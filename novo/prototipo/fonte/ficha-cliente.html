@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Ficha do cliente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/*BASE*/
+.btn.fantasma{color:var(--texto-2);background:var(--fosco);border:1px solid var(--borda)}
+.btn.fantasma:hover{color:var(--texto)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.migalha{font-size:14px;font-weight:600;color:var(--texto-3)}
+.migalha a{color:var(--texto-3);text-decoration:none}.migalha a:hover{color:var(--texto)}
+.migalha b{color:var(--texto-2);font-weight:600}
+
+.cab-f{display:flex;align-items:center;gap:18px;padding:20px 22px;border-radius:26px;margin-bottom:16px;flex-wrap:wrap}
+.logo-f{position:relative;width:68px;height:68px;border-radius:20px;flex:none;display:grid;place-items:center;font-weight:800;font-size:14px;cursor:pointer;overflow:hidden;
+  color:var(--creme,#F1E9DC);background:#2F4A3F;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 24px rgba(0,0,0,.4)}
+.logo-f.vazio{background:var(--fosco);color:var(--texto-3);border:1.5px dashed color-mix(in srgb,var(--tinta) 20%,transparent);box-shadow:none}
+.logo-f span{position:absolute;inset:auto 0 0 0;padding:3px 0;font-size:9px;font-weight:600;text-align:center;background:rgba(0,0,0,.55);color:#fff;opacity:0;transition:opacity .2s}
+.logo-f:hover span{opacity:1}
+.cab-f h2{font-size:24px;font-weight:700;letter-spacing:-.03em}
+.cab-f p{color:var(--texto-3);font-size:13px;margin-top:2px}
+.cab-f .esp{flex:1}
+.completa{min-width:220px}
+.completa div{display:flex;justify-content:space-between;font-size:12.5px;color:var(--texto-2)}
+.completa div b{color:var(--texto)}
+.completa i{display:block;height:7px;margin-top:7px;border-radius:99px;background:color-mix(in srgb,var(--tinta) 8%,transparent);overflow:hidden}
+.completa i s{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brasa),var(--laranja));text-decoration:none;transition:width .5s}
+.completa small{display:block;margin-top:6px;font-size:11.5px;color:var(--texto-3)}
+
+.corpo-f{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:start}
+.corpo-f>*{min-width:0}
+.secoes{position:sticky;top:20px;padding:8px;border-radius:22px;display:flex;flex-direction:column;gap:2px}
+.secoes a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;font-size:13px;font-weight:500;color:var(--texto-2);text-decoration:none}
+.secoes a:hover{background:var(--vidro-1);color:var(--texto)}
+.secoes a.ativo{color:var(--texto);background:var(--vidro-2);box-shadow:var(--brilho)}
+.secoes a i{width:20px;height:20px;border-radius:50%;flex:none;display:grid;place-items:center;font-style:normal;font-size:10px;font-weight:700;border:1.5px solid color-mix(in srgb,var(--tinta) 20%,transparent);color:var(--texto-3)}
+.secoes a i.ok{background:var(--laranja);border-color:var(--laranja);color:#1d0c03}
+.bloco{padding:22px;border-radius:26px;margin-bottom:16px;scroll-margin-top:16px}
+.bloco>h3{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.bloco>p.d{color:var(--texto-3);font-size:12.5px;margin-top:3px}
+.grade2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.grade3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.campo label,.campo>span{display:block;font-size:12px;font-weight:600;color:var(--texto-2);margin-bottom:7px}
+.campo label em{font-style:normal;font-weight:400;color:var(--texto-3)}
+.campo input,.campo select,.campo textarea{width:100%;padding:11px 14px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:13.5px;outline:none;transition:border-color .2s}
+.campo textarea{min-height:88px;resize:vertical;line-height:1.55}
+.campo select option{background:var(--superficie)}
+.campo input:focus,.campo select:focus,.campo textarea:focus{border-color:color-mix(in srgb,var(--laranja) 55%,transparent)}
+.campo.cheio{grid-column:1/-1}
+.so-ler .campo input,.so-ler .campo select,.so-ler .campo textarea{background:color-mix(in srgb,var(--tinta) 1.5%,transparent)}
+.cores{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cor{position:relative;width:40px;height:40px;border-radius:12px;border:2px solid color-mix(in srgb,var(--tinta) 15%,transparent);overflow:hidden;cursor:pointer}
+.cor input{position:absolute;inset:-8px;width:60px;height:60px;border:0;padding:0;cursor:pointer;opacity:0}
+.cor-add{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--texto-3);border:1.5px dashed color-mix(in srgb,var(--tinta) 20%,transparent)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;padding:8px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);min-height:46px;align-items:center}
+.tags:focus-within{border-color:color-mix(in srgb,var(--laranja) 55%,transparent)}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:4px 6px 4px 10px;border-radius:9px;font-size:12.5px;background:var(--vidro-2)}
+.tag.ruim{background:rgba(255,90,78,.12);color:#FFB2AB}
+.tag.bom{background:rgba(155,227,176,.1);color:#C9F0D4}
+.tag button{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;color:var(--texto-3)}
+.tag button:hover{background:color-mix(in srgb,var(--tinta) 10%,transparent);color:var(--texto)}
+.tags input{flex:1;min-width:120px;background:none;border:0;outline:none;color:var(--texto);font:inherit;font-size:13px;padding:4px}
+.regua{margin-top:14px}
+.regua .l{display:flex;justify-content:space-between;font-size:12px;color:var(--texto-3);margin-bottom:6px}
+.regua input[type=range]{width:100%;accent-color:var(--laranja)}
+.ia-box{display:flex;align-items:center;gap:14px;margin-top:16px;padding:14px 16px;border-radius:18px;background:color-mix(in srgb,var(--laranja) 8%,transparent);border:1px solid color-mix(in srgb,var(--laranja) 30%,transparent)}
+.ia-box div{flex:1}
+.ia-box b{display:block;font-size:13.5px}
+.ia-box small{color:var(--texto-3);font-size:12px}
+.preenchendo{animation:pisca 1s ease-in-out infinite}
+@keyframes pisca{50%{border-color:color-mix(in srgb,var(--laranja) 80%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--laranja) 15%,transparent)}}
+
+/* redes */
+.redes{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.rede{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:18px;background:var(--fosco);border:1px solid var(--borda)}
+.rede .ic{width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;color:#fff}
+.rede div.t{flex:1;min-width:0}
+.rede b{display:block;font-size:14px}
+.rede small{display:block;margin-top:2px;color:var(--texto-3);font-size:12px}
+.rede .perm{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.rede .perm span{font-size:10.5px;padding:2px 7px;border-radius:6px;color:var(--texto-2);background:color-mix(in srgb,var(--tinta) 6%,transparent)}
+.st{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st.ok{color:#9BE3B0;background:rgba(155,227,176,.1)}
+.st.off{color:var(--texto-3);background:color-mix(in srgb,var(--tinta) 6%,transparent)}
+.st.breve{color:var(--ambar);background:rgba(255,181,71,.1)}
+.nota{margin-top:14px;font-size:12px;color:var(--texto-3);display:flex;gap:8px;align-items:flex-start}
+
+/* cota */
+.cota{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.q{padding:14px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda);text-align:center}
+.q small{display:block;font-size:12px;color:var(--texto-3)}
+.q .ctrl{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:8px}
+.q button{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--texto-2);background:var(--vidro-2)}
+.q button:hover:not(:disabled){color:var(--texto)}
+.q b{font-size:26px;font-weight:700;min-width:36px}
+.vinc{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--fosco);font-size:13px}
+.vinc div{flex:1}
+.vinc small{display:block;color:var(--texto-3);font-size:12px}
+.vinc a{color:var(--laranja-claro);font-weight:600;text-decoration:none;font-size:12.5px}
+.opcoes{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.op{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);cursor:pointer;text-align:left;width:100%}
+.op .r{width:18px;height:18px;border-radius:50%;flex:none;border:2px solid color-mix(in srgb,var(--tinta) 30%,transparent)}
+.op[aria-checked=true]{border-color:color-mix(in srgb,var(--laranja) 55%,transparent);background:color-mix(in srgb,var(--laranja) 8%,transparent)}
+.op[aria-checked=true] .r{border-color:var(--laranja);box-shadow:inset 0 0 0 3px var(--superficie);background:var(--laranja)}
+.op b{display:block;font-size:13px}
+.op small{color:var(--texto-3);font-size:11.5px}
+
+/* portal */
+.interruptor{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda);cursor:pointer;width:100%;text-align:left}
+.interruptor div{flex:1}
+.interruptor b{display:block;font-size:13.5px;font-weight:600}
+.interruptor small{color:var(--texto-3);font-size:12px}
+.chave{width:42px;height:24px;border-radius:99px;flex:none;position:relative;background:color-mix(in srgb,var(--tinta) 12%,transparent);transition:background .25s}
+.chave::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4);transition:transform .35s var(--mola)}
+[aria-checked=true] .chave{background:var(--laranja)}
+[aria-checked=true] .chave::after{transform:translateX(18px)}
+.interruptor:disabled{opacity:.55;cursor:not-allowed}
+.sub-t{margin:18px 0 8px;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--texto-3)}
+.acessos{display:flex;flex-direction:column;gap:8px}
+.ac{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda)}
+.ac .av{width:34px;height:34px;font-size:11px;margin:0;flex:none}
+.ac div.t{flex:1;min-width:0}
+.ac b{display:block;font-size:13px}
+.ac small{display:block;color:var(--texto-3);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac select{padding:7px 10px;border-radius:10px;background:rgba(0,0,0,.2);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:12.5px;outline:none}
+.ac select option{background:var(--superficie)}
+.ac .tirar{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--texto-3)}
+.ac .tirar:hover{background:rgba(255,90,78,.12);color:var(--vermelho)}
+.novo-ac{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) 150px auto;gap:8px;margin-top:8px}
+.novo-ac input,.novo-ac select{padding:10px 12px;border-radius:12px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:13px;outline:none}
+.novo-ac select option{background:var(--superficie)}
+.abas-p{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.abas-p button{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;font-size:12.5px;font-weight:500;text-align:left;background:var(--fosco);border:1px solid var(--borda);color:var(--texto-3)}
+.abas-p button .ck{width:18px;height:18px;border-radius:6px;flex:none;display:grid;place-items:center;border:1.5px solid color-mix(in srgb,var(--tinta) 25%,transparent);color:transparent}
+.abas-p button[aria-checked=true]{color:var(--texto)}
+.abas-p button[aria-checked=true] .ck{background:var(--laranja);border-color:var(--laranja);color:#1d0c03}
+.niveis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:6px}
+.niveis div{padding:10px 12px;border-radius:14px;font-size:12px;color:var(--texto-3);background:var(--fosco)}
+.niveis b{display:block;font-size:12.5px;color:var(--texto-2);margin-bottom:2px}
+
+/* barra salvar */
+.salvar{position:sticky;bottom:14px;z-index:5;display:flex;align-items:center;gap:12px;margin-top:6px;padding:12px 14px 12px 20px;border-radius:22px;background:color-mix(in srgb,var(--superficie) 80%,transparent);transform:translateY(20px);opacity:0;pointer-events:none;transition:all .35s var(--mola)}
+.salvar.on{transform:none;opacity:1;pointer-events:auto}
+.salvar span{flex:1;font-size:13px;color:var(--texto-2)}
+.salvar span b{color:var(--ambar)}
+.leitura{margin-bottom:14px;padding:12px 16px;border-radius:16px;font-size:13px;color:var(--ambar);background:rgba(255,181,71,.07);border:1px dashed rgba(255,181,71,.4)}
+.toast{position:fixed;z-index:40;left:50%;top:22px;transform:translate(-50%,-20px);opacity:0;padding:12px 18px;border-radius:16px;font-size:13px;transition:all .35s var(--mola);pointer-events:none;max-width:calc(100% - 24px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.veu{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:16px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
+.veu.aberto{display:grid;animation:aparece .25s}
+@keyframes aparece{from{opacity:0}}
+.oauth{width:min(420px,100%);padding:24px;border-radius:26px;text-align:center;background:color-mix(in srgb,var(--superficie) 90%,transparent)}
+.oauth .ic{width:56px;height:56px;margin:0 auto;border-radius:16px;display:grid;place-items:center;color:#fff}
+.oauth h3{margin-top:14px;font-size:18px}
+.oauth p{margin-top:6px;font-size:13px;color:var(--texto-2);line-height:1.5}
+.oauth ul{text-align:left;margin:14px 0 0;padding:12px 14px 12px 32px;border-radius:14px;background:var(--fosco);font-size:12.5px;color:var(--texto-2);line-height:1.7}
+.oauth .acoes{display:flex;gap:8px;justify-content:center;margin-top:18px}
+
+@media (max-width:1100px){.corpo-f{grid-template-columns:1fr}.secoes{position:static;flex-direction:row;overflow-x:auto}.secoes a{flex:none}}
+@media (max-width:640px){.grade2,.grade3,.cota,.niveis{grid-template-columns:1fr}.novo-ac{grid-template-columns:1fr}.rede{flex-wrap:wrap}.ac{flex-wrap:wrap}.cab-f h2{font-size:20px}.completa{min-width:0;width:100%}.bloco{padding:18px}}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<div class="app">
+<!--LATERAL:clientes:CA-->
+  <main class="principal">
+    <header class="topo">
+      <h1 class="migalha"><a href="cliente.html">Clientes</a> · <b data-mig>Clínica Aurora</b> · Ficha</h1>
+      <div class="esp"></div>
+      <a class="btn fantasma" href="cliente.html" style="text-decoration:none" data-ir-quadro>Ver quadro</a>
+    </header>
+
+    <div class="leitura" data-leitura style="display:none"></div>
+
+    <section class="cab-f vidro especular entra">
+      <label class="logo-f" data-logo-box title="Trocar logo"><b data-logo-txt>AURORA</b><span>trocar logo</span><input type="file" accept="image/*" hidden data-logo></label>
+      <div><h2 data-nome-cab>Clínica Aurora</h2><p data-sub-cab>Dermatologia &amp; Estética · Social media · cliente desde mar/2026</p></div>
+      <div class="esp"></div>
+      <div class="completa"><div><span>Ficha completa</span><b data-pct>0%</b></div><i><s data-pct-barra style="width:0"></s></i><small>Quanto mais completa, mais a IA acerta o jeito do cliente.</small></div>
+    </section>
+
+    <div class="corpo-f">
+      <nav class="secoes vidro entra" style="animation-delay:.05s" data-secoes>
+        <a href="#dados" class="ativo"><i data-ok="dados">1</i>Dados</a>
+        <a href="#briefing"><i data-ok="briefing">2</i>Briefing</a>
+        <a href="#redes"><i data-ok="redes">3</i>Redes conectadas</a>
+        <a href="#cota"><i data-ok="cota">4</i>Cota e aprovação</a>
+        <a href="#portal"><i data-ok="portal">5</i>Portal do cliente</a>
+      </nav>
+
+      <div data-form>
+        <!-- 1. dados -->
+        <section class="bloco vidro entra" id="dados" style="animation-delay:.08s">
+          <h3>Dados do cliente</h3><p class="d">O básico para a equipe saber com quem está falando.</p>
+          <div class="grade2">
+            <div class="campo"><label for="c-nome">Nome da marca</label><input id="c-nome" data-c="nome" placeholder="Ex.: Clínica Aurora"></div>
+            <div class="campo"><label for="c-seg">Segmento</label><select id="c-seg" data-c="seg"><option value="">Escolha…</option><option>Saúde e estética</option><option>Alimentação</option><option>Fitness</option><option>Casa e decoração</option><option>Odontologia</option><option>Moda</option><option>Serviços</option><option>Outro</option></select></div>
+            <div class="campo"><label for="c-sub">Subtítulo <em>· aparece no topo do quadro</em></label><input id="c-sub" data-c="sub" placeholder="Ex.: Dermatologia & Estética"></div>
+            <div class="campo"><label for="c-pasta">Pasta na lateral</label><select id="c-pasta" data-c="pasta"><option>Social media</option><option>Pack completo</option><option>Avulsos</option></select></div>
+            <div class="campo"><label for="c-cidade">Cidade</label><input id="c-cidade" data-c="cidade" placeholder="Ex.: Recife, PE"></div>
+            <div class="campo"><label for="c-site">Site</label><input id="c-site" data-c="site" placeholder="www.exemplo.com.br"></div>
+            <div class="campo"><label for="c-resp">Responsável pela conta <em>· na agência</em></label><select id="c-resp" data-c="resp"></select></div>
+            <div class="campo"><label for="c-status">Situação</label><select id="c-status" data-c="status"><option>Ativo</option><option>Pausado</option><option>Ex-cliente (arquivar)</option></select></div>
+          </div>
+          <div class="sub-t">Identidade visual</div>
+          <div class="grade2" style="margin-top:0">
+            <div class="campo"><span>Cores da marca</span><div class="cores" data-cores></div></div>
+            <div class="campo"><label for="c-fontes">Fontes</label><input id="c-fontes" data-c="fontes" placeholder="Ex.: Playfair Display e Inter"></div>
+          </div>
+          <div class="sub-t">Quem da equipe trabalha neste cliente</div>
+          <div class="podes-eq" data-equipe style="display:flex;flex-wrap:wrap;gap:6px"></div>
+          <p class="nota" style="margin-top:8px">Quem não estiver aqui não vê este cliente. Para mudar, use a tela de <a href="equipe.html" style="color:var(--laranja-claro)">Equipe</a>.</p>
+        </section>
+
+        <!-- 2. briefing -->
+        <section class="bloco vidro" id="briefing">
+          <h3>Briefing</h3><p class="d">É o que a IA lê antes de planejar o mês. Escreva como explicaria para alguém novo na equipe.</p>
+          <div class="ia-box" data-ia-box><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--laranja-claro);flex:none"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg>
+            <div><b>Preencher com IA a partir do Instagram</b><small>Lê as legendas, as imagens e os comentários e escreve um rascunho. Você revisa. <span data-custo>R$ 2,41 · a 1ª análise é grátis</span></small></div>
+            <button class="btn primario" data-ia-preencher>Preencher</button></div>
+          <div class="grade2">
+            <div class="campo cheio"><label for="b-sobre">Sobre o negócio</label><textarea id="b-sobre" data-c="sobre" placeholder="O que faz, há quanto tempo, o que a torna diferente…"></textarea></div>
+            <div class="campo"><label for="b-publico">Público</label><textarea id="b-publico" data-c="publico" placeholder="Quem compra, idade, onde mora, o que procura…"></textarea></div>
+            <div class="campo"><label for="b-objetivo">Objetivo nas redes</label><textarea id="b-objetivo" data-c="objetivo" placeholder="Ex.: agendar avaliações, ser lembrada como referência…"></textarea></div>
+            <div class="campo cheio"><span>Serviços e produtos</span><div class="tags" data-tags="servicos"></div></div>
+          </div>
+          <div class="sub-t">Tom de voz</div>
+          <div class="grade2" style="margin-top:0">
+            <div class="regua"><div class="l"><span>Formal</span><span>Descontraído</span></div><input type="range" min="0" max="100" data-c="tom1" aria-label="Formal ou descontraído"></div>
+            <div class="regua"><div class="l"><span>Técnico</span><span>Simples</span></div><input type="range" min="0" max="100" data-c="tom2" aria-label="Técnico ou simples"></div>
+          </div>
+          <div class="grade2">
+            <div class="campo"><span>Palavras e assuntos que usamos</span><div class="tags" data-tags="usar" data-tipo="bom"></div></div>
+            <div class="campo"><span>O que evitar</span><div class="tags" data-tags="evitar" data-tipo="ruim"></div></div>
+            <div class="campo"><span>Concorrentes e referências</span><div class="tags" data-tags="concorrentes"></div></div>
+            <div class="campo"><label for="b-datas">Datas importantes</label><input id="b-datas" data-c="datas" placeholder="Ex.: aniversário da clínica em 10/03, Novembro Azul"></div>
+          </div>
+        </section>
+
+        <!-- 3. redes -->
+        <section class="bloco vidro" id="redes">
+          <h3>Redes conectadas</h3><p class="d">Conexão oficial, sem senha. Quem é dono da conta autoriza uma vez, e o sistema publica e coleta as métricas todo dia.</p>
+          <div class="redes" data-redes></div>
+          <p class="nota"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;margin-top:1px"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Nunca pedimos a senha das redes. Se o cliente quiser, ele mesmo desconecta pelo app da rede.</p>
+        </section>
+
+        <!-- 4. cota -->
+        <section class="bloco vidro" id="cota">
+          <h3>Cota mensal e aprovação</h3><p class="d">Quanto é entregue por mês. Essa é a meta do dashboard e o que a IA planeja.</p>
+          <div class="cota" data-cota></div>
+          <div class="vinc" data-vinc></div>
+          <div class="sub-t">Se o cliente não responder a aprovação</div>
+          <div class="opcoes" data-sem-resposta></div>
+          <div class="grade3" style="margin-top:14px">
+            <div class="campo"><label for="a-prazo">Prazo para aprovar</label><select id="a-prazo" data-c="prazoAprov"><option value="1">1 dia</option><option value="2">2 dias</option><option value="3">3 dias</option><option value="5">5 dias</option></select></div>
+            <div class="campo"><label for="a-plan">Planejamento do mês entregue até</label><select id="a-plan" data-c="diaPlan"><option value="20">dia 20 do mês anterior</option><option value="25">dia 25 do mês anterior</option><option value="1">dia 1º do mês</option></select></div>
+            <div class="campo"><label for="a-hora">Horário preferido</label><input id="a-hora" data-c="hora" placeholder="Ex.: terça e sexta, 19h"></div>
+          </div>
+        </section>
+
+        <!-- 5. portal -->
+        <section class="bloco vidro" id="portal">
+          <h3>Portal do cliente</h3><p class="d">Onde o cliente aprova, pede, conversa e acompanha os resultados.</p>
+          <div style="margin-top:16px"><button class="interruptor" role="switch" aria-checked="true" data-sw="portal"><div><b>Portal ativo</b><small data-portal-url>pulse.app/p/clinica-aurora · entra com link mágico no e-mail</small></div><span class="chave"></span></button></div>
+          <div class="sub-t">Quem do cliente tem acesso</div>
+          <div class="niveis"><div><b>Aprovador</b>aprova, pede ajuste, conversa e marca horários</div><div><b>Só acompanha</b>vê planejamento e relatório, não aprova</div><div><b>Financeiro</b>vê só contratos e cobranças</div></div>
+          <div class="acessos" data-acessos style="margin-top:10px"></div>
+          <form class="novo-ac" data-novo-ac><input placeholder="Nome" data-na-nome aria-label="Nome"><input type="email" placeholder="email@cliente.com.br" data-na-email aria-label="E-mail"><select data-na-nivel aria-label="Nível"><option>Aprovador</option><option>Só acompanha</option><option>Financeiro</option></select><button class="btn primario">Convidar</button></form>
+          <div class="sub-t">O que aparece no portal</div>
+          <div class="abas-p" data-abas></div>
+          <div style="margin-top:12px"><button class="interruptor" role="switch" aria-checked="true" data-sw="link"><div><b>Aprovação por link, sem login</b><small>Para o cliente que só quer aprovar pelo celular. Não dá acesso a relatório, arquivos nem contratos.</small></div><span class="chave"></span></button></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px"><a class="btn fantasma" href="portal-planejamento.html" style="text-decoration:none" data-ver-portal>Ver o portal como o cliente</a><button class="btn fantasma" data-copiar>Copiar link do portal</button></div>
+        </section>
+
+        <div class="salvar vidro" data-salvar><span><b>Alterações não salvas.</b> Salve para valer para a equipe e para a IA.</span><button class="btn fantasma" data-descartar>Descartar</button><button class="btn primario" data-salva>Salvar</button></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="veu" data-veu><div class="oauth vidro especular" data-oauth></div></div>
+<div class="toast vidro" data-toast></div>
+
+<script>
+(function(){
+  var EU=window.PULSE?PULSE.atual():null,EDITA=!EU||PULSE.faz(EU,'editar_cliente');
+  var NOVO=/[?&]novo/.test(location.search);
+  var EQUIPE=window.PULSE?PULSE.EQUIPE:{};
+  var AURORA={nome:'Clínica Aurora',seg:'Saúde e estética',sub:'Dermatologia & Estética',pasta:'Social media',cidade:'Recife, PE',site:'www.clinicaaurora.com.br',resp:'BS',status:'Ativo',fontes:'Playfair Display e Inter',
+    cores:['#2F4A3F','#F1E9DC','#C9A76A'],
+    sobre:'Clínica de dermatologia e estética em Boa Viagem, aberta em 2019. Três dermatologistas e uma esteticista. O diferencial é o atendimento sem pressa: a primeira consulta tem 1 hora.',
+    publico:'Mulheres de 25 a 45 anos, classe A e B, de Recife e região. Procuram cuidar da pele com orientação médica e desconfiam de promessas milagrosas.',
+    objetivo:'Agendar avaliações pelo WhatsApp e ser lembrada como a clínica que explica antes de vender.',
+    servicos:['Limpeza de pele','Peeling','Tratamento de manchas','Botox','Preenchimento','Laser'],tom1:62,tom2:78,
+    usar:['explicar o porquê','rotina possível','pele real','bastidores'],evitar:['antes e depois exagerado','promessa de resultado','termos técnicos sem explicar','preço no feed'],
+    concorrentes:['@dermaclinicarecife','@pelerealbr','@clinicavitta'],datas:'Aniversário da clínica em 10/03 · Novembro Azul · Black Friday só para avaliação',
+    cota:[8,4,12],semResp:'lembrar',prazoAprov:'2',diaPlan:'25',hora:'terça e sexta, 19h',
+    redes:{instagram:true,facebook:true,tiktok:false,gmn:false},
+    acessos:[['Ana Ribeiro','ana@clinicaaurora.com.br','Aprovador','há 2 h'],['Dra. Paula Mendes','paula@clinicaaurora.com.br','Só acompanha','há 3 dias'],['Financeiro Aurora','financeiro@clinicaaurora.com.br','Financeiro','nunca entrou']],
+    abas:{Planejamento:true,Pedidos:true,Mensagens:true,'Relatório':true,Agenda:true,Arquivos:true,Contratos:true},portal:true,link:true};
+  var VAZIO={nome:'',seg:'',sub:'',pasta:'Social media',cidade:'',site:'',resp:EU&&EQUIPE[EU.k]?EU.k:'BS',status:'Ativo',fontes:'',cores:[],sobre:'',publico:'',objetivo:'',servicos:[],tom1:50,tom2:50,usar:[],evitar:[],concorrentes:[],datas:'',
+    cota:[8,4,8],semResp:'lembrar',prazoAprov:'2',diaPlan:'25',hora:'',redes:{instagram:false,facebook:false,tiktok:false,gmn:false},acessos:[],
+    abas:{Planejamento:true,Pedidos:true,Mensagens:true,'Relatório':true,Agenda:true,Arquivos:true,Contratos:false},portal:true,link:true};
+  var salvo=JSON.parse(JSON.stringify(NOVO?VAZIO:AURORA)),F=JSON.parse(JSON.stringify(salvo));
+  var REDES=[
+    ['instagram','Instagram','linear-gradient(135deg,#F58529,#DD2A7B 55%,#8134AF)','<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>','@clinicaaurora · 8.412 seguidores · conta profissional',['Publicar feed, reels e stories','Ler métricas','Responder comentários']],
+    ['facebook','Facebook','#1877F2','<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8a0 0 0 0 1 0 0z"/>','Página Clínica Aurora · 2.342 seguidores',['Publicar na página','Ler métricas']],
+    ['tiktok','TikTok','#111','<path d="M15 3c.4 2.6 2 4.3 5 4.5v3.3c-1.9 0-3.5-.6-5-1.6V15a6 6 0 1 1-6-6v3.4A2.7 2.7 0 1 0 11.7 15V3z"/>','',['Publicar vídeos','Ler métricas']],
+    ['gmn','Google Meu Negócio','#4285F4','<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>','',['Ler avaliações','Publicar novidades']],
+    ['linkedin','LinkedIn','#0A66C2','<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 10v7"/>','',[]]
+  ];
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
+  function iniciais(n){return (n||'').split(/\s+/).filter(Boolean).map(function(x){return x[0]}).slice(0,2).join('').toUpperCase()||'?'}
+
+  // preencher campos simples
+  function campos(){
+    $('[data-c=resp]').innerHTML=Object.keys(EQUIPE).map(function(k){return '<option value="'+k+'">'+EQUIPE[k].completo+' · '+PULSE.PAPEIS[EQUIPE[k].papel].nome+'</option>'}).join('');
+    $$('[data-c]').forEach(function(el){var k=el.dataset.c;if(F[k]!==undefined)el.value=F[k];if(!EDITA)el.disabled=true});
+  }
+  function cabecalho(){
+    var n=F.nome||'Novo cliente';$('[data-nome-cab]').textContent=n;$('[data-mig]').textContent=n;
+    $('[data-sub-cab]').textContent=[F.sub||F.seg||'Preencha os dados abaixo',F.pasta,NOVO?'cadastro novo':'cliente desde mar/2026'].filter(Boolean).join(' · ');
+    var lb=$('[data-logo-box]');lb.classList.toggle('vazio',!F.nome&&!F.logo);
+    lb.style.background=F.logo?'center/cover url('+F.logo+')':(F.cores[0]||'');lb.style.color=F.cores[1]||'';
+    $('[data-logo-txt]').textContent=F.logo?'':(F.nome?(F.nome.split(' ').slice(-1)[0]||'').toUpperCase().slice(0,7):'LOGO');
+    $('[data-portal-url]').textContent='pulse.app/p/'+((F.nome||'novo-cliente').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''))+' · entra com link mágico no e-mail';
+  }
+  function cores(){
+    $('[data-cores]').innerHTML=F.cores.map(function(c,i){return '<label class="cor" style="background:'+c+'" title="'+c+'"><input type="color" value="'+c+'" data-cor="'+i+'"'+(EDITA?'':' disabled')+'></label>'}).join('')+(EDITA&&F.cores.length<5?'<button class="cor-add" data-cor-add aria-label="Adicionar cor">+</button>':'');
+    $$('[data-cor]').forEach(function(i){i.addEventListener('input',function(){F.cores[+i.dataset.cor]=i.value;i.parentNode.style.background=i.value;mudou();cabecalho()})});
+    var a=$('[data-cor-add]');if(a)a.addEventListener('click',function(){F.cores.push('#FF6B1A');cores();mudou()});
+  }
+  function tags(){
+    $$('[data-tags]').forEach(function(box){var k=box.dataset.tags,tp=box.dataset.tipo||'';
+      box.innerHTML=F[k].map(function(t,i){return '<span class="tag '+tp+'">'+esc(t)+(EDITA?'<button type="button" data-tira="'+i+'" aria-label="Remover">×</button>':'')+'</span>'}).join('')+(EDITA?'<input placeholder="'+(F[k].length?'+ adicionar':'Digite e aperte Enter')+'" aria-label="Adicionar">':'');
+      $$('[data-tira]',box).forEach(function(b){b.addEventListener('click',function(){F[k].splice(+b.dataset.tira,1);tags();mudou();progresso()})});
+      var inp=$('input',box);if(inp)inp.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===',')&&inp.value.trim()){e.preventDefault();F[k].push(inp.value.trim().replace(/,$/,''));tags();mudou();progresso();$('[data-tags='+k+'] input').focus()}
+        if(e.key==='Backspace'&&!inp.value&&F[k].length){F[k].pop();tags();mudou();$('[data-tags='+k+'] input').focus()}});
+    });
+  }
+  function equipe(){
+    var cli='CA',lista=Object.keys(EQUIPE).filter(function(k){return NOVO?EQUIPE[k].papel==='admin'||EQUIPE[k].papel==='gestor'||k===F.resp:PULSE.atende(EQUIPE[k],cli)});
+    $('[data-equipe]').innerHTML=lista.map(function(k){var u=EQUIPE[k];return '<span style="display:inline-flex;align-items:center;gap:7px;padding:4px 11px 4px 4px;border-radius:99px;font-size:12.5px;background:var(--fosco);border:1px solid var(--borda)"><span class="av" style="width:24px;height:24px;font-size:9px;margin:0;background:linear-gradient(135deg,'+u.cor+')">'+k+'</span>'+u.nome+' <small style="color:var(--texto-3)">'+PULSE.PAPEIS[u.papel].nome+'</small></span>'}).join('');
+  }
+  function redes(){
+    $('[data-redes]').innerHTML=REDES.map(function(r){var on=F.redes[r[0]],breve=r[0]==='linkedin';
+      return '<div class="rede"><span class="ic" style="background:'+r[2]+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+r[3]+'</svg></span>'+
+        '<div class="t"><b>'+r[1]+'</b><small>'+(breve?'A integração com o LinkedIn chega em breve.':on?(NOVO?'Conectado agora':r[4])+' · coleta diária ativa':'Não conectado. As métricas começam a contar a partir da conexão.')+'</small>'+
+        (on&&r[5].length?'<div class="perm">'+r[5].map(function(p){return '<span>'+p+'</span>'}).join('')+'</div>':'')+'</div>'+
+        (breve?'<span class="st breve">Em breve</span>':on?'<span class="st ok">Conectado</span>'+(EDITA?'<button class="btn fantasma" style="padding:7px 12px;font-size:12px" data-desc="'+r[0]+'">Desconectar</button>':''):(EDITA?'<button class="btn primario" style="padding:8px 14px;font-size:12.5px" data-conectar="'+r[0]+'">Conectar</button>':'<span class="st off">Desconectado</span>'))+'</div>'}).join('');
+    $$('[data-conectar]').forEach(function(b){b.addEventListener('click',function(){oauth(b.dataset.conectar)})});
+    $$('[data-desc]').forEach(function(b){b.addEventListener('click',function(){F.redes[b.dataset.desc]=false;redes();progresso();aviso('Desconectado. A coleta de métricas foi pausada.')})});
+  }
+  function oauth(k){
+    var r=REDES.filter(function(x){return x[0]===k})[0];
+    $('[data-oauth]').innerHTML='<span class="ic" style="background:'+r[2]+'"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+r[3]+'</svg></span><h3>Conectar o '+r[1]+'</h3>'+
+      '<p>Você será levado ao '+r[1]+'. Quem é dono da conta entra lá e autoriza. O Pulse Creator nunca vê a senha.</p><ul>'+r[5].map(function(p){return '<li>'+p+'</li>'}).join('')+'</ul>'+
+      '<p style="font-size:12px;color:var(--texto-3)">Se o dono da conta não estiver com você, mande este link para ele autorizar de onde estiver.</p>'+
+      '<div class="acoes"><button class="btn fantasma" data-link-dono>Mandar link para o dono</button><button class="btn primario" data-autorizar>Continuar no '+r[1]+'</button></div>';
+    $('[data-veu]').classList.add('aberto');
+    $('[data-autorizar]').addEventListener('click',function(){this.textContent='Conectando…';var b=this;setTimeout(function(){F.redes[k]=true;fecha();redes();progresso();mudou();aviso(r[1]+' conectado. A primeira coleta de métricas sai em alguns minutos.')},900)});
+    $('[data-link-dono]').addEventListener('click',function(){fecha();aviso('Link de autorização copiado. Ele vale por 48 horas.')});
+  }
+  function fecha(){$('[data-veu]').classList.remove('aberto')}
+  $('[data-veu]').addEventListener('click',function(e){if(e.target===this)fecha()});
+  function cota(){
+    var n=['Posts','Reels','Stories'];
+    $('[data-cota]').innerHTML=n.map(function(x,i){return '<div class="q"><small>'+x+' por mês</small><div class="ctrl"><button data-q="'+i+'" data-d="-1"'+(EDITA?'':' disabled')+' aria-label="Menos">−</button><b>'+F.cota[i]+'</b><button data-q="'+i+'" data-d="1"'+(EDITA?'':' disabled')+' aria-label="Mais">+</button></div></div>'}).join('');
+    $$('[data-q]').forEach(function(b){b.addEventListener('click',function(){var i=+b.dataset.q;F.cota[i]=Math.max(0,Math.min(60,F.cota[i]+(+b.dataset.d)));cota();mudou()})});
+    var difer=!NOVO&&(F.cota[0]!==8||F.cota[1]!==4||F.cota[2]!==12);
+    $('[data-vinc]').innerHTML=NOVO?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--texto-3)"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><div>Sem contrato ainda<small>Depois de criar o cliente, suba o contrato e a cota é conferida com ele.</small></div><a href="contratos.html">Contratos →</a>':
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--laranja-claro)"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><div>Social media · 12 meses · R$ 2.400/mês<small>'+(difer?'<span style="color:var(--ambar)">A cota está diferente do contrato (8 posts, 4 reels, 12 stories). Vale fazer um aditivo.</span>':'A cota bate com o escopo do contrato.')+'</small></div><a href="contratos.html">Ver contrato →</a>';
+    var O=[['lembrar','Lembrar o cliente','Avisa por e-mail e WhatsApp no fim do prazo e de novo no dia seguinte'],['aprovar','Aprovar automaticamente','Passado o prazo, conta como aprovado e segue para agendamento'],['esperar','Esperar a resposta','Não publica nada sem aprovação, mesmo que atrase']];
+    $('[data-sem-resposta]').innerHTML=O.map(function(o){return '<button class="op" role="radio" aria-checked="'+(F.semResp===o[0])+'" data-sr="'+o[0]+'"'+(EDITA?'':' disabled')+'><span class="r"></span><div><b>'+o[1]+'</b><small>'+o[2]+'</small></div></button>'}).join('');
+    $$('[data-sr]').forEach(function(b){b.addEventListener('click',function(){F.semResp=b.dataset.sr;cota();mudou()})});
+  }
+  function portal(){
+    $('[data-sw=portal]').setAttribute('aria-checked',F.portal);$('[data-sw=link]').setAttribute('aria-checked',F.link);
+    $('[data-acessos]').innerHTML=F.acessos.length?F.acessos.map(function(a,i){return '<div class="ac"><span class="av" style="background:linear-gradient(135deg,#7FA08A,#2F4A3F)">'+iniciais(a[0])+'</span><div class="t"><b>'+esc(a[0])+'</b><small>'+esc(a[1])+' · '+(a[3]==='convite enviado'?'<span style="color:var(--ambar)">convite enviado</span>':'último acesso '+a[3])+'</small></div>'+
+      '<select data-nv="'+i+'" aria-label="Nível de acesso"'+(EDITA?'':' disabled')+'>'+['Aprovador','Só acompanha','Financeiro'].map(function(n){return '<option'+(n===a[2]?' selected':'')+'>'+n+'</option>'}).join('')+'</select>'+
+      (EDITA?'<button class="tirar" data-tirar="'+i+'" aria-label="Tirar acesso" title="Tirar acesso"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>':'')+'</div>'}).join(''):'<p class="nota" style="margin:0">Ninguém do cliente tem acesso ainda. Convide abaixo.</p>';
+    $$('[data-nv]').forEach(function(s){s.addEventListener('change',function(){F.acessos[+s.dataset.nv][2]=s.value;mudou()})});
+    $$('[data-tirar]').forEach(function(b){b.addEventListener('click',function(){var a=F.acessos.splice(+b.dataset.tirar,1)[0];portal();mudou();progresso();aviso(a[0]+' perdeu o acesso ao portal')})});
+    $('[data-abas]').innerHTML=Object.keys(F.abas).map(function(k){return '<button role="checkbox" aria-checked="'+F.abas[k]+'" data-aba="'+k+'"'+(EDITA?'':' disabled')+'><span class="ck"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4"><path d="M5 12l5 5L20 7"/></svg></span>'+k+'</button>'}).join('');
+    $$('[data-aba]').forEach(function(b){b.addEventListener('click',function(){F.abas[b.dataset.aba]=!F.abas[b.dataset.aba];portal();mudou()})});
+    $('[data-novo-ac]').style.display=EDITA?'':'none';
+    $('[data-ver-portal]').style.display=NOVO?'none':'';
+  }
+  $$('[data-sw]').forEach(function(b){b.addEventListener('click',function(){if(!EDITA)return;var k=b.dataset.sw;F[k]=!F[k];b.setAttribute('aria-checked',F[k]);mudou()})});
+  $('[data-novo-ac]').addEventListener('submit',function(e){e.preventDefault();var n=$('[data-na-nome]').value.trim(),m=$('[data-na-email]').value.trim();
+    if(!n||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)){aviso('Preencha o nome e um e-mail válido');return}
+    F.acessos.push([n,m,$('[data-na-nivel]').value,'convite enviado']);this.reset();portal();mudou();progresso();aviso('Convite enviado para '+m+'. Ele entra com um link no e-mail, sem senha.')});
+  $('[data-copiar]').addEventListener('click',function(){aviso('Link copiado: '+$('[data-portal-url]').textContent.split(' · ')[0])});
+
+  // IA preenche o briefing
+  $('[data-ia-preencher]').addEventListener('click',function(){
+    if(!F.redes.instagram){aviso('Conecte o Instagram antes. É de lá que a IA lê o perfil.');location.hash='redes';return}
+    var b=this;b.disabled=true;b.textContent='Lendo o perfil…';
+    var alvo=['sobre','publico','objetivo'].map(function(k){return $('[data-c='+k+']')});alvo.forEach(function(x){x.classList.add('preenchendo')});
+    setTimeout(function(){var A=NOVO?rascunho():AURORA;['sobre','publico','objetivo'].forEach(function(k){if(!F[k])F[k]=A[k]});['servicos','usar','evitar'].forEach(function(k){if(!F[k].length)F[k]=A[k].slice()});F.tom1=A.tom1;F.tom2=A.tom2;
+      alvo.forEach(function(x){x.classList.remove('preenchendo')});campos();tags();mudou();progresso();b.disabled=false;b.textContent='Preencher de novo';
+      $('[data-custo]').textContent='Rascunho pronto. Revise antes de salvar.';aviso('Rascunho do briefing pronto. Leia e ajuste o que precisar.')},1600);
+  });
+  // rascunho de briefing para um cliente novo, a partir do nome e do segmento
+  function rascunho(){
+    var n=F.nome||'a marca',seg=F.seg||'Serviços';
+    var M={
+      'Alimentação':['%n é um negócio de alimentação com clientes fiéis no bairro. O perfil mostra os pratos, o preparo e a equipe; os posts com bastidores da cozinha são os mais comentados.','Famílias e casais de 25 a 50 anos da região, que pedem por delivery no fim de semana e valorizam ingrediente de qualidade.','Aumentar os pedidos de terça a quinta e fazer o perfil virar o cardápio de referência.',['Delivery','Retirada no balcão','Promoções da semana','Eventos'],['feito na hora','ingrediente fresco','bastidores da cozinha'],['foto escura','preço sem contexto','comida que não está no cardápio']],
+      'Saúde e estética':['%n atende na área de saúde e estética, com foco em explicar antes de indicar um tratamento. As legendas são didáticas e os comentários trazem muitas dúvidas.','Mulheres de 25 a 45 anos que pesquisam antes de agendar e confiam em quem explica.','Agendar avaliações e ser lembrada como referência que explica.',['Avaliação','Tratamentos faciais','Tratamentos corporais'],['explicar o porquê','rotina possível','bastidores'],['promessa de resultado','antes e depois exagerado']],
+      'Fitness':['%n trabalha com atividade física e acompanhamento próximo dos alunos. Os vídeos curtos de exercício são os que mais performam.','Adultos de 25 a 55 anos que querem começar ou voltar a treinar sem se machucar.','Trazer alunos para a aula experimental.',['Aula experimental','Planos mensais','Turmas'],['movimento possível','sem dor','constância'],['corpo perfeito','dieta extrema']]
+    };
+    var t=M[seg]||['%n atende o público local com atendimento próximo. O perfil mostra o dia a dia e as dúvidas mais comuns dos clientes.','Clientes da região que pesquisam no Instagram antes de contratar.','Gerar contatos pelo WhatsApp e mostrar o trabalho feito.',['Serviço principal','Orçamento'],['atendimento próximo','bastidores'],['jargão técnico']];
+    return {sobre:t[0].replace('%n',n),publico:t[1],objetivo:t[2],servicos:t[3],usar:t[4],evitar:t[5],tom1:65,tom2:75};
+  }
+  $('[data-logo]').addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){F.logo=r.result;cabecalho();mudou()};r.readAsDataURL(f)});
+
+  // mudanças
+  $$('[data-c]').forEach(function(el){el.addEventListener('input',function(){F[el.dataset.c]=el.type==='range'?+el.value:el.value;mudou();progresso();if(['nome','sub','seg','pasta'].indexOf(el.dataset.c)>=0)cabecalho()})});
+  function mudou(){if(!EDITA)return;var dif=JSON.stringify(F)!==JSON.stringify(salvo);$('[data-salvar]').classList.toggle('on',dif)}
+  $('[data-descartar]').addEventListener('click',function(){F=JSON.parse(JSON.stringify(salvo));tudo();aviso('Alterações descartadas')});
+  $('[data-salva]').addEventListener('click',function(){
+    if(!F.nome.trim()){aviso('Dê um nome ao cliente');location.hash='dados';$('[data-c=nome]').focus();return}
+    salvo=JSON.parse(JSON.stringify(F));mudou();
+    if(NOVO){aviso(F.nome+' criado. '+(F.acessos.length?'Os convites do portal foram enviados.':'Agora convide alguém do cliente para o portal.'))}else aviso('Ficha salva. A IA já usa o briefing novo no próximo planejamento.');
+  });
+  addEventListener('beforeunload',function(e){if($('[data-salvar]').classList.contains('on')){e.preventDefault();e.returnValue=''}});
+
+  // progresso da ficha
+  function progresso(){
+    var S={dados:!!(F.nome&&F.seg&&F.cidade&&F.cores.length),briefing:!!(F.sobre&&F.publico&&F.servicos.length&&(F.usar.length||F.evitar.length)),redes:F.redes.instagram,cota:F.cota[0]+F.cota[1]+F.cota[2]>0,portal:F.acessos.length>0};
+    var itens=[F.nome,F.seg,F.sub,F.cidade,F.site,F.fontes,F.cores.length,F.sobre,F.publico,F.objetivo,F.servicos.length,F.usar.length,F.evitar.length,F.concorrentes.length,F.datas,F.redes.instagram,F.redes.facebook,F.hora,F.acessos.length];
+    var p=Math.round(itens.filter(Boolean).length/itens.length*100);
+    $('[data-pct]').textContent=p+'%';$('[data-pct-barra]').style.width=p+'%';
+    Object.keys(S).forEach(function(k,i){var el=$('[data-ok='+k+']');el.classList.toggle('ok',S[k]);el.textContent=S[k]?'✓':i+1});
+  }
+  // seção acesa ao rolar
+  var links=$$('[data-secoes] a');
+  links.forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var s=$(a.getAttribute('href'));if(s)s.scrollIntoView({behavior:'smooth',block:'start'})})});
+  var ob=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)links.forEach(function(a){a.classList.toggle('ativo',a.getAttribute('href')==='#'+e.target.id)})})},{rootMargin:'-30% 0px -60% 0px'});
+  ['dados','briefing','redes','cota','portal'].forEach(function(id){ob.observe(document.getElementById(id))});
+
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},3000)}
+  function tudo(){campos();cabecalho();cores();tags();equipe();redes();cota();portal();progresso();mudou()}
+  if(!EDITA){$('[data-leitura]').style.display='';$('[data-leitura]').textContent='Você pode ler a ficha, mas a sua função não edita os dados do cliente.';$('[data-ia-box]').style.display='none';$('[data-logo-box]').style.pointerEvents='none'}
+  if(NOVO){document.title='Pulse Creator · Novo cliente';$('[data-ir-quadro]').style.display='none';$('[data-salva]').textContent='Criar cliente';
+    $$('.cli-lat.ativo').forEach(function(a){a.classList.remove('ativo')});setTimeout(function(){$('[data-c=nome]').focus()},300)}
+  tudo();
+})();
+</script>
+</body>
+</html>

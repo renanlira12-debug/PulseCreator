@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Portal do cliente — relatório do mês</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;-webkit-font-smoothing:antialiased;font-size:14px;font-variant-numeric:tabular-nums}
+h1,h2,h3,h4{margin:0;letter-spacing:-0.03em}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--act)}
+button{font:inherit;cursor:pointer}
+.mono{font-variant-numeric:tabular-nums}
+.ser{font-weight:600;letter-spacing:-0.04em}
+</style>
+</helmet>
+
+<div style="{{raiz}}">
+
+  <div style="position:absolute;top:0;left:0;right:0;height:1000px;overflow:hidden;pointer-events:none">
+    <span style="{{aur1}}"></span>
+    <span style="{{aur2}}"></span>
+    <span style="{{aur3}}"></span>
+  </div>
+
+  <header style="position:relative;background:var(--side);backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);border-bottom:1px solid var(--stroke)">
+    <div style="max-width:1140px;margin:0 auto;padding:14px 28px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+      <div style="display:flex;align-items:baseline;gap:3px">
+        <b style="font-size:16px;font-weight:800;letter-spacing:-0.04em">PULSO</b>
+        <span style="width:5px;height:13px;background:linear-gradient(180deg,var(--ac),var(--vi));display:inline-block;transform:skewX(-14deg);border-radius:2px"></span>
+        <span style="font-size:16px;font-weight:400;letter-spacing:-0.03em;color:var(--mut)">CREATOR</span>
+      </div>
+      <span style="width:1px;height:18px;background:var(--stroke)"></span>
+      <span style="font-size:12.5px;color:var(--mut)">Estúdio Linha para <b style="color:var(--ink);font-weight:600">Clínica Bem Viver</b></span>
+      <span style="flex:1"></span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut)">
+        <span style="width:26px;height:26px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);font-size:10px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;color:var(--ink)">AC</span>Ana Costa
+      </span>
+    </div>
+    <div style="max-width:1140px;margin:0 auto;padding:0 28px">
+      <nav style="display:flex;flex-wrap:wrap;gap:3px">
+        <span style="padding:10px 15px 13px;font-size:13.5px;font-weight:700;border-bottom:2px solid var(--ac);margin-bottom:-1px">Relatório</span>
+        <a href="PortalPlanejamento.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Planejamento</a>
+        <a href="PortalArquivos.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Arquivos</a>
+        <a href="PortalAgenda.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Agenda</a>
+        <a href="PortalRelatorio.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Linha do tempo</a>
+        <a href="PortalCofre.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Cofre</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="position:relative;max-width:1140px;margin:0 auto;padding:28px 28px 60px;width:100%">
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:22px">
+      <span style="display:inline-flex;align-items:center;gap:7px;min-height:30px;padding:0 13px;border-radius:999px;background:var(--acs);border:1px solid var(--acb);font-size:10.5px;font-weight:700;letter-spacing:.15em;color:var(--act)">
+        <span style="width:5px;height:5px;border-radius:999px;background:var(--ac);box-shadow:0 0 8px var(--ac)"></span>OUTUBRO 2026
+      </span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="PortalRelatorio.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 18px;border-radius:999px;background:linear-gradient(140deg,var(--vi),var(--ac));color:#FFF;font-size:12.5px;font-weight:600;box-shadow:0 8px 24px var(--acs)">Baixar em PDF</a>
+        <a href="PortalRelatorio.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 18px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);box-shadow:var(--glow);font-size:12.5px;font-weight:500">Comparar com setembro</a>
+      </div>
+    </div>
+
+    <section style="position:relative;background:var(--glass);backdrop-filter:blur(28px) saturate(185%);-webkit-backdrop-filter:blur(28px) saturate(185%);border:1px solid var(--stroke);border-radius:26px;box-shadow:var(--sh),var(--glow);padding:28px 32px;overflow:hidden">
+      <span style="position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--spec),transparent);pointer-events:none"></span>
+      <h1 style="font-size:clamp(23px,2.9vw,35px);font-weight:700;letter-spacing:-0.055em;line-height:1.14;max-width:19ch">Outubro trouxe <span style="color:var(--ac)">116.350 pessoas</span> até você.</h1>
+      <p style="font-size:14.5px;color:var(--mut);margin-top:12px">8% a mais de alcance que setembro, e 505 seguidores novos.</p>
+    </section>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(192px,1fr));gap:14px;margin-top:14px">
+      <div style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:22px;box-shadow:var(--sh),var(--glow);padding:20px 22px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:7px;height:7px;border-radius:999px;background:var(--ac);box-shadow:0 0 8px var(--ac)"></span>
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.13em;color:var(--mut)">ALCANCE</span>
+        </div>
+        <div class="mono" style="font-size:34px;font-weight:600;letter-spacing:-0.05em;line-height:1.1;margin-top:10px">116.350</div>
+        <div style="font-size:12.5px;color:var(--fai);margin-top:6px"><span style="color:var(--cy);font-weight:600">▲ 8%</span> vs setembro</div>
+      </div>
+      <div style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:22px;box-shadow:var(--sh),var(--glow);padding:20px 22px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:7px;height:7px;border-radius:999px;background:var(--cy)"></span>
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.13em;color:var(--mut)">ENGAJAMENTO</span>
+        </div>
+        <div class="mono" style="font-size:34px;font-weight:600;letter-spacing:-0.05em;line-height:1.1;margin-top:10px">4,89%</div>
+        <div style="font-size:12.5px;color:var(--fai);margin-top:6px"><span style="color:var(--cy);font-weight:600">▲ 0,4 pp</span> vs setembro</div>
+      </div>
+      <div style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:22px;box-shadow:var(--sh),var(--glow);padding:20px 22px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:7px;height:7px;border-radius:999px;background:var(--vi)"></span>
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.13em;color:var(--mut)">SEGUIDORES</span>
+        </div>
+        <div class="mono" style="font-size:34px;font-weight:600;letter-spacing:-0.05em;line-height:1.1;margin-top:10px">+505</div>
+        <div style="font-size:12.5px;color:var(--fai);margin-top:6px">7.744 no total</div>
+      </div>
+      <div style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:22px;box-shadow:var(--sh),var(--glow);padding:20px 22px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:7px;height:7px;border-radius:999px;background:var(--cy)"></span>
+          <span style="font-size:10.5px;font-weight:700;letter-spacing:.13em;color:var(--mut)">PUBLICAÇÕES</span>
+        </div>
+        <div class="mono" style="font-size:34px;font-weight:600;letter-spacing:-0.05em;line-height:1.1;margin-top:10px">15</div>
+        <div style="font-size:12.5px;color:var(--fai);margin-top:6px">12 combinados em contrato</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;margin-top:14px">
+
+      <div style="flex:999 1 430px;min-width:0;display:flex;flex-direction:column;gap:14px">
+
+        <section style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:24px 26px">
+          <h2 style="font-size:15px;font-weight:700;letter-spacing:-0.02em">Alcance por semana</h2>
+          <p style="font-size:12px;color:var(--fai);margin-top:4px">Pessoas distintas alcançadas no Instagram, por semana de outubro.</p>
+          <div style="display:flex;align-items:flex-end;gap:13px;height:170px;margin-top:24px">
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:8px">
+              <div title="Semana 1: 24.100 pessoas" style="height:77%;background:linear-gradient(180deg,var(--ac),var(--vi));border-radius:5px 5px 0 0"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:8px">
+              <div title="Semana 2: 26.800 pessoas" style="height:86%;background:linear-gradient(180deg,var(--ac),var(--vi));border-radius:5px 5px 0 0"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:8px">
+              <span class="mono" style="font-size:12px;font-weight:600;text-align:center">31.200</span>
+              <div title="Semana 3: 31.200 pessoas" style="height:100%;background:linear-gradient(180deg,var(--ac),var(--vi));border-radius:5px 5px 0 0;box-shadow:0 0 22px var(--acs)"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:8px">
+              <div title="Semana 4: 22.900 pessoas" style="height:73%;background:linear-gradient(180deg,var(--ac),var(--vi));border-radius:5px 5px 0 0"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:8px">
+              <div title="Semana 5, parcial: 11.350 pessoas" style="height:36%;background:linear-gradient(180deg,var(--ac),var(--vi));border-radius:5px 5px 0 0"></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:13px;margin-top:10px;border-top:1px solid var(--stroke);padding-top:10px">
+            <span class="mono" style="flex:1;font-size:11px;color:var(--fai);text-align:center">sem 1</span>
+            <span class="mono" style="flex:1;font-size:11px;color:var(--fai);text-align:center">sem 2</span>
+            <span class="mono" style="flex:1;font-size:11px;color:var(--fai);text-align:center">sem 3</span>
+            <span class="mono" style="flex:1;font-size:11px;color:var(--fai);text-align:center">sem 4</span>
+            <span class="mono" style="flex:1;font-size:11px;color:var(--fai);text-align:center">sem 5</span>
+          </div>
+        </section>
+
+        <section style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:24px 26px">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px">
+            <span style="width:7px;height:7px;border-radius:999px;background:var(--ac);box-shadow:0 0 10px var(--ac)"></span>
+            <h2 style="font-size:15px;font-weight:700;letter-spacing:-0.02em;flex:1">O que aconteceu em outubro</h2>
+            <span style="font-size:11px;color:var(--fai)">escrito pela Marina</span>
+          </div>
+          <p style="font-size:14.5px;line-height:1.65;margin-bottom:13px">A terceira semana puxou o mês inteiro. O carrossel sobre protetor solar passou de trinta mil pessoas sozinho, e foi o conteúdo mais salvo do período — sinal de que o formato "mito x verdade" funciona muito bem com o seu público.</p>
+          <p style="font-size:14.5px;line-height:1.65;margin-bottom:13px">Os stories caíram 8%, mas isso era esperado: fizemos seis a menos que em setembro por causa do feriado. A taxa de resposta seguiu igual, então não é perda de interesse.</p>
+          <p style="font-size:14.5px;line-height:1.65">Em novembro vamos repetir a estrutura de "mito x verdade" em dois conteúdos e trazer de volta a caixinha de perguntas, que foi o que mais trouxe gente nova pro perfil em agosto.</p>
+        </section>
+
+        <section style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:4px 26px">
+          <h2 style="font-size:15px;font-weight:700;letter-spacing:-0.02em;padding:22px 0 8px">Melhores publicações</h2>
+          <div style="display:flex;align-items:center;gap:15px;padding:15px 0;border-top:1px solid var(--stroke)">
+            <span class="mono" style="flex:0 0 28px;height:28px;border-radius:9px;background:var(--acs);border:1px solid var(--acb);color:var(--act);font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">01</span>
+            <span style="flex:0 0 42px;height:42px;border-radius:13px;background:var(--glass2);border:1px solid var(--stroke)"></span>
+            <div style="flex:1;min-width:0">
+              <h4 style="font-size:14px;font-weight:600;letter-spacing:-0.015em">Mitos sobre protetor solar</h4>
+              <p class="mono" style="font-size:11px;color:var(--fai);margin-top:3px">CARROSSEL · 08 OUT</p>
+            </div>
+            <div style="flex:0 0 auto;text-align:right"><div class="mono" style="font-size:14.5px;font-weight:600">31.200</div><div style="font-size:11px;color:var(--fai)">alcance</div></div>
+            <div style="flex:0 0 auto;text-align:right;min-width:58px"><div class="mono" style="font-size:14.5px;font-weight:600">412</div><div style="font-size:11px;color:var(--fai)">salvos</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:15px;padding:15px 0;border-top:1px solid var(--stroke)">
+            <span class="mono" style="flex:0 0 28px;height:28px;border-radius:9px;background:var(--glass2);border:1px solid var(--stroke);font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">02</span>
+            <span style="flex:0 0 42px;height:42px;border-radius:13px;background:var(--glass2);border:1px solid var(--stroke)"></span>
+            <div style="flex:1;min-width:0">
+              <h4 style="font-size:14px;font-weight:600;letter-spacing:-0.015em">Um dia na clínica</h4>
+              <p class="mono" style="font-size:11px;color:var(--fai);margin-top:3px">REEL · 16 OUT</p>
+            </div>
+            <div style="flex:0 0 auto;text-align:right"><div class="mono" style="font-size:14.5px;font-weight:600">18.940</div><div style="font-size:11px;color:var(--fai)">alcance</div></div>
+            <div style="flex:0 0 auto;text-align:right;min-width:58px"><div class="mono" style="font-size:14.5px;font-weight:600">155</div><div style="font-size:11px;color:var(--fai)">salvos</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:15px;padding:15px 0 22px;border-top:1px solid var(--stroke)">
+            <span class="mono" style="flex:0 0 28px;height:28px;border-radius:9px;background:var(--glass2);border:1px solid var(--stroke);font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">03</span>
+            <span style="flex:0 0 42px;height:42px;border-radius:13px;background:var(--glass2);border:1px solid var(--stroke)"></span>
+            <div style="flex:1;min-width:0">
+              <h4 style="font-size:14px;font-weight:600;letter-spacing:-0.015em">3 sinais de que sua pele pede hidratação</h4>
+              <p class="mono" style="font-size:11px;color:var(--fai);margin-top:3px">POST · 22 OUT</p>
+            </div>
+            <div style="flex:0 0 auto;text-align:right"><div class="mono" style="font-size:14.5px;font-weight:600">14.120</div><div style="font-size:11px;color:var(--fai)">alcance</div></div>
+            <div style="flex:0 0 auto;text-align:right;min-width:58px"><div class="mono" style="font-size:14.5px;font-weight:600">98</div><div style="font-size:11px;color:var(--fai)">salvos</div></div>
+          </div>
+        </section>
+      </div>
+
+      <div style="flex:1 1 290px;min-width:280px;display:flex;flex-direction:column;gap:14px">
+
+        <section style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:22px 24px">
+          <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em;margin-bottom:14px">Sua próxima reunião</h2>
+          <div class="mono" style="font-size:12px;color:var(--fai)">terça, 4 de novembro · 14:00</div>
+          <div style="font-size:14.5px;font-weight:600;margin-top:5px">Alinhamento de novembro</div>
+          <p style="font-size:12.5px;color:var(--mut);line-height:1.5;margin-top:7px">30 minutos, online, com a Marina.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+            <a href="PortalAgenda.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:999px;background:linear-gradient(140deg,var(--vi),var(--ac));color:#FFF;font-size:12.5px;font-weight:600;box-shadow:0 8px 24px var(--acs)">Confirmar presença</a>
+            <a href="PortalAgenda.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);box-shadow:var(--glow);font-size:12.5px;font-weight:500">Marcar um ensaio de fotos</a>
+          </div>
+        </section>
+
+        <section style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:22px 24px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px">
+            <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em">Seus arquivos</h2>
+            <a href="PortalArquivos.dc.html" style="font-size:12px;color:var(--mut)">Abrir tudo</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:11px">
+              <span style="width:32px;height:32px;border-radius:11px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--mut)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 15l5-4 4 3 3-2 6 5"/></svg></span>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">Outubro · Posts</div><div class="mono" style="font-size:11px;color:var(--fai)">15 arquivos</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:11px">
+              <span style="width:32px;height:32px;border-radius:11px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--mut)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg></span>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">Outubro · Reels</div><div class="mono" style="font-size:11px;color:var(--fai)">6 arquivos</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:11px">
+              <span style="width:32px;height:32px;border-radius:11px;background:var(--acs);border:1px solid var(--acb);display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--act)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500">Enviado por você</div><div class="mono" style="font-size:11px;color:var(--fai)">3 arquivos</div></div>
+            </div>
+          </div>
+          <p style="font-size:11.5px;color:var(--fai);line-height:1.5;margin-top:14px">Tudo fica no Google Drive do Estúdio Linha, organizado por mês.</p>
+        </section>
+
+        <section style="background:var(--glassLow);border:1px solid var(--stroke);border-radius:24px;padding:22px 24px">
+          <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em;margin-bottom:16px">Linha do tempo</h2>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;gap:11px"><span class="mono" style="flex:0 0 46px;font-size:11px;color:var(--act);padding-top:2px">out 26</span><span style="flex:1;font-size:12.5px;line-height:1.45">Começamos a publicar carrosséis de "mito x verdade"</span></div>
+            <div style="display:flex;gap:11px"><span class="mono" style="flex:0 0 46px;font-size:11px;color:var(--fai);padding-top:2px">set 26</span><span style="flex:1;font-size:12.5px;line-height:1.45;color:var(--mut)">Ensaio de fotos novo na clínica</span></div>
+            <div style="display:flex;gap:11px"><span class="mono" style="flex:0 0 46px;font-size:11px;color:var(--fai);padding-top:2px">jul 26</span><span style="flex:1;font-size:12.5px;line-height:1.45;color:var(--mut)">Troca da identidade visual do perfil</span></div>
+            <div style="display:flex;gap:11px"><span class="mono" style="flex:0 0 46px;font-size:11px;color:var(--fai);padding-top:2px">mar 26</span><span style="flex:1;font-size:12.5px;line-height:1.45;color:var(--mut)">Início do contrato com o Estúdio Linha</span></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1180}}'>
+class Component extends DCLogic {
+  tema() {
+    return { ink:'#F5F3F0', mut:'#A9A49D', fai:'#8A857E',
+          ac:'#FF6A1A', act:'#FF9254', acs:'rgba(255,106,26,.14)', acb:'rgba(255,106,26,.34)',
+          cy:'#FFB020', vi:'#C2410C',
+          glass:'rgba(255,255,255,.05)', glass2:'rgba(255,255,255,.085)', glass3:'rgba(255,255,255,.14)', glassLow:'rgba(255,255,255,.03)',
+          side:'rgba(8,8,9,.6)',
+          stroke:'rgba(255,255,255,.11)', spec:'rgba(255,255,255,.7)', track:'rgba(255,255,255,.08)',
+          sh:'0 2px 10px rgba(0,0,0,.45), 0 24px 60px rgba(0,0,0,.55)',
+          glow:'inset 0 1px 0 rgba(255,255,255,.2), inset 0 -1px 0 rgba(255,255,255,.04)',
+          fundo:'radial-gradient(120% 80% at 55% 0%, #1B120B 0%, #0C0A08 55%, #050505 100%)',
+          o1:'.5', o2:'.44', o3:'.3' };
+  }
+  blob(cor, css) {
+    return 'position:absolute;border-radius:999px;pointer-events:none;background:radial-gradient(circle,' + cor + ' 0%, transparent 68%);' + css;
+  }
+  renderVals() {
+    var t = this.tema();
+    var vars = '';
+    for (var k in t) { vars += '--' + k + ':' + t[k] + ';'; }
+    return {
+      raiz: vars + 'position:relative;min-height:100vh;background:' + t.fundo + ';color:' + t.ink + ';overflow-x:hidden',
+      aur1: this.blob(t.vi, 'top:-200px;left:2%;width:600px;height:580px;filter:blur(100px);opacity:' + t.o1),
+      aur2: this.blob(t.ac, 'top:-90px;left:40%;width:680px;height:560px;filter:blur(110px);opacity:' + t.o2),
+      aur3: this.blob(t.cy, 'top:90px;right:-120px;width:540px;height:540px;filter:blur(110px);opacity:' + t.o3)
+    };
+  }
+}
+</script>
+</body>
+</html>

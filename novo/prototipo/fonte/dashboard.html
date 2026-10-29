@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/*BASE*/
+/* ---------- grade ---------- */
+.grade{display:grid;gap:16px}
+.grade>*{min-width:0}
+.g-hero{grid-template-columns:1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g-2{grid-template-columns:1.25fr 1fr}
+.g-3{grid-template-columns:1fr 1fr}
+.bloco{margin-top:16px}
+
+/* ---------- hero ---------- */
+.hero{display:flex;align-items:center;gap:28px;padding:28px 32px;border-radius:28px;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-80px;top:-120px;width:360px;height:360px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--laranja) 16%,transparent),transparent 65%);pointer-events:none}
+.hero h2{margin-top:10px;font-size:clamp(24px,2.6vw,34px);line-height:1.15;font-weight:700;letter-spacing:-.03em;max-width:620px}
+.hero h2 em{font-style:normal;color:var(--laranja);text-shadow:0 0 24px color-mix(in srgb,var(--laranja) 45%,transparent)}
+.hero .quebra{margin-top:12px;color:var(--texto-2)}
+.hero .quebra b{color:var(--texto);font-weight:600}
+.hero .comp{margin-top:14px;display:flex;align-items:center;gap:8px;color:var(--texto-3);font-size:13px}
+.hero .texto{flex:1;position:relative;z-index:1}
+.anel{position:relative;z-index:1;width:168px;height:168px;flex:none}
+.anel svg{width:100%;height:100%;transform:rotate(-90deg)}
+.anel .trilho{stroke:color-mix(in srgb,var(--tinta) 8%,transparent)}
+.anel .valor{stroke:url(#gradAnel);stroke-linecap:round;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--laranja) 60%,transparent));
+  stroke-dasharray:440;stroke-dashoffset:440;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)}
+.anel .meio{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.anel .meio b{font-size:36px;font-weight:700;letter-spacing:-.04em}
+.anel .meio small{font-size:10.5px;font-weight:600;letter-spacing:.1em;color:var(--texto-2)}
+
+/* ---------- cartões de número ---------- */
+.num{padding:18px 20px;border-radius:22px}
+.num .rotulo{color:var(--texto-3)}
+.num b{display:block;margin:8px 0 8px;font-size:32px;font-weight:700;letter-spacing:-.04em}
+.num small{color:var(--texto-3);font-size:12px;margin-left:4px}
+.num.alerta{border-color:rgba(255,90,78,.35);background:linear-gradient(180deg,rgba(255,90,78,.10),rgba(255,90,78,.03))}
+.num.alerta b{color:var(--vermelho)}
+
+/* barras */
+.barras-topo{display:flex;align-items:baseline;gap:10px;margin:-6px 0 14px}
+.barras-topo b{font-size:28px;font-weight:700;letter-spacing:-.04em}
+.barras{display:grid;grid-template-columns:28px 1fr;gap:8px;height:200px}
+.eixo{display:flex;flex-direction:column;justify-content:space-between;font-size:10.5px;color:var(--texto-3);text-align:right;padding-bottom:22px}
+.colunas{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.col{display:flex;flex-direction:column;align-items:center;gap:8px}
+.trilho-b{position:relative;flex:1;width:100%;max-width:44px;border-radius:12px;background:color-mix(in srgb,var(--tinta) 5%,transparent);overflow:hidden}
+.trilho-b i{position:absolute;left:0;right:0;bottom:0;border-radius:12px;background:color-mix(in srgb,var(--laranja) 38%,transparent);height:0;transition:height 1s cubic-bezier(.2,.8,.2,1)}
+.col.atual .trilho-b i{background:linear-gradient(180deg,var(--laranja-claro),var(--laranja));box-shadow:0 0 18px color-mix(in srgb,var(--laranja) 50%,transparent)}
+.col span{font-size:11px;color:var(--texto-3)}
+.col.atual span{color:var(--texto)}
+.col:hover .trilho-b{outline:1px solid color-mix(in srgb,var(--tinta) 25%,transparent)}
+
+/* funil */
+.funil{display:flex;flex-direction:column;gap:10px}
+.etapa{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:12px;font-size:12.5px}
+.etapa span{color:var(--texto-2)}
+.etapa .faixa{height:30px;border-radius:10px;background:color-mix(in srgb,var(--tinta) 4%,transparent);overflow:hidden}
+.etapa .faixa i{display:flex;align-items:center;justify-content:flex-end;height:100%;padding-right:8px;border-radius:10px;width:0;
+  font-style:normal;font-size:11px;font-weight:600;color:#1d0c03;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.etapa b{text-align:right;font-weight:600}
+
+/* pódio */
+.podio{display:grid;grid-template-columns:1fr 1.1fr 1fr;align-items:end;gap:10px;padding-top:6px}
+.lugar{text-align:center}
+.lugar .av{width:56px;height:56px;font-size:17px}
+.lugar.p1 .av{width:72px;height:72px;font-size:21px;box-shadow:0 0 0 3px var(--laranja),0 0 28px color-mix(in srgb,var(--laranja) 55%,transparent)}
+.lugar b{display:block;margin-top:8px;font-size:13.5px}
+.lugar small{color:var(--texto-3);font-size:12px}
+.degrau{margin-top:10px;border-radius:14px 14px 6px 6px;display:grid;place-items:center;font-weight:700;color:var(--texto-2);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tinta) 8%,transparent),color-mix(in srgb,var(--tinta) 2%,transparent));border:1px solid var(--borda);border-bottom:0}
+.p1 .degrau{height:92px;color:var(--laranja);background:linear-gradient(180deg,color-mix(in srgb,var(--laranja) 22%,transparent),color-mix(in srgb,var(--laranja) 4%,transparent));border-color:color-mix(in srgb,var(--laranja) 35%,transparent)}
+.p2 .degrau{height:64px}.p3 .degrau{height:48px}
+.coroa{display:block;margin:0 auto 4px;width:22px;height:22px;color:var(--ambar);filter:drop-shadow(0 0 6px rgba(255,181,71,.6))}
+
+/* precisa de você */
+.lista{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:var(--fosco);border:1px solid transparent;transition:border-color .2s,background .2s}
+.item:hover{border-color:var(--borda);background:color-mix(in srgb,var(--tinta) 5%,transparent)}
+.item .tipo{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex:none}
+.item .tipo svg{width:17px;height:17px}
+.item .tipo.l{background:color-mix(in srgb,var(--laranja) 14%,transparent);color:var(--laranja-claro)}
+.item .tipo.a{background:rgba(255,181,71,.12);color:var(--ambar)}
+.item .tipo.v{background:rgba(255,90,78,.12);color:var(--vermelho)}
+.item div{flex:1;min-width:0}
+.item b{display:block;font-weight:500;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item small{color:var(--texto-3);font-size:12px}
+.item .quando{font-size:11.5px;color:var(--texto-3);flex:none}
+
+
+@media (max-width:520px){.num{padding:16px 14px}.num .rotulo{letter-spacing:.03em;font-size:10.5px}.etapa{grid-template-columns:72px minmax(0,1fr) 34px;gap:8px}.lugar .av{width:46px;height:46px;font-size:14px}.lugar.p1 .av{width:58px;height:58px}}
+.hero-ent{align-items:center}
+.selo-dash{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--laranja-claro);background:color-mix(in srgb,var(--laranja) 13%,transparent);border:1px solid color-mix(in srgb,var(--laranja) 30%,transparent)}
+.gigante{margin-top:12px!important;font-size:clamp(44px,6vw,76px)!important;font-weight:900!important;letter-spacing:-.045em!important;line-height:.95!important}
+.ritmo{margin-top:8px;font-size:15px;font-style:italic;color:var(--texto-2)}
+.ritmo.alerta{color:var(--laranja-claro)}
+.mes-dash{display:inline-flex;align-items:center;gap:4px;margin-top:16px;padding:4px;border-radius:99px}
+.mes-dash b{padding:0 12px;font-size:13.5px;min-width:130px;text-align:center}
+.mes-dash button{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--texto-2)}
+.mes-dash button:hover:not(:disabled){background:var(--vidro-2);color:var(--texto)}
+.mes-dash button:disabled{opacity:.3}
+.anel .meio .frac{display:block;margin-top:2px;font-size:11.5px;color:var(--laranja-claro);font-weight:600}
+.num .ic-num{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;margin-bottom:10px;color:var(--laranja-claro);background:color-mix(in srgb,var(--laranja) 13%,transparent)}
+.num b{margin:0 0 4px!important}
+.num .rotulo{display:block}
+.num small{display:block;margin:4px 0 0!important}
+.num .mini-link{display:inline-block;margin-top:6px;font-size:12px;color:var(--laranja-claro);text-decoration:none}
+.num.destaque{border-color:color-mix(in srgb,var(--laranja) 45%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--laranja) 12%,transparent),color-mix(in srgb,var(--laranja) 3%,transparent))}
+.num.destaque b{color:var(--laranja-claro)}
+.num.alerta .ic-num{color:var(--vermelho);background:color-mix(in srgb,var(--vermelho) 13%,transparent)}
+.saude{padding:22px;border-radius:24px}
+.saude-g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.saude .s{padding:14px 16px;border-radius:18px;background:var(--fosco);border:1px solid var(--borda)}
+.saude .s b{display:block;margin:6px 0 2px;font-size:28px;font-weight:800;letter-spacing:-.04em}
+.saude .s small{display:block;font-size:12px;color:var(--laranja-claro);font-weight:600}
+.saude .s p{margin-top:6px;font-size:11.5px;color:var(--texto-3)}
+@media (max-width:900px){.saude-g{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+
+<div class="app">
+<!--LATERAL:dashboard-->
+
+  <main class="principal">
+    <header class="topo">
+      <h1>Dashboard</h1>
+      <div class="esp"></div>
+      <a class="btn primario ocultar" href="demandas.html" style="text-decoration:none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Nova demanda</a>
+    </header>
+
+    <section class="grade g-hero">
+      <div class="hero hero-ent vidro especular entra">
+        <div class="texto">
+          <span class="selo-dash"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg>DASHBOARD</span>
+          <h2 class="gigante">ENTREGAS</h2>
+          <p class="ritmo" data-ritmo></p>
+          <div class="mes-dash vidro"><button data-mes-dash="-1" aria-label="Mês anterior"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button><b data-mes-nome></b><button data-mes-dash="1" aria-label="Próximo mês"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6"/></svg></button></div>
+        </div>
+        <div class="anel">
+          <svg viewBox="0 0 160 160"><circle class="trilho" cx="80" cy="80" r="70" fill="none" stroke-width="12"/><circle class="valor" cx="80" cy="80" r="70" fill="none" stroke-width="12" data-anel/></svg>
+          <div class="meio"><b data-pct>0%</b><small>ENTREGUE</small><span class="frac" data-frac></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grade g4 bloco" data-cards></section>
+
+    <section class="saude vidro bloco entra" style="animation-delay:.2s">
+      <div class="cab"><div><h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-3px;color:var(--laranja-claro)"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg> Saúde da operação</h3><p>Como a equipe está trabalhando, além de quanto entrega</p></div></div>
+      <div class="saude-g" data-saude></div>
+    </section>
+
+    <section class="grade g-2 bloco">
+      <div class="cartao vidro entra" style="animation-delay:.25s">
+        <div class="cab">
+          <div><h3>Entregas por mês</h3><p>Meta de outubro: 160 · soma do que os clientes contrataram</p></div>
+          <div class="esp"></div>
+          <span class="mini"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18"/></svg>2026</span>
+        </div>
+        <div class="barras-topo"><b>138</b><span class="var sobe">▲ 14,8%</span><span style="color:var(--texto-3);font-size:12.5px">faltam 22 para a meta</span></div>
+        <div class="barras">
+          <div class="eixo"><span>160</span><span>120</span><span>80</span><span>40</span><span>0</span></div>
+          <div class="colunas" data-barras></div>
+        </div>
+      </div>
+
+      <div class="cartao vidro entra" style="animation-delay:.3s">
+        <div class="cab">
+          <div><h3>Fluxo de outubro</h3><p>Onde estão os 160 conteúdos do mês</p></div>
+        </div>
+        <div class="funil" data-funil></div>
+        <p style="margin-top:16px;color:var(--texto-3);font-size:12.5px">O maior gargalo está em <b style="color:var(--laranja-claro);font-weight:600">aprovação do cliente</b>: 19 conteúdos esperando há mais de 2 dias.</p>
+      </div>
+    </section>
+
+    <section class="grade g-3 bloco">
+      <div class="cartao vidro entra" style="animation-delay:.35s">
+        <div class="cab"><div><h3>Quem mais entregou</h3><p>Toque em alguém para ver tudo o que a pessoa entregou</p></div></div>
+        <div class="podio">
+          <div class="lugar p2"><div class="av" style="background:linear-gradient(135deg,#6b7280,#374151)">TM</div><b>Tiago</b><small>94 entregas</small><div class="degrau">2</div></div>
+          <div class="lugar p1"><svg class="coroa" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18l-1.5-10-5 4L12 5l-2.5 7-5-4z"/></svg><div class="av" style="background:linear-gradient(135deg,#FF9A57,#C2410C)">BS</div><b>Bianca</b><small>128 entregas</small><div class="degrau">1</div></div>
+          <div class="lugar p3"><div class="av" style="background:linear-gradient(135deg,#a16207,#713f12)">DL</div><b>Davi</b><small>81 entregas</small><div class="degrau">3</div></div>
+        </div>
+      </div>
+
+      <div class="cartao vidro entra" style="animation-delay:.4s">
+        <div class="cab"><div><h3>Precisa de você</h3><p>Vindo dos portais dos clientes</p></div><div class="esp"></div><span class="mini">7 itens</span></div>
+        <div class="lista">
+          <div class="item"><span class="tipo v"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b>Aprovação parada há 3 dias</b><small>Clínica Aurora · 4 posts</small></div><span class="quando">3 d</span></div>
+          <div class="item"><span class="tipo l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 8l5-5 5 5M5 21h14"/></svg></span><div><b>Novo pedido: arte para promoção de sábado</b><small>Forno Bravo · 3 anexos</small></div><span class="quando">40 min</span></div>
+          <div class="item"><span class="tipo a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><div><b>Ensaio de fotos para confirmar</b><small>Studio Move · sex, 31/10 às 9h</small></div><span class="quando">2 h</span></div>
+          <div class="item"><span class="tipo l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><div><b>“Dá pra trocar a foto do carrossel?”</b><small>Casa Lume · mensagem</small></div><span class="quando">5 h</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloco">
+      <div class="cartao vidro entra" style="animation-delay:.45s">
+        <div class="cab"><div><h3>Resultados dos clientes</h3><p>Instagram · outubro até agora vs setembro</p></div><div class="esp"></div><span class="mini">Ver todos →</span></div>
+        <div class="rolagem">
+          <table class="tabela">
+            <thead><tr><th>Cliente</th><th>Seguidores</th><th>Alcance</th><th>Engajamento</th><th>Tendência</th></tr></thead>
+            <tbody data-resultados></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  // pílula com lente: escorrega e estica até o botão escolhido
+  document.querySelectorAll('[data-pilulas]').forEach(function(g){
+    var lente=g.querySelector('.lente');
+    function move(b,anima){
+      lente.style.width=b.offsetWidth+'px';
+      lente.style.transform='translateX('+b.offsetLeft+'px)';
+      if(anima){lente.classList.remove('esticando');void lente.offsetWidth;lente.classList.add('esticando')}
+    }
+    var ativo=g.querySelector('[aria-pressed=true]');
+    lente.style.transition='none';move(ativo,false);
+    requestAnimationFrame(function(){lente.style.transition=''});
+    g.addEventListener('click',function(e){
+      var b=e.target.closest('button');if(!b)return;
+      g.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+      move(b,true);
+    });
+    addEventListener('resize',function(){move(g.querySelector('[aria-pressed=true]'),false)});
+  });
+
+  // mês do dashboard: entregas × meta (meta = soma das cotas contratadas)
+  var MESES=[
+    {nome:'Agosto 2026',meta:226,ent:226,cli:26,prazo:93,lead:'6,1',leadN:296,retr:'5%',retrN:11,qual:'4,7',atr:2},
+    {nome:'Setembro 2026',meta:229,ent:221,cli:26,prazo:88,lead:'6,9',leadN:304,retr:'8%',retrN:18,qual:'4,6',atr:6},
+    {nome:'Outubro 2026',meta:231,ent:135,cli:27,prazo:86,lead:'7,2',leadN:135,retr:'9%',retrN:12,qual:'4,5',atr:12}
+  ],mi=2,DIA=22,DIAS=31;
+  function $(s){return document.querySelector(s)}
+  function mes(){
+    var m=MESES[mi],p=Math.round(m.ent/m.meta*100),atual=mi===2,ideal=atual?DIA/DIAS:1,falta=m.meta-m.ent;
+    $('[data-mes-nome]').textContent=m.nome;$('[data-pct]').textContent=p+'%';$('[data-frac]').textContent=m.ent+' / '+m.meta;
+    $('[data-anel]').style.strokeDashoffset=440-440*Math.min(1,p/100);
+    var r=m.ent/m.meta-ideal;
+    $('[data-ritmo]').textContent=!atual?(p>=100?'Mês fechado com a meta batida.':'Mês fechado: ficaram '+falta+' entregas de fora.'):r>=-.03?'Bom ritmo, vamos fechar o mês com folga.':r>=-.12?'Atenção: precisamos acelerar o mês.':'Ritmo abaixo do esperado. Hora de redistribuir as demandas.';
+    $('[data-ritmo]').className='ritmo'+(atual&&r<-.03?' alerta':'');
+    $('[data-cards]').innerHTML=
+      '<div class="num vidro entra"><span class="ic-num"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8"/></svg></span><b>'+m.cli+'</b><span class="rotulo">Clientes ativos</span></div>'+
+      '<div class="num vidro entra" style="animation-delay:.05s"><span class="ic-num"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></span><b>'+m.meta+'</b><span class="rotulo">Meta do mês</span><a class="mini-link" href="demandas.html">ver lista →</a></div>'+
+      '<div class="num vidro destaque entra" style="animation-delay:.1s"><span class="ic-num"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12l5 5L20 7"/></svg></span><b>'+m.ent+'</b><span class="rotulo">Entregues</span><small>'+p+'% da meta</small></div>'+
+      '<div class="num vidro '+(falta>0?'alerta':'')+' entra" style="animation-delay:.15s"><span class="ic-num"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><b>'+Math.max(0,falta)+'</b><span class="rotulo">Falta</span>'+(atual?'<small>'+(DIAS-DIA)+' dias pela frente</small>':'')+'</div>';
+    var S=[['Lead time médio',m.lead+'d',m.leadN+' entregas','do pedido à entrega'],['Taxa de retrabalho',m.retr,m.retrN+' itens voltaram','pedido de ajuste do cliente ou da revisão'],['Qualidade média',m.qual,'de 5','nota da revisão interna'],['No prazo',m.prazo+'%',m.atr+' atrasadas','entregues até a data combinada']];
+    $('[data-saude]').innerHTML=S.map(function(x,i){return '<div class="s"><span class="rotulo">'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2]+'</small><p>'+x[3]+'</p></div>'}).join('');
+    document.querySelectorAll('[data-mes-dash]').forEach(function(b){var n=mi+(+b.dataset.mesDash);b.disabled=n<0||n>=MESES.length});
+  }
+  document.querySelectorAll('[data-mes-dash]').forEach(function(b){b.addEventListener('click',function(){mi+=+b.dataset.mesDash;var h=$('.hero .texto');h.style.transition='filter .25s,opacity .25s';h.style.filter='blur(6px)';h.style.opacity='.4';setTimeout(function(){mes();h.style.filter='';h.style.opacity=''},200)})});
+
+  // barras
+  var meses=[['Mai',112],['Jun',126],['Jul',119],['Ago',141],['Set',120],['Out',138]];
+  $('[data-barras]').innerHTML=meses.map(function(m,i){
+    return '<div class="col'+(i===meses.length-1?' atual':'')+'" title="'+m[0]+': '+m[1]+' entregas"><div class="trilho-b"><i data-h="'+(m[1]/160*100)+'"></i></div><span>'+m[0]+'</span></div>';
+  }).join('');
+
+  // funil
+  var etapas=[['Planejado',160,'color-mix(in srgb,var(--laranja) 45%,transparent)'],['Produzido',142,'color-mix(in srgb,var(--laranja) 70%,transparent)'],['Aprovado',123,'var(--laranja)'],['Publicado',104,'var(--brasa)']];
+  $('[data-funil]').innerHTML=etapas.map(function(e){
+    var p=Math.round(e[1]/160*100);
+    return '<div class="etapa"><span>'+e[0]+'</span><div class="faixa"><i data-w="'+p+'" style="background:'+e[2]+'">'+p+'%</i></div><b>'+e[1]+'</b></div>';
+  }).join('');
+
+  // resultados
+  var cli=[
+    ['CA','Clínica Aurora','#FF9A57,#C2410C','8.412','+214','42,1 mil','▲ 18%','sobe','4,8%',[3,4,4,5,6,6,8]],
+    ['FB','Forno Bravo','#f59e0b,#b45309','15.930','+590','96,4 mil','▲ 33%','sobe','6,2%',[4,5,5,6,7,8,9]],
+    ['SM','Studio Move','#78716c,#44403c','3.208','+41','11,7 mil','▼ 9%','desce','3,1%',[6,6,5,5,4,4,3]],
+    ['CL','Casa Lume','#ea580c,#7c2d12','5.774','+132','27,9 mil','▲ 7%','sobe','4,0%',[4,4,5,4,5,5,6]]
+  ];
+  function spark(v,cor){
+    var w=84,h=26,mx=Math.max.apply(0,v),mn=Math.min.apply(0,v);
+    var pts=v.map(function(y,i){return (i*(w/(v.length-1))).toFixed(1)+','+(h-3-(y-mn)/((mx-mn)||1)*(h-6)).toFixed(1)}).join(' ');
+    return '<svg class="spark" viewBox="0 0 '+w+' '+h+'"><polyline points="'+pts+'" fill="none" stroke="'+cor+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  $('[data-resultados]').innerHTML=cli.map(function(c){
+    return '<tr><td><span class="cli"><span class="av" style="background:linear-gradient(135deg,'+c[2]+')">'+c[0]+'</span>'+c[1]+'</span></td>'+
+      '<td>'+c[3]+' <span style="color:var(--ambar);font-size:12px">'+c[4]+'</span></td>'+
+      '<td>'+c[5]+' <span class="var '+c[7]+'">'+c[6]+'</span></td><td>'+c[8]+'</td>'+
+      '<td>'+spark(c[9],c[7]==='sobe'?'var(--laranja-claro)':'var(--vermelho)')+'</td></tr>';
+  }).join('');
+
+  // anima ao carregar
+  setTimeout(function(){
+    mes();
+    document.querySelectorAll('[data-h]').forEach(function(i){i.style.height=i.dataset.h+'%'});
+    document.querySelectorAll('[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%'});
+  },300);
+})();
+</script>
+</body>
+</html>

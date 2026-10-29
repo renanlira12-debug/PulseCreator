@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clínica Aurora · Agenda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/*BASE*/
+.proximos{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+.proximos h3,.passo-t{margin:0 0 4px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--texto-3)}
+.comp{display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:20px}
+.comp.novo{animation:chega .6s var(--mola)}
+@keyframes chega{from{opacity:0;transform:translateY(-10px) scale(.98);filter:blur(6px)}}
+.data-b{width:54px;flex:none;text-align:center;padding:6px 0;border-radius:14px;background:color-mix(in srgb,var(--laranja) 12%,transparent);border:1px solid color-mix(in srgb,var(--laranja) 30%,transparent)}
+.data-b small{display:block;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--laranja-claro)}
+.data-b b{font-size:22px;font-weight:700;letter-spacing:-.03em}
+.comp div.t{flex:1;min-width:0}
+.comp div.t b{display:block;font-size:14px}
+.comp div.t small{display:block;margin-top:2px;color:var(--texto-3);font-size:12px}
+.st{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st.ok{color:#9BE3B0;background:rgba(155,227,176,.1)}
+.st.espera{color:var(--ambar);background:rgba(255,181,71,.12)}
+.comp a.btn{text-decoration:none}
+
+.marcar{margin-top:30px;padding:24px;border-radius:28px}
+.marcar>h3{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.marcar>p{color:var(--texto-3);font-size:13px;margin-top:3px}
+.tipos-a{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
+.tipo-a{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px;border-radius:20px;text-align:left;width:100%;
+  background:var(--fosco);border:1px solid var(--borda);transition:all .25s var(--mola)}
+.tipo-a:hover{border-color:color-mix(in srgb,var(--tinta) 20%,transparent)}
+.tipo-a[aria-pressed=true]{border-color:color-mix(in srgb,var(--laranja) 60%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--laranja) 16%,transparent),color-mix(in srgb,var(--laranja) 4%,transparent));transform:translateY(-2px)}
+.tipo-a .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--tinta) 7%,transparent);color:var(--texto-2)}
+.tipo-a[aria-pressed=true] .ic{background:color-mix(in srgb,var(--laranja) 20%,transparent);color:var(--laranja-claro)}
+.tipo-a b{font-size:14px}
+.tipo-a small{font-size:12px;color:var(--texto-3);line-height:1.45}
+.tipo-a .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.tipo-a .tags span{font-size:11px;padding:2px 8px;border-radius:7px;color:var(--texto-2);background:color-mix(in srgb,var(--tinta) 6%,transparent)}
+
+.escolha-d{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;margin-top:22px}
+.cal-a{padding:16px;border-radius:22px;background:var(--fosco);border:1px solid color-mix(in srgb,var(--tinta) 5%,transparent)}
+.cal-cab{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-cab b{font-size:14px}
+.cal-cab button{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--texto-2)}
+.cal-cab button:hover:not(:disabled){background:var(--vidro-2)}
+.cal-cab button:disabled{opacity:.3}
+.sem-a,.dias-a{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.sem-a span{text-align:center;font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--texto-3);padding-bottom:6px}
+.dia-a{aspect-ratio:1;border-radius:12px;font-size:13px;font-weight:600;color:var(--texto-3);display:grid;place-items:center;position:relative;transition:all .2s var(--mola)}
+.dia-a.livre{color:var(--texto);background:color-mix(in srgb,var(--tinta) 6%,transparent)}
+.dia-a.livre::after{content:"";position:absolute;bottom:6px;width:4px;height:4px;border-radius:50%;background:var(--laranja)}
+.dia-a.livre:hover{background:color-mix(in srgb,var(--tinta) 12%,transparent)}
+.dia-a[aria-pressed=true]{color:#1d0c03;background:linear-gradient(135deg,var(--laranja-claro),var(--laranja));box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 16px color-mix(in srgb,var(--laranja) 35%,transparent);transform:scale(1.06)}
+.dia-a[aria-pressed=true]::after{background:#1d0c03}
+.dia-a:disabled{cursor:default;text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--tinta) 15%,transparent)}
+.dia-a.vazio{visibility:hidden}
+.fuso{margin-top:10px;font-size:11.5px;color:var(--texto-3)}
+.horarios h4{margin:0 0 10px;font-size:14px;font-weight:600}
+.horarios p.v{font-size:13px;color:var(--texto-3);padding:20px;border-radius:16px;border:1px dashed color-mix(in srgb,var(--tinta) 10%,transparent);text-align:center}
+.hs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.hs button{padding:11px 8px;border-radius:14px;font-size:13px;font-weight:600;background:var(--fosco);border:1px solid var(--borda);transition:all .2s var(--mola)}
+.hs button:hover{border-color:color-mix(in srgb,var(--laranja) 50%,transparent)}
+.hs button[aria-pressed=true]{color:#1d0c03;background:linear-gradient(135deg,var(--laranja-claro),var(--laranja));border-color:transparent}
+.quem-a{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:12px;color:var(--texto-3)}
+.quem-a .av{width:24px;height:24px;font-size:9px;margin:0}
+.extra{display:none;margin-top:16px}
+.extra.on{display:block;animation:chega .4s var(--mola)}
+.campo{margin-top:12px}
+.campo label{display:block;font-size:12px;font-weight:600;color:var(--texto-2);margin-bottom:7px}
+.campo input,.campo select,.campo textarea{width:100%;padding:11px 14px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:13.5px;outline:none}
+.campo textarea{min-height:70px;resize:vertical}
+.campo select option{background:var(--superficie)}
+.campo input:focus,.campo select:focus,.campo textarea:focus{border-color:color-mix(in srgb,var(--laranja) 50%,transparent)}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.confirma{display:flex;align-items:center;gap:14px;margin-top:20px;padding:14px 16px;border-radius:18px;background:color-mix(in srgb,var(--tinta) 4%,transparent);border:1px solid var(--borda)}
+.confirma div{flex:1}
+.confirma b{display:block;font-size:13.5px}
+.confirma small{color:var(--texto-3);font-size:12px}
+.confirma .btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.6)}
+@media (max-width:900px){.tipos-a{grid-template-columns:repeat(2,minmax(0,1fr))}.escolha-d{grid-template-columns:1fr}}
+@media (max-width:520px){.comp{flex-wrap:wrap}.comp .st{order:3}.confirma{flex-direction:column;align-items:stretch}.duas{grid-template-columns:1fr}.marcar{padding:18px}}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<div class="portal-pag">
+<!--PORTAL:agenda-->
+  <main class="conteudo-portal">
+    <div class="entra">
+      <h2 class="ola-p">Sua <em>agenda</em> com a agência</h2>
+      <p class="sub-p">Marque reuniões e ensaios direto aqui. Você só vê os horários livres da equipe.</p>
+    </div>
+
+    <section class="proximos entra" style="animation-delay:.05s">
+      <h3>Próximos compromissos</h3>
+      <div data-proximos style="display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+
+    <section class="marcar vidro especular entra" style="animation-delay:.1s" data-marcar>
+      <h3>Marcar um horário</h3>
+      <p>Escolha o que você precisa, depois o dia e a hora.</p>
+      <span class="passo-t" style="display:block;margin-top:18px">1 · O que vamos fazer</span>
+      <div class="tipos-a" data-tipos></div>
+
+      <div class="escolha-d">
+        <div>
+          <span class="passo-t" style="display:block;margin-bottom:10px">2 · Escolha o dia</span>
+          <div class="cal-a">
+            <div class="cal-cab"><button data-m="-1" aria-label="Mês anterior"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button><b data-mes></b><button data-m="1" aria-label="Próximo mês"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button></div>
+            <div class="sem-a"><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span><span>DOM</span></div>
+            <div class="dias-a" data-dias></div>
+          </div>
+          <p class="fuso">Horários no fuso de Brasília (GMT−3). Dias com ponto laranja têm horário livre.</p>
+        </div>
+        <div class="horarios">
+          <span class="passo-t" style="display:block;margin-bottom:10px">3 · Escolha a hora</span>
+          <div data-horas><p class="v">Escolha um dia no calendário.</p></div>
+          <div class="extra" data-extra>
+            <div class="duas">
+              <div class="campo"><label for="e-local">Local</label><select id="e-local"><option>Na clínica</option><option>Estúdio da agência</option><option>Externo (combinar)</option></select></div>
+              <div class="campo"><label for="e-pessoas">Pessoas nas fotos</label><input id="e-pessoas" type="number" min="1" value="2"></div>
+            </div>
+            <div class="campo"><label for="e-obs">O que fotografar?</label><textarea id="e-obs" placeholder="Ex.: equipe, sala de atendimento, procedimentos"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="confirma">
+        <div><b data-resumo>Escolha o tipo, o dia e a hora</b><small data-resumo-sub>O convite vai para o seu e-mail e para o Google Agenda da agência.</small></div>
+        <button class="btn primario" data-confirmar disabled>Confirmar</button>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast vidro" data-toast></div>
+
+<script>
+(function(){
+  var TIPOS=[
+    {id:'alinhamento',nome:'Reunião de alinhamento',desc:'Revisar o mês, resultados e próximos passos.',dur:30,onde:'Online · Meet',ic:'<rect x="3" y="6" width="13" height="12" rx="3"/><path d="M16 10l5-3v10l-5-3"/>',horas:['09:00','10:00','11:00','14:00','15:30','17:00'],resp:['BS','Bianca']},
+    {id:'ensaio',nome:'Ensaio de fotos',desc:'Fotos profissionais da equipe, do espaço e dos serviços.',dur:180,onde:'Presencial',ic:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',horas:['08:00','13:30'],resp:['DL','Davi'],confirma:true,dias:[2,4]},
+    {id:'gravacao',nome:'Gravação de vídeo',desc:'Reels e vídeos para as redes, com roteiro pronto.',dur:120,onde:'Presencial',ic:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9l5 3-5 3z"/>',horas:['09:00','14:00'],resp:['TM','Tiago'],confirma:true,dias:[1,3]},
+    {id:'rapida',nome:'Dúvida rápida',desc:'Uma conversa curta para resolver algo pontual.',dur:15,onde:'Online · Meet',ic:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',horas:['09:30','11:45','16:00','16:30','17:30'],resp:['BS','Bianca']}
+  ];
+  var PROX=[{tipo:'alinhamento',dia:new Date(2026,9,28),hora:'10:00',st:'ok'}];
+  var MES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  var DS=['dom','seg','ter','qua','qui','sex','sáb'];
+  var HOJE=new Date(2026,9,22);
+  var sel={tipo:null,dia:null,hora:null},mesV=new Date(2026,9,1);
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function tipo(id){return TIPOS.filter(function(t){return t.id===id})[0]}
+  function dur(m){return m>=60?(m/60)+' h':m+' min'}
+  function proximos(novo){
+    PROX.sort(function(a,b){return a.dia-b.dia});
+    $('[data-proximos]').innerHTML=PROX.map(function(p,i){var t=tipo(p.tipo);
+      return '<div class="comp vidro'+(novo===p?' novo':'')+'"><span class="data-b"><small>'+DS[p.dia.getDay()]+'</small><b>'+p.dia.getDate()+'</b></span>'+
+        '<div class="t"><b>'+t.nome+'</b><small>'+p.dia.getDate()+' de '+MES[p.dia.getMonth()]+' · '+p.hora+' · '+dur(t.dur)+' · '+t.onde+' · com '+t.resp[1]+'</small></div>'+
+        '<span class="st '+p.st+'">'+(p.st==='ok'?'Confirmado':'Esperando a agência')+'</span>'+
+        (t.onde.indexOf('Meet')>=0&&p.st==='ok'?'<a class="btn fantasma" href="#" onclick="return false">Entrar no Meet</a>':'')+'</div>';
+    }).join('')||'<p style="color:var(--texto-3);font-size:13px">Nada marcado ainda.</p>';
+  }
+  function tipos(){
+    $('[data-tipos]').innerHTML=TIPOS.map(function(t){return '<button class="tipo-a" aria-pressed="'+(sel.tipo===t.id)+'" data-tipo="'+t.id+'"><span class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+t.ic+'</svg></span><b>'+t.nome+'</b><small>'+t.desc+'</small><span class="tags"><span>'+dur(t.dur)+'</span><span>'+t.onde+'</span>'+(t.confirma?'<span>agência confirma</span>':'')+'</span></button>'}).join('');
+    $$('[data-tipo]').forEach(function(b){b.addEventListener('click',function(){sel.tipo=b.dataset.tipo;sel.hora=null;
+      if(sel.dia&&!livre(sel.dia))sel.dia=null;tipos();cal();horas();resumo();$('[data-extra]').classList.toggle('on',sel.tipo==='ensaio')})});
+  }
+  function livre(d){
+    if(d<=HOJE)return false;var w=d.getDay();if(w===0||w===6)return false;
+    var t=tipo(sel.tipo);if(!t)return true;
+    if(t.dias&&t.dias.indexOf(w)<0)return false;
+    return (d.getDate()*7+w)%5!==0;
+  }
+  function cal(){
+    $('[data-mes]').textContent=MES[mesV.getMonth()]+' '+mesV.getFullYear();
+    $('[data-m="-1"]').disabled=mesV.getMonth()===9;$('[data-m="1"]').disabled=mesV.getMonth()===11;
+    var off=(mesV.getDay()+6)%7,n=new Date(mesV.getFullYear(),mesV.getMonth()+1,0).getDate(),h='';
+    for(var k=0;k<off;k++)h+='<span class="dia-a vazio"></span>';
+    for(var d=1;d<=n;d++){var dt=new Date(mesV.getFullYear(),mesV.getMonth(),d),l=sel.tipo&&livre(dt),s=sel.dia&&+sel.dia===+dt;
+      h+='<button class="dia-a'+(l?' livre':'')+'" '+(l?'':'disabled ')+'aria-pressed="'+!!s+'" data-d="'+d+'" aria-label="'+d+' de '+MES[mesV.getMonth()]+(l?', tem horário':'')+'">'+d+'</button>'}
+    $('[data-dias]').innerHTML=h;
+    $$('[data-d]').forEach(function(b){b.addEventListener('click',function(){sel.dia=new Date(mesV.getFullYear(),mesV.getMonth(),+b.dataset.d);sel.hora=null;cal();horas();resumo()})});
+  }
+  function horas(){
+    var box=$('[data-horas]'),t=tipo(sel.tipo);
+    if(!t){box.innerHTML='<p class="v">Primeiro escolha o que vamos fazer.</p>';return}
+    if(!sel.dia){box.innerHTML='<p class="v">Escolha um dia no calendário.</p>';return}
+    var hs=t.horas.filter(function(x,i){return (sel.dia.getDate()+i)%4!==0});
+    box.innerHTML='<h4>'+DS[sel.dia.getDay()]+', '+sel.dia.getDate()+' de '+MES[sel.dia.getMonth()]+'</h4><div class="hs">'+hs.map(function(x){return '<button aria-pressed="'+(sel.hora===x)+'" data-h="'+x+'">'+x+'</button>'}).join('')+'</div>'+
+      '<p class="quem-a"><span class="av" style="background:linear-gradient(135deg,#FF9A57,#C2410C)">'+t.resp[0]+'</span>Com '+t.resp[1]+' · '+dur(t.dur)+'</p>';
+    $$('[data-h]').forEach(function(b){b.addEventListener('click',function(){sel.hora=b.dataset.h;horas();resumo()})});
+  }
+  function resumo(){
+    var t=tipo(sel.tipo),ok=t&&sel.dia&&sel.hora,btn=$('[data-confirmar]');
+    btn.disabled=!ok;btn.textContent=t&&t.confirma?'Pedir este horário':'Confirmar';
+    $('[data-resumo]').textContent=ok?t.nome+' · '+DS[sel.dia.getDay()]+', '+sel.dia.getDate()+' de '+MES[sel.dia.getMonth()]+' às '+sel.hora:'Escolha o tipo, o dia e a hora';
+    $('[data-resumo-sub]').textContent=ok&&t.confirma?'A agência confirma em até 1 dia útil. Você recebe o aviso aqui e por e-mail.':'O convite vai para o seu e-mail e para o Google Agenda da agência.';
+  }
+  $$('[data-m]').forEach(function(b){b.addEventListener('click',function(){mesV=new Date(mesV.getFullYear(),mesV.getMonth()+(+b.dataset.m),1);cal()})});
+  $('[data-confirmar]').addEventListener('click',function(){
+    var t=tipo(sel.tipo),p={tipo:sel.tipo,dia:sel.dia,hora:sel.hora,st:t.confirma?'espera':'ok'};
+    PROX.push(p);proximos(p);
+    aviso(t.confirma?'Pedido enviado. A agência confirma o '+t.nome.toLowerCase()+' em até 1 dia útil.':'Marcado! O convite com o link do Meet foi para o seu e-mail.');
+    sel={tipo:null,dia:null,hora:null};tipos();cal();horas();resumo();$('[data-extra]').classList.remove('on');
+    scrollTo({top:0,behavior:'smooth'});
+  });
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},3000)}
+  proximos();tipos();cal();horas();resumo();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Planejar com IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/*BASE*/
+.btn.fantasma{color:var(--texto-2);background:var(--fosco);border:1px solid var(--borda)}
+.btn.fantasma:hover{color:var(--texto)}
+.fase{display:none}.fase.on{display:block;animation:entraF .45s ease}
+@keyframes entraF{from{opacity:0;filter:blur(8px);transform:translateY(8px)}}
+.titulo{margin-bottom:18px}
+.titulo h2{font-size:28px;font-weight:700;letter-spacing:-.03em}
+.titulo h2 em{font-style:normal;color:var(--laranja)}
+.titulo p{color:var(--texto-2);margin-top:4px}
+
+/* configurar */
+.cfg{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);gap:16px;align-items:start}
+.bloco{padding:22px;border-radius:26px}
+.passo{display:block;margin-bottom:10px;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--texto-3)}
+.passo+*{margin-bottom:22px}
+.linha2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sel{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda)}
+.sel .av{width:34px;height:34px;font-size:11px;margin:0;flex:none}
+.sel div{flex:1;min-width:0}
+.sel b{display:block;font-size:13.5px}
+.sel small{color:var(--texto-3);font-size:12px}
+.sel select{width:100%;background:none;border:0;color:var(--texto);font:inherit;font-size:13.5px;font-weight:600;outline:none;cursor:pointer}
+.sel select option{background:var(--superficie)}
+.qtds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.qtd{padding:12px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda);text-align:center}
+.qtd small{display:block;font-size:11.5px;color:var(--texto-3)}
+.qtd .ctrl{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px}
+.qtd button{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--texto-2);background:var(--vidro-2)}
+.qtd button:hover{color:var(--texto)}
+.qtd b{font-size:22px;font-weight:700;min-width:30px}
+.qtd em{display:block;margin-top:4px;font-style:normal;font-size:10.5px;color:var(--texto-3)}
+.fontes{display:flex;flex-direction:column;gap:8px}
+.fonte{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:15px;background:var(--fosco);border:1px solid var(--borda);cursor:pointer;text-align:left;width:100%}
+.fonte .ck{width:20px;height:20px;border-radius:6px;flex:none;display:grid;place-items:center;border:1.5px solid color-mix(in srgb,var(--tinta) 30%,transparent);color:transparent;transition:all .2s}
+.fonte[aria-checked=true] .ck{background:var(--laranja);border-color:var(--laranja);color:#1d0c03}
+.fonte div{flex:1;min-width:0}
+.fonte b{display:block;font-size:13px;font-weight:600}
+.fonte small{color:var(--texto-3);font-size:11.5px}
+.fonte .novo{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;color:#1d0c03;background:var(--ambar);flex:none}
+.modo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modo button{padding:12px;border-radius:15px;text-align:left;background:var(--fosco);border:1px solid var(--borda)}
+.modo button b{display:block;font-size:13px}
+.modo button small{display:block;margin-top:3px;color:var(--texto-3);font-size:11.5px;line-height:1.4}
+.modo button[aria-pressed=true]{border-color:color-mix(in srgb,var(--laranja) 55%,transparent);background:color-mix(in srgb,var(--laranja) 10%,transparent)}
+.resumo-c h3{font-size:16px;font-weight:700}
+.itens-c{display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:13px}
+.itens-c div{display:flex;justify-content:space-between;gap:10px;color:var(--texto-2)}
+.itens-c div b{color:var(--texto);font-weight:600;text-align:right}
+.custo{margin-top:16px;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--laranja) 8%,transparent);border:1px solid color-mix(in srgb,var(--laranja) 30%,transparent)}
+.custo .l1{display:flex;align-items:baseline;justify-content:space-between}
+.custo .l1 span{font-size:12.5px;color:var(--texto-2)}
+.custo .l1 b{font-size:24px;font-weight:700;letter-spacing:-.03em;color:var(--laranja-claro)}
+.custo small{display:block;margin-top:4px;font-size:11.5px;color:var(--texto-3)}
+.saldo{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--texto-2)}
+.gerar{width:100%;justify-content:center;margin-top:16px;padding:14px;font-size:14px}
+.obs{margin-top:10px;font-size:11.5px;color:var(--texto-3);text-align:center}
+
+/* gerando */
+.gerando{position:relative;min-height:calc(100vh - 120px);display:grid;place-items:center;text-align:center;border-radius:30px;overflow:hidden;padding:40px 20px}
+.rede{position:absolute;inset:0;width:100%;height:100%;opacity:.7}
+.rede line{stroke:color-mix(in srgb,var(--laranja) 25%,transparent);stroke-width:1}
+.rede circle{fill:var(--laranja);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--laranja) 90%,transparent))}
+.centro{position:relative;z-index:1;max-width:640px;width:100%}
+.orbe{width:96px;height:96px;margin:0 auto;border-radius:50%;display:grid;place-items:center;color:var(--laranja-claro);
+  border:2px solid var(--laranja);box-shadow:0 0 0 14px color-mix(in srgb,var(--laranja) 7%,transparent),0 0 50px color-mix(in srgb,var(--laranja) 50%,transparent),inset 0 0 20px color-mix(in srgb,var(--laranja) 35%,transparent);animation:pulsa 2.2s ease-in-out infinite}
+@keyframes pulsa{50%{box-shadow:0 0 0 22px color-mix(in srgb,var(--laranja) 3%,transparent),0 0 70px color-mix(in srgb,var(--laranja) 65%,transparent),inset 0 0 24px color-mix(in srgb,var(--laranja) 45%,transparent)}}
+.cafe{display:inline-flex;align-items:center;gap:8px;margin-top:26px;font-size:15px;font-weight:600;color:var(--ambar)}
+.gerando h2{margin-top:10px;font-size:clamp(28px,4vw,46px);font-weight:700;letter-spacing:-.04em;line-height:1.05}
+.gerando h2 em{font-style:normal;color:var(--laranja)}
+.agora{margin-top:14px;min-height:22px;font-size:15px;color:var(--texto-2)}
+.traços{display:flex;justify-content:center;gap:6px;margin-top:24px}
+.traços i{width:28px;height:5px;border-radius:99px;background:color-mix(in srgb,var(--tinta) 12%,transparent);transition:background .4s}
+.traços i.ok{background:var(--laranja);box-shadow:0 0 8px color-mix(in srgb,var(--laranja) 60%,transparent)}
+.barra-g{display:flex;justify-content:space-between;margin-top:18px;font-size:12.5px;color:var(--texto-2)}
+.barra-g b{color:var(--ambar);font-weight:600}
+.trilho{margin-top:8px;height:8px;border-radius:99px;background:color-mix(in srgb,var(--tinta) 8%,transparent);overflow:hidden}
+.trilho i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--brasa),var(--laranja),#FFB074);box-shadow:0 0 14px color-mix(in srgb,var(--laranja) 60%,transparent);transition:width .6s ease}
+.pilulas-g{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:20px}
+.pilulas-g span{padding:8px 14px;border-radius:99px;font-size:12.5px;background:var(--fosco);border:1px solid var(--borda)}
+.cancelar{margin-top:20px}
+
+/* revisar */
+.aprendeu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.ap{padding:16px;border-radius:20px}
+.ap small{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--laranja-claro)}
+.ap b{display:block;margin-top:8px;font-size:14px;font-weight:600;line-height:1.35}
+.ap p{margin-top:4px;font-size:12px;color:var(--texto-3);line-height:1.45}
+.barra-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.barra-r .esp{flex:1}
+.barra-r .info{font-size:13px;color:var(--texto-2)}
+.barra-r .info b{color:var(--texto)}
+.semana{margin-bottom:16px}
+.semana h3{display:flex;align-items:center;gap:8px;margin:0 0 8px 4px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--texto-3)}
+.semana h3 span{letter-spacing:0;font-weight:500;text-transform:none}
+.ideia{display:grid;grid-template-columns:24px 92px 66px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;margin-bottom:6px;border-radius:16px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tinta) 5.5%,transparent),color-mix(in srgb,var(--tinta) 2.5%,transparent));border:1px solid var(--borda);transition:opacity .25s,filter .25s}
+.ideia.fora{opacity:.4}
+.ideia.fora .tit{text-decoration:line-through}
+.ideia.refazendo{filter:blur(3px);opacity:.6}
+.ideia .ck{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;border:1.5px solid color-mix(in srgb,var(--tinta) 30%,transparent);color:transparent}
+.ideia:not(.fora) .ck{background:var(--laranja);border-color:var(--laranja);color:#1d0c03}
+.ideia .dt{font-size:12px;color:var(--texto-2)}
+.ideia .dt b{display:block;color:var(--texto);font-size:13px}
+.fmt{font-size:11px;font-weight:600;padding:3px 8px;border-radius:7px;text-align:center;color:var(--texto-2);background:color-mix(in srgb,var(--tinta) 7%,transparent)}
+.fmt.reels{color:var(--alta,#FF5A4E);background:rgba(255,90,78,.12)}
+.fmt.carrossel{color:var(--ambar);background:rgba(255,181,71,.12)}
+.ideia .tx{min-width:0}
+.ideia .tit{display:block;width:100%;font-size:13.5px;font-weight:600;background:none;border:0;color:var(--texto);font-family:inherit;outline:none;padding:2px 0;border-bottom:1px solid transparent}
+.ideia .tit:focus{border-bottom-color:color-mix(in srgb,var(--laranja) 50%,transparent)}
+.ideia .gancho{display:block;margin-top:3px;font-size:12px;color:var(--texto-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ideia .gancho b{color:var(--laranja-claro);font-weight:600}
+.ideia .ac{display:flex;gap:4px}
+.ideia .ac button{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--texto-3)}
+.ideia .ac button:hover{background:var(--vidro-2);color:var(--texto)}
+.ideia .ac button.gira svg{animation:gira .8s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.pe-r{position:sticky;bottom:14px;z-index:4;display:flex;align-items:center;gap:12px;margin-top:10px;padding:12px 14px 12px 20px;border-radius:22px;background:color-mix(in srgb,var(--superficie) 75%,transparent)}
+.pe-r div{flex:1;font-size:13px;color:var(--texto-2)}
+.pe-r div b{color:var(--texto)}
+.toast{position:fixed;z-index:40;left:50%;top:22px;transform:translate(-50%,-20px);opacity:0;padding:12px 18px;border-radius:16px;font-size:13px;transition:all .35s var(--mola);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.pronto{text-align:center;padding:50px 20px;border-radius:28px}
+.pronto .orbe{animation:none}
+.pronto h2{margin-top:20px;font-size:30px;font-weight:700;letter-spacing:-.03em}
+.pronto p{margin-top:8px;color:var(--texto-2)}
+.pronto .acoes{display:flex;justify-content:center;gap:10px;margin-top:22px;flex-wrap:wrap}
+.pronto a{text-decoration:none}
+
+@media (max-width:1100px){.cfg{grid-template-columns:1fr}.aprendeu{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.linha2,.modo{grid-template-columns:1fr}.qtds{gap:6px}.ideia{grid-template-columns:24px minmax(0,1fr) auto;row-gap:6px}.ideia .dt{grid-column:2;display:flex;gap:6px;align-items:baseline}.ideia .fmt{grid-column:3;grid-row:1}.ideia .tx{grid-column:1/-1}.ideia .ac{grid-column:3;grid-row:2;justify-content:flex-end}.aprendeu{grid-template-columns:1fr}.pe-r{flex-direction:column;align-items:stretch}.titulo h2{font-size:23px}}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<div class="app">
+<!--LATERAL:ia-->
+  <main class="principal">
+    <header class="topo"><h1>Planejar com IA</h1><div class="esp"></div><span class="selo" style="margin:0"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg>Créditos: R$ 23,40</span></header>
+
+    <!-- 1. configurar -->
+    <section class="fase on" data-fase="cfg">
+      <div class="titulo"><h2>Monte o mês de um cliente <em>com IA</em></h2><p>A IA lê o perfil, o briefing e os resultados, e devolve o plano pronto para você revisar.</p></div>
+      <div class="cfg">
+        <div class="bloco vidro especular">
+          <span class="passo">1 · Cliente e mês</span>
+          <div class="linha2">
+            <label class="sel"><span class="av" style="background:linear-gradient(135deg,#7FA08A,#2F4A3F)" data-cli-av>CA</span><div><small>Cliente</small><select data-cli><option value="CA">Clínica Aurora</option><option value="FB">Forno Bravo</option><option value="SM">Studio Move</option><option value="CL">Casa Lume</option><option value="OD">Odonto Prado</option></select></div></label>
+            <label class="sel"><span class="av" style="background:color-mix(in srgb,var(--laranja) 20%,transparent);color:var(--laranja-claro);font-size:10px">NOV</span><div><small>Mês</small><select data-mes><option>Novembro 2026</option><option>Dezembro 2026</option></select></div></label>
+          </div>
+          <span class="passo">2 · Quantidades · já vêm do contrato</span>
+          <div class="qtds" data-qtds></div>
+          <span class="passo">3 · O que a IA vai ler</span>
+          <div class="fontes" data-fontes></div>
+          <span class="passo">4 · Quanto automatizar</span>
+          <div class="modo" data-modo>
+            <button aria-pressed="true" data-m="revisar"><b>Revisar o plano antes</b><small>A IA monta as ideias, você aprova e depois ela cria roteiros e cards.</small></button>
+            <button aria-pressed="false" data-m="tudo"><b>Tudo automático</b><small>Do plano aos cards no quadro, de uma vez. Dá para desfazer depois.</small></button>
+          </div>
+        </div>
+        <aside class="bloco vidro resumo-c">
+          <h3>Resumo</h3>
+          <div class="itens-c" data-resumo></div>
+          <div class="custo"><div class="l1"><span>Custo desta geração</span><b>R$ 4,12</b></div><small>Preço fixo, mostrado antes de usar. Sem surpresa na fatura.</small></div>
+          <div class="saldo"><span>Saldo de créditos</span><b>R$ 23,40 → R$ 19,28</b></div>
+          <button class="btn primario gerar" data-gerar><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6zM19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Gerar planejamento</button>
+          <p class="obs">Leva cerca de 2 minutos. Usando a chave própria da agência, o custo vai direto para o provedor.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 2. gerando -->
+    <section class="fase" data-fase="gerando">
+      <div class="gerando vidro">
+        <svg class="rede" data-rede preserveAspectRatio="none"></svg>
+        <div class="centro">
+          <div class="orbe"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+          <div class="cafe"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 11h2a2 2 0 0 1 0 4h-2M8 2v3M12 2v3"/></svg>Aproveita pra ir tomar um café!</div>
+          <h2>Estamos fazendo o planejamento mensal <em>por você.</em></h2>
+          <p class="agora" data-agora></p>
+          <div class="traços" data-tracos></div>
+          <div class="barra-g"><span data-etapa></span><b data-falta></b></div>
+          <div class="trilho"><i data-trilho></i></div>
+          <div class="pilulas-g"><span data-p-cli></span><span data-p-mes></span><span data-p-qtd></span></div>
+          <button class="btn fantasma cancelar" data-cancelar>Cancelar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. revisar -->
+    <section class="fase" data-fase="revisar">
+      <div class="titulo"><h2>Plano de <em data-r-mes>novembro</em> · <span data-r-cli>Clínica Aurora</span></h2><p>Revise as ideias. Tire o que não fizer sentido, edite o título ou peça outra ideia no lugar.</p></div>
+      <div class="aprendeu">
+        <div class="ap vidro"><small>Tom de voz</small><b>Próximo e didático, sem termos técnicos</b><p>Medido nas legendas que o cliente já publicou.</p></div>
+        <div class="ap vidro"><small>O que funciona</small><b>Bastidores e “mitos e verdades”</b><p>3× mais alcance que a média em outubro.</p></div>
+        <div class="ap vidro"><small>Visual do perfil</small><b>Sálvia e creme, fotos claras, pouco texto na arte</b><p>Lido nas imagens dos posts.</p></div>
+        <div class="ap vidro"><small>Melhor horário</small><b>Terça e sexta, 19h</b><p>As datas abaixo já seguem isso.</p></div>
+      </div>
+      <div class="barra-r"><span class="info" data-info></span><span class="esp"></span><button class="btn fantasma" data-pdf>Baixar PDF do plano</button></div>
+      <div data-semanas></div>
+      <div class="pe-r vidro"><div data-pe></div><button class="btn fantasma" data-voltar>Ajustar e gerar de novo</button><button class="btn primario" data-criar>Criar cards no quadro</button></div>
+    </section>
+
+    <!-- 4. pronto -->
+    <section class="fase" data-fase="pronto">
+      <div class="pronto vidro especular">
+        <div class="orbe"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div>
+        <h2 data-ok-tit></h2>
+        <p data-ok-sub></p>
+        <div class="acoes"><a class="btn primario" href="cliente.html">Abrir o quadro do cliente</a><button class="btn fantasma" data-outro>Planejar outro cliente</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast vidro" data-toast></div>
+
+<script>
+(function(){
+  var CLI={CA:['Clínica Aurora','#7FA08A,#2F4A3F',[8,4,12]],FB:['Forno Bravo','#f59e0b,#b45309',[12,6,20]],SM:['Studio Move','#78716c,#44403c',[6,2,0]],CL:['Casa Lume','#ea580c,#7c2d12',[8,0,8]],OD:['Odonto Prado','#d97706,#78350f',[8,4,0]]};
+  var FONTES=[['ig','Instagram do cliente','Legendas, comentários, imagens dos posts e áudio dos reels',true,true],['brief','Briefing e ficha do cliente','Público, serviços, o que evitar',true],
+    ['res','Resultados de outubro','O que performou volta como base do próximo mês',true,true],['datas','Datas do mês','Novembro Azul, Black Friday, feriados',true],['ref','Biblioteca de referências','14 referências salvas para este cliente',false],['conc','Concorrentes','3 perfis cadastrados',false]];
+  var ETAPAS=['Lendo as legendas e os comentários do Instagram…','Olhando as imagens e ouvindo o áudio dos reels…','Conferindo o briefing e a ficha do cliente…','Vendo o que funcionou em outubro…','Separando as datas importantes de novembro…','Montando o planejamento do mês e escolhendo os ganchos…','Escrevendo os roteiros e as legendas…','Revisando tudo e escolhendo as datas…'];
+  var BANCO=[
+    ['Post','Novembro Azul: cuide da pele dele também','“Homem também tem pele. E ela também envelhece.”'],['Reels','Bastidores: 1 dia de procedimento','“O que acontece antes do paciente chegar?”'],
+    ['Carrossel','Mitos e verdades sobre o protetor solar','“Protetor em dia nublado? Mito ou verdade?”'],['Post','Black Friday: avaliação com 20% off','“Só essa semana, e só até sexta.”'],
+    ['Reels','Peeling: antes, durante e depois','“30 segundos que respondem a sua maior dúvida.”'],['Carrossel','5 erros que envelhecem a pele','“O 3º quase todo mundo comete.”'],
+    ['Post','Conheça a equipe: Dra. Paula','“Quem cuida de você aqui dentro.”'],['Reels','Skincare de 1 minuto para a manhã','“Sem 12 produtos. Só 3.”'],
+    ['Carrossel','Pele no verão: como se preparar','“Dezembro chega antes do que você pensa.”'],['Post','Depoimento: tratamento de manchas','“Em 3 meses, ela parou de usar base.”'],
+    ['Reels','Perguntas que mais ouvimos no consultório','“Pergunta de paciente, resposta de dermatologista.”'],['Post','Agenda de dezembro aberta','“As vagas de fim de ano acabam rápido.”'],
+    ['Carrossel','Rotina noturna em 3 passos','“A pele se recupera enquanto você dorme.”'],['Reels','Mito: “pele oleosa não precisa de hidratante”','“Precisa sim. E a gente explica.”'],
+    ['Post','Black Friday: últimas horas','“Termina hoje às 23h59.”'],['Carrossel','Diferença entre limpeza e peeling','“Parecem iguais, mas não são.”']
+  ];
+  var STORIES=['Caixinha de perguntas','Enquete: qual o seu tipo de pele?','Bastidores do dia','Lembrete de Black Friday','Antes e depois','Contagem regressiva'];
+  var cfg={cli:'CA',mes:'Novembro 2026',q:[8,4,12],fontes:{},modo:'revisar'},plano=[],timer=null;
+  FONTES.forEach(function(f){cfg.fontes[f[0]]=f[3]});
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function fase(n){$$('[data-fase]').forEach(function(f){f.classList.toggle('on',f.dataset.fase===n)});scrollTo(0,0)}
+  function qtds(){
+    var nomes=['Posts','Reels','Stories'],c=CLI[cfg.cli][2];
+    $('[data-qtds]').innerHTML=nomes.map(function(n,i){return '<div class="qtd"><small>'+n+'</small><div class="ctrl"><button data-q="'+i+'" data-d="-1" aria-label="Menos">−</button><b>'+cfg.q[i]+'</b><button data-q="'+i+'" data-d="1" aria-label="Mais">+</button></div><em>'+(cfg.q[i]===c[i]?'igual ao contrato':'contrato: '+c[i])+'</em></div>'}).join('');
+    $$('[data-q]').forEach(function(b){b.addEventListener('click',function(){var i=+b.dataset.q;cfg.q[i]=Math.max(0,Math.min(30,cfg.q[i]+(+b.dataset.d)));qtds();resumo()})});
+  }
+  function fontes(){
+    $('[data-fontes]').innerHTML=FONTES.map(function(f){return '<button class="fonte" role="checkbox" aria-checked="'+cfg.fontes[f[0]]+'" data-fo="'+f[0]+'"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4"><path d="M5 12l5 5L20 7"/></svg></span><div><b>'+f[1]+'</b><small>'+f[2]+'</small></div>'+(f[4]?'<span class="novo">DIFERENCIAL</span>':'')+'</button>'}).join('');
+    $$('[data-fo]').forEach(function(b){b.addEventListener('click',function(){cfg.fontes[b.dataset.fo]=!cfg.fontes[b.dataset.fo];fontes();resumo()})});
+  }
+  function resumo(){
+    var n=FONTES.filter(function(f){return cfg.fontes[f[0]]}).length;
+    $('[data-resumo]').innerHTML='<div><span>Cliente</span><b>'+CLI[cfg.cli][0]+'</b></div><div><span>Mês</span><b>'+cfg.mes+'</b></div>'+
+      '<div><span>Conteúdos</span><b>'+(cfg.q[0]+cfg.q[1]+cfg.q[2])+' ('+cfg.q[0]+' posts, '+cfg.q[1]+' reels, '+cfg.q[2]+' stories)</b></div><div><span>Fontes</span><b>'+n+' de '+FONTES.length+'</b></div>'+
+      '<div><span>Modo</span><b>'+(cfg.modo==='revisar'?'Revisar antes':'Tudo automático')+'</b></div>';
+    $('[data-gerar]').disabled=cfg.q[0]+cfg.q[1]+cfg.q[2]===0;
+  }
+  $('[data-cli]').addEventListener('change',function(){cfg.cli=this.value;cfg.q=CLI[cfg.cli][2].slice();$('[data-cli-av]').textContent=cfg.cli;$('[data-cli-av]').style.background='linear-gradient(135deg,'+CLI[cfg.cli][1]+')';qtds();resumo()});
+  $('[data-mes]').addEventListener('change',function(){cfg.mes=this.value;resumo()});
+  $$('[data-m]').forEach(function(b){b.addEventListener('click',function(){cfg.modo=b.dataset.m;$$('[data-m]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});resumo()})});
+
+  // rede de pontos animada (decoração da fase gerando)
+  function rede(){
+    var s=$('[data-rede]'),W=s.clientWidth||1000,H=s.clientHeight||700,p=[],h='';s.setAttribute('viewBox','0 0 '+W+' '+H);
+    for(var i=0;i<14;i++){var a=i*2.39,r=.25+((i*37)%10)/22;p.push([W/2+Math.cos(a)*W*r*.55,H/2+Math.sin(a)*H*r*.6])}
+    p.forEach(function(a,i){var b=p[(i+3)%p.length];h+='<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'"/>'});
+    p.forEach(function(a,i){h+='<circle cx="'+a[0]+'" cy="'+a[1]+'" r="'+(2.5+i%3)+'"><animate attributeName="opacity" values="1;.3;1" dur="'+(2+i%4)+'s" repeatCount="indefinite"/></circle>'});
+    s.innerHTML=h;
+  }
+  function gerar(){
+    fase('gerando');rede();
+    var tot=cfg.q[0]+cfg.q[1]+cfg.q[2],k=0;
+    $('[data-tracos]').innerHTML=ETAPAS.map(function(){return '<i></i>'}).join('');
+    $('[data-p-cli]').textContent=CLI[cfg.cli][0];$('[data-p-mes]').textContent=cfg.mes;
+    function passo(){
+      if(k>=ETAPAS.length){fim();return}
+      $('[data-agora]').textContent=ETAPAS[k];
+      $$('[data-tracos] i').forEach(function(t,i){t.classList.toggle('ok',i<=k)});
+      $('[data-etapa]').textContent='Etapa '+(k+1)+' de '+ETAPAS.length;
+      var seg=Math.max(5,Math.round((ETAPAS.length-k-1)*15));
+      $('[data-falta]').textContent=k===ETAPAS.length-1?'Quase lá':'Faltam ~'+(seg>=60?Math.round(seg/60)+' min':seg+' s');
+      $('[data-trilho]').style.width=((k+1)/ETAPAS.length*100)+'%';
+      var feitos=k<5?0:Math.round(tot*(k-4)/3);$('[data-p-qtd]').textContent=feitos+' / '+tot+' conteúdos';
+      k++;timer=setTimeout(passo,1300);
+    }
+    passo();
+  }
+  function montar(){
+    plano=[];var dias=[];for(var d=1;d<=30;d++){var w=new Date(2026,10,d).getDay();if(w===2||w===5||w===4)dias.push(d)}
+    var posts=BANCO.filter(function(b){return b[0]!=='Reels'}),reels=BANCO.filter(function(b){return b[0]==='Reels'}),lista=[];
+    for(var i=0;i<cfg.q[0];i++)lista.push(posts[i%posts.length]);
+    for(var j=0;j<cfg.q[1];j++)lista.push(reels[j%reels.length]);
+    lista.sort(function(a,b){return BANCO.indexOf(a)-BANCO.indexOf(b)});
+    lista.forEach(function(b,i){var d=dias[Math.round(i*(dias.length-1)/Math.max(1,lista.length-1))];plano.push({f:b[0],t:b[1],g:b[2],d:d,h:b[0]==='Reels'?'19h':'12h',ok:true})});
+  }
+  var DS=['dom','seg','ter','qua','qui','sex','sáb'];
+  function revisar(){
+    $('[data-r-cli]').textContent=CLI[cfg.cli][0];$('[data-r-mes]').textContent=cfg.mes.split(' ')[0].toLowerCase();
+    var sem=[[1,8],[9,15],[16,22],[23,30]],h='';
+    sem.forEach(function(s,k){var it=plano.map(function(p,i){return [p,i]}).filter(function(x){return x[0].d>=s[0]&&x[0].d<=s[1]});if(!it.length)return;
+      h+='<div class="semana"><h3>Semana '+(k+1)+' <span>· '+s[0]+' a '+s[1]+' de '+cfg.mes.split(' ')[0].toLowerCase()+'</span></h3>'+it.map(function(x){var p=x[0],i=x[1],w=new Date(2026,10,p.d).getDay();
+        return '<div class="ideia'+(p.ok?'':' fora')+'" data-i="'+i+'"><button class="ck" data-tg="'+i+'" aria-label="Manter"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4"><path d="M5 12l5 5L20 7"/></svg></button>'+
+          '<span class="dt"><b>'+DS[w]+' '+p.d+'/11</b>'+p.h+'</span><span class="fmt '+p.f.toLowerCase()+'">'+p.f+'</span>'+
+          '<div class="tx"><input class="tit" value="'+p.t.replace(/"/g,'&quot;')+'" data-ed="'+i+'" aria-label="Título"><span class="gancho"><b>Gancho:</b> '+p.g+'</span></div>'+
+          '<div class="ac"><button data-rf="'+i+'" title="Outra ideia no lugar" aria-label="Outra ideia"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg></button></div></div>'}).join('')+'</div>';
+    });
+    if(cfg.q[2])h+='<div class="semana"><h3>Stories <span>· '+cfg.q[2]+' ao longo do mês</span></h3><div class="ideia" style="grid-template-columns:24px minmax(0,1fr)"><span class="ck" style="background:var(--laranja);border-color:var(--laranja);color:#1d0c03"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4"><path d="M5 12l5 5L20 7"/></svg></span><div class="tx"><b style="font-size:13px">'+STORIES.slice(0,Math.min(6,cfg.q[2])).join(' · ')+'</b><span class="gancho">Distribuídos entre os posts, sempre no dia seguinte a um conteúdo do feed.</span></div></div></div>';
+    $('[data-semanas]').innerHTML=h;
+    $$('[data-tg]').forEach(function(b){b.addEventListener('click',function(){var p=plano[+b.dataset.tg];p.ok=!p.ok;b.closest('.ideia').classList.toggle('fora',!p.ok);pe()})});
+    $$('[data-ed]').forEach(function(b){b.addEventListener('input',function(){plano[+b.dataset.ed].t=b.value})});
+    $$('[data-rf]').forEach(function(b){b.addEventListener('click',function(){var i=+b.dataset.rf,p=plano[i],el=b.closest('.ideia');b.classList.add('gira');el.classList.add('refazendo');
+      setTimeout(function(){var cand=BANCO.filter(function(x){return x[0]===p.f&&!plano.some(function(q){return q.t===x[1]})});var n=cand[0]||BANCO.filter(function(x){return x[0]===p.f})[(i+3)%4];
+        p.t=n[1];p.g=n[2];revisar();aviso('Nova ideia no lugar: '+n[1])},900)})});
+    pe();
+  }
+  function pe(){var n=plano.filter(function(p){return p.ok}).length;
+    $('[data-info]').innerHTML='<b>'+n+'</b> de '+plano.length+' ideias no feed'+(cfg.q[2]?' · <b>'+cfg.q[2]+'</b> stories':'');
+    $('[data-pe]').innerHTML='Vai criar <b>'+(n+cfg.q[2])+' cards</b> no quadro de '+CLI[cfg.cli][0]+', com roteiro e legenda.';$('[data-criar]').disabled=!n}
+  function fim(){montar();if(cfg.modo==='tudo'){pronto()}else{fase('revisar');revisar()}}
+  function pronto(){var n=plano.filter(function(p){return p.ok}).length+cfg.q[2];
+    $('[data-ok-tit]').textContent=n+' cards criados no quadro';$('[data-ok-sub]').textContent=CLI[cfg.cli][0]+' · '+cfg.mes+'. Todos com roteiro e legenda, em “Produção” e só visíveis para a agência.';fase('pronto')}
+  $('[data-gerar]').addEventListener('click',gerar);
+  $('[data-cancelar]').addEventListener('click',function(){clearTimeout(timer);fase('cfg');aviso('Geração cancelada. Nada foi cobrado.')});
+  $('[data-voltar]').addEventListener('click',function(){fase('cfg')});
+  $('[data-criar]').addEventListener('click',pronto);
+  $('[data-outro]').addEventListener('click',function(){fase('cfg')});
+  $('[data-pdf]').addEventListener('click',function(){aviso('O PDF do plano seria baixado agora.')});
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},2600)}
+  qtds();fontes();resumo();
+})();
+</script>
+</body>
+</html>

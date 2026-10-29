@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Portal do cliente — arquivos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;-webkit-font-smoothing:antialiased;font-size:14px;font-variant-numeric:tabular-nums}
+h1,h2,h3,h4{margin:0;letter-spacing:-0.03em}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--act)}
+button{font:inherit;cursor:pointer}
+input{font:inherit;color:inherit}
+.mono{font-variant-numeric:tabular-nums}
+.ser{font-weight:600;letter-spacing:-0.04em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</helmet>
+
+<div style="{{raiz}}">
+
+  <div style="position:absolute;top:0;left:0;right:0;height:900px;overflow:hidden;pointer-events:none">
+    <span style="{{aur1}}"></span>
+    <span style="{{aur2}}"></span>
+    <span style="{{aur3}}"></span>
+  </div>
+
+  <header style="position:relative;background:var(--side);backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);border-bottom:1px solid var(--stroke)">
+    <div style="max-width:1140px;margin:0 auto;padding:14px 28px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+      <div style="display:flex;align-items:baseline;gap:3px">
+        <b style="font-size:16px;font-weight:800;letter-spacing:-0.04em">PULSO</b>
+        <span style="width:5px;height:13px;background:linear-gradient(180deg,var(--ac),var(--vi));display:inline-block;transform:skewX(-14deg);border-radius:2px"></span>
+        <span style="font-size:16px;font-weight:400;letter-spacing:-0.03em;color:var(--mut)">CREATOR</span>
+      </div>
+      <span style="width:1px;height:18px;background:var(--stroke)"></span>
+      <span style="font-size:12.5px;color:var(--mut)">Estúdio Linha para <b style="color:var(--ink);font-weight:600">Clínica Bem Viver</b></span>
+      <span style="flex:1"></span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut)">
+        <span style="width:26px;height:26px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);font-size:10px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;color:var(--ink)">AC</span>Ana Costa
+      </span>
+    </div>
+    <div style="max-width:1140px;margin:0 auto;padding:0 28px">
+      <nav style="display:flex;flex-wrap:wrap;gap:3px">
+        <a href="PortalRelatorio.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Relatório</a>
+        <a href="PortalPlanejamento.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Planejamento</a>
+        <span style="padding:10px 15px 13px;font-size:13.5px;font-weight:700;border-bottom:2px solid var(--ac);margin-bottom:-1px">Arquivos</span>
+        <a href="PortalAgenda.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Agenda</a>
+        <a href="PortalRelatorio.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Linha do tempo</a>
+        <a href="PortalCofre.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Cofre</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="position:relative;max-width:1140px;margin:0 auto;padding:28px 28px 60px;width:100%">
+
+    <section style="position:relative;background:var(--glass);backdrop-filter:blur(28px) saturate(185%);-webkit-backdrop-filter:blur(28px) saturate(185%);border:1px solid var(--stroke);border-radius:26px;box-shadow:var(--sh),var(--glow);padding:28px 32px;overflow:hidden">
+      <span style="position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--spec),transparent);pointer-events:none"></span>
+      <h1 style="font-size:clamp(23px,2.9vw,35px);font-weight:700;letter-spacing:-0.055em;line-height:1.14;max-width:17ch">Tudo da sua marca, <span style="color:var(--ac)">num lugar só</span>.</h1>
+      <p style="font-size:14.5px;color:var(--mut);margin-top:12px">Cada arte publicada fica guardada e organizada por mês. Baixe quando precisar.</p>
+    </section>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:20px 0 16px">
+      <span class="mono" style="font-size:12.5px;color:var(--mut)">Arquivos</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--fai)" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      <span class="mono" style="font-size:12.5px;font-weight:600">Outubro 2026</span>
+      <span style="flex:1"></span>
+      <label class="sr" for="buscafile">Buscar arquivo</label>
+      <span style="display:inline-flex;align-items:center;gap:9px;min-height:38px;padding:0 14px;border-radius:12px;background:var(--glass2);border:1px solid var(--stroke);min-width:210px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--fai)" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="buscafile" type="search" placeholder="Buscar arquivo..." style="border:0;background:transparent;outline:none;font-size:12.5px;width:100%;min-width:0">
+      </span>
+      <a href="PortalArquivos.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 16px;border-radius:999px;background:linear-gradient(140deg,var(--vi),var(--ac));color:#FFF;font-size:12.5px;font-weight:600;box-shadow:0 8px 22px var(--acs)">Enviar material</a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:12px">
+      <a href="PortalArquivos.dc.html" style="display:flex;align-items:center;gap:12px;background:var(--glass);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--stroke);border-radius:18px;box-shadow:var(--sh),var(--glow);padding:16px 18px">
+        <span style="width:34px;height:34px;border-radius:11px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cy)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></span>
+        <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">Posts</div><div class="mono" style="font-size:11px;color:var(--fai);margin-top:2px">15 arquivos</div></div>
+      </a>
+      <a href="PortalArquivos.dc.html" style="display:flex;align-items:center;gap:12px;background:var(--glass);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--stroke);border-radius:18px;box-shadow:var(--sh),var(--glow);padding:16px 18px">
+        <span style="width:34px;height:34px;border-radius:11px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--vi)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></span>
+        <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">Reels</div><div class="mono" style="font-size:11px;color:var(--fai);margin-top:2px">6 arquivos</div></div>
+      </a>
+      <a href="PortalArquivos.dc.html" style="display:flex;align-items:center;gap:12px;background:var(--glass);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--stroke);border-radius:18px;box-shadow:var(--sh),var(--glow);padding:16px 18px">
+        <span style="width:34px;height:34px;border-radius:11px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--mut)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></span>
+        <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">Fotos do ensaio</div><div class="mono" style="font-size:11px;color:var(--fai);margin-top:2px">124 arquivos</div></div>
+      </a>
+      <a href="PortalArquivos.dc.html" style="display:flex;align-items:center;gap:12px;background:var(--acs);border:1px solid var(--acb);border-radius:18px;padding:16px 18px">
+        <span style="width:34px;height:34px;border-radius:11px;background:var(--glass2);border:1px solid var(--acb);display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--act)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span>
+        <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">Enviado por você</div><div class="mono" style="font-size:11px;color:var(--fai);margin-top:2px">3 arquivos</div></div>
+      </a>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;margin-top:14px">
+
+      <section style="flex:999 1 440px;min-width:0;background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:4px 26px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:20px 0 8px">
+          <h2 style="font-size:15px;font-weight:700;letter-spacing:-0.02em">Arquivos de outubro</h2>
+          <a href="PortalArquivos.dc.html" style="font-size:12px;color:var(--mut)">Baixar tudo</a>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:15px;padding:14px 0;border-top:1px solid var(--stroke)">
+          <span style="flex:0 0 42px;height:42px;border-radius:12px;background:var(--glass2);border:1px solid var(--stroke)"></span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13.5px;font-weight:500">mitos-protetor-solar-carrossel.png</div>
+            <div class="mono" style="font-size:11px;color:var(--fai);margin-top:3px">4 SLIDES · 8,2 MB · PUBLICADO EM 08 OUT</div>
+          </div>
+          <a href="PortalArquivos.dc.html" aria-label="Baixar mitos-protetor-solar-carrossel.png" style="flex:0 0 auto;width:36px;height:36px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M4 20h16"/></svg></a>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:15px;padding:14px 0;border-top:1px solid var(--stroke)">
+          <span style="flex:0 0 42px;height:42px;border-radius:12px;background:var(--glass2);border:1px solid var(--stroke)"></span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13.5px;font-weight:500">um-dia-na-clinica.mp4</div>
+            <div class="mono" style="font-size:11px;color:var(--fai);margin-top:3px">00:34 · 41,6 MB · PUBLICADO EM 16 OUT</div>
+          </div>
+          <a href="PortalArquivos.dc.html" aria-label="Baixar um-dia-na-clinica.mp4" style="flex:0 0 auto;width:36px;height:36px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M4 20h16"/></svg></a>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:15px;padding:14px 0;border-top:1px solid var(--stroke)">
+          <span style="flex:0 0 42px;height:42px;border-radius:12px;background:var(--glass2);border:1px solid var(--stroke)"></span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13.5px;font-weight:500">3-sinais-hidratacao.png</div>
+            <div class="mono" style="font-size:11px;color:var(--fai);margin-top:3px">1 IMAGEM · 2,4 MB · PUBLICADO EM 22 OUT</div>
+          </div>
+          <a href="PortalArquivos.dc.html" aria-label="Baixar 3-sinais-hidratacao.png" style="flex:0 0 auto;width:36px;height:36px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M4 20h16"/></svg></a>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:15px;padding:14px 0 22px;border-top:1px solid var(--stroke)">
+          <span style="flex:0 0 42px;height:42px;border-radius:12px;background:var(--acs);border:1px solid var(--acb);display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--act)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M5 3h9l5 5v13a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/></svg></span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13.5px;font-weight:500">relatorio-outubro-2026.pdf</div>
+            <div class="mono" style="font-size:11px;color:var(--fai);margin-top:3px">9 PÁGINAS · 1,1 MB · GERADO EM 31 OUT</div>
+          </div>
+          <a href="PortalArquivos.dc.html" aria-label="Baixar relatorio-outubro-2026.pdf" style="flex:0 0 auto;width:36px;height:36px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M4 20h16"/></svg></a>
+        </div>
+      </section>
+
+      <div style="flex:1 1 290px;min-width:280px;display:flex;flex-direction:column;gap:14px">
+
+        <section style="background:var(--glassLow);border:1px dashed var(--acb);border-radius:24px;padding:26px 24px;text-align:center">
+          <span style="width:44px;height:44px;border-radius:999px;background:var(--acs);border:1px solid var(--acb);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--act)" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>
+          </span>
+          <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em">Mande material pra gente</h2>
+          <p style="font-size:12.5px;color:var(--mut);line-height:1.5;margin-top:7px">Foto da clínica, logo, vídeo do celular, tabela de preços. Cai direto na pasta certa.</p>
+          <a href="PortalArquivos.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 18px;border-radius:999px;background:linear-gradient(140deg,var(--vi),var(--ac));color:#FFF;font-size:12.5px;font-weight:600;margin-top:15px;box-shadow:0 8px 24px var(--acs)">Escolher arquivos</a>
+        </section>
+
+        <section style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:22px 24px">
+          <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em;margin-bottom:14px">Guardado até agora</h2>
+          <div class="mono" style="font-size:30px;font-weight:600;letter-spacing:-0.05em;line-height:1.1">2.418</div>
+          <p style="font-size:12px;color:var(--fai);margin-top:5px">arquivos desde março de 2026</p>
+          <div style="border-top:1px solid var(--stroke);margin-top:14px;padding-top:13px">
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:8px"><span style="color:var(--mut)">Imagens</span><span class="mono">1.902</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:8px"><span style="color:var(--mut)">Vídeos</span><span class="mono">428</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="color:var(--mut)">Documentos</span><span class="mono">88</span></div>
+          </div>
+        </section>
+
+        <section style="background:var(--glassLow);border:1px solid var(--stroke);border-radius:24px;padding:22px 24px">
+          <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em;margin-bottom:13px">Onde isso fica</h2>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:10px;font-size:12.5px;line-height:1.5">
+              <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;background:var(--stroke);margin-top:6px"></span>
+              <span style="flex:1">No Google Drive do Estúdio Linha, organizado por cliente e por mês.</span>
+            </div>
+            <div style="display:flex;gap:10px;font-size:12.5px;line-height:1.5">
+              <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;background:var(--stroke);margin-top:6px"></span>
+              <span style="flex:1">Você enxerga só a pasta da Clínica Bem Viver.</span>
+            </div>
+            <div style="display:flex;gap:10px;font-size:12.5px;line-height:1.5">
+              <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;background:var(--ac);margin-top:6px"></span>
+              <span style="flex:1">Se um dia o contrato acabar, você leva tudo.</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1060}}'>
+class Component extends DCLogic {
+  tema() {
+    return { ink:'#F5F3F0', mut:'#A9A49D', fai:'#8A857E',
+          ac:'#FF6A1A', act:'#FF9254', acs:'rgba(255,106,26,.14)', acb:'rgba(255,106,26,.34)',
+          cy:'#FFB020', vi:'#C2410C',
+          glass:'rgba(255,255,255,.05)', glass2:'rgba(255,255,255,.085)', glass3:'rgba(255,255,255,.14)', glassLow:'rgba(255,255,255,.03)',
+          side:'rgba(8,8,9,.6)',
+          stroke:'rgba(255,255,255,.11)', spec:'rgba(255,255,255,.7)', track:'rgba(255,255,255,.08)',
+          sh:'0 2px 10px rgba(0,0,0,.45), 0 24px 60px rgba(0,0,0,.55)',
+          glow:'inset 0 1px 0 rgba(255,255,255,.2), inset 0 -1px 0 rgba(255,255,255,.04)',
+          fundo:'radial-gradient(120% 80% at 55% 0%, #1B120B 0%, #0C0A08 55%, #050505 100%)',
+          o1:'.5', o2:'.44', o3:'.3' };
+  }
+  blob(cor, css) {
+    return 'position:absolute;border-radius:999px;pointer-events:none;background:radial-gradient(circle,' + cor + ' 0%, transparent 68%);' + css;
+  }
+  renderVals() {
+    var t = this.tema();
+    var vars = '';
+    for (var k in t) { vars += '--' + k + ':' + t[k] + ';'; }
+    return {
+      raiz: vars + 'position:relative;min-height:100vh;background:' + t.fundo + ';color:' + t.ink + ';overflow-x:hidden',
+      aur1: this.blob(t.vi, 'top:-200px;left:6%;width:580px;height:560px;filter:blur(100px);opacity:' + t.o1),
+      aur2: this.blob(t.ac, 'top:-90px;left:44%;width:660px;height:540px;filter:blur(110px);opacity:' + t.o2),
+      aur3: this.blob(t.cy, 'top:80px;right:-120px;width:520px;height:520px;filter:blur(110px);opacity:' + t.o3)
+    };
+  }
+}
+</script>
+</body>
+</html>

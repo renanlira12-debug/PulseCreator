@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Entrar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/*BASE*/
+.tela-l{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(380px,480px);gap:40px;align-items:center;max-width:1180px;margin:0 auto;padding:40px 28px}
+.lado-txt h1{margin-top:44px;font-size:clamp(34px,4.6vw,58px);font-weight:700;letter-spacing:-.045em;line-height:1.02}
+.lado-txt h1 em{font-style:normal;color:var(--laranja);text-shadow:0 0 30px color-mix(in srgb,var(--laranja) 40%,transparent)}
+.lado-txt>p{margin-top:16px;max-width:480px;font-size:15.5px;color:var(--texto-2);line-height:1.6}
+.pontos{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.pontos div{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--texto-2)}
+.pontos i{width:32px;height:32px;border-radius:11px;display:grid;place-items:center;flex:none;color:var(--laranja-claro);background:color-mix(in srgb,var(--laranja) 12%,transparent);font-style:normal}
+.cartao-l{padding:28px;border-radius:30px;background:color-mix(in srgb,var(--superficie) 55%,transparent)}
+.cartao-l .pilulas{width:100%;display:flex;background:var(--fosco)}
+.cartao-l .pilulas button{flex:1;padding:10px 8px;font-size:13px;font-weight:600}
+.painel{display:none;margin-top:22px}
+.painel.on{display:block;animation:entraP .4s ease}
+@keyframes entraP{from{opacity:0;filter:blur(6px);transform:translateY(6px)}}
+.painel h2{font-size:22px;font-weight:700;letter-spacing:-.03em}
+.painel>p{margin-top:4px;font-size:13px;color:var(--texto-3)}
+.campo{margin-top:16px}
+.campo label{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--texto-2);margin-bottom:7px}
+.campo label a{font-weight:500;color:var(--laranja-claro);text-decoration:none}
+.campo input{width:100%;padding:13px 15px;border-radius:15px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:14px;outline:none;transition:border-color .2s}
+.campo input:focus{border-color:color-mix(in srgb,var(--laranja) 55%,transparent)}
+.campo.erro input{border-color:var(--vermelho)}
+.campo .msg-e{display:none;margin-top:6px;font-size:12px;color:var(--vermelho)}
+.campo.erro .msg-e{display:block}
+.senha{position:relative}
+.senha button{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--texto-3)}
+.senha button:hover{color:var(--texto)}
+.lembrar{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:var(--texto-2)}
+.lembrar input{accent-color:var(--laranja)}
+.entrar{width:100%;justify-content:center;margin-top:20px;padding:14px}
+.entrar.carregando{pointer-events:none;opacity:.85}
+.entrar.carregando::after{content:"";width:14px;height:14px;border-radius:50%;border:2px solid color-mix(in srgb,var(--superficie) 30%,transparent);border-top-color:#1d0c03;animation:gira .7s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.ou{display:flex;align-items:center;gap:12px;margin:18px 0;font-size:12px;color:var(--texto-3)}
+.ou::before,.ou::after{content:"";flex:1;height:1px;background:color-mix(in srgb,var(--tinta) 8%,transparent)}
+.google{width:100%;justify-content:center;padding:13px;color:var(--texto);background:var(--fosco);border:1px solid var(--borda)}
+.google:hover{background:var(--vidro-2)}
+.rodape-l{margin-top:20px;text-align:center;font-size:12.5px;color:var(--texto-3)}
+.rodape-l a{color:var(--laranja-claro);text-decoration:none;font-weight:600}
+.enviado{display:none;text-align:center;padding:8px 0}
+.enviado.on{display:block;animation:entraP .4s ease}
+.enviado .env-ic{width:64px;height:64px;margin:6px auto 0;border-radius:22px;display:grid;place-items:center;color:var(--laranja-claro);background:color-mix(in srgb,var(--laranja) 14%,transparent);box-shadow:0 0 30px color-mix(in srgb,var(--laranja) 25%,transparent)}
+.enviado h3{margin-top:16px;font-size:20px;font-weight:700;letter-spacing:-.02em}
+.enviado p{margin-top:6px;font-size:13.5px;color:var(--texto-2);line-height:1.55}
+.enviado p b{color:var(--texto)}
+.simula{margin-top:18px;padding:12px;border-radius:16px;border:1px dashed rgba(255,181,71,.4);background:rgba(255,181,71,.05);font-size:12px;color:var(--ambar)}
+.simula .btn{margin-top:10px;width:100%;justify-content:center}
+.link-t{margin-top:14px;font-size:12.5px;color:var(--texto-3)}
+.link-t button{color:var(--laranja-claro);font-weight:600}
+.contas{margin-top:14px;padding:11px 12px;border-radius:14px;font-size:11.5px;color:var(--texto-3);border:1px dashed rgba(255,181,71,.35);background:rgba(255,181,71,.04)}
+.contas b{color:var(--ambar)}
+.contas div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.contas button{padding:4px 10px;border-radius:99px;font-size:11.5px;color:var(--texto-2);background:var(--vidro-1);border:1px solid var(--borda)}
+.contas button:hover{color:var(--texto);border-color:color-mix(in srgb,var(--laranja) 45%,transparent)}
+.seguro{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;font-size:11.5px;color:var(--texto-3)}
+@media (max-width:900px){.tela-l{grid-template-columns:1fr;gap:24px;padding:28px 16px}.lado-txt h1{margin-top:28px;font-size:32px}.pontos{display:none}.lado-txt>p{font-size:14px}}
+@media (max-width:420px){.cartao-l{padding:20px}}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<main class="tela-l">
+  <section class="lado-txt entra">
+    <div class="marca">
+      <div class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d0c03" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+      <div><b>Pulse Creator</b><small>gestão de conteúdo</small></div>
+    </div>
+    <h1>A agência opera.<br><em>O cliente acompanha.</em></h1>
+    <p>Planejamento, aprovação, publicação e resultado num lugar só, com um portal de verdade para cada cliente.</p>
+    <div class="pontos">
+      <div><i>1</i>A equipe produz e publica pelo painel da agência.</div>
+      <div><i>2</i>O cliente aprova, pede, conversa e vê o relatório no portal dele.</div>
+      <div><i>3</i>Cada um entra no seu lugar, com o mesmo login.</div>
+    </div>
+  </section>
+
+  <section class="cartao-l vidro especular entra" style="animation-delay:.08s">
+    <div class="pilulas" role="tablist" aria-label="Tipo de acesso" data-pilulas>
+      <span class="lente"></span>
+      <button role="tab" aria-pressed="true" data-quem="agencia">Sou da agência</button>
+      <button role="tab" aria-pressed="false" data-quem="cliente">Sou cliente</button>
+    </div>
+
+    <!-- agência -->
+    <div class="painel on" data-painel="agencia">
+      <h2>Entrar no painel</h2>
+      <p>Para quem trabalha na agência.</p>
+      <form data-form-ag novalidate>
+        <div class="campo"><label for="ag-email">E-mail</label><input id="ag-email" type="email" autocomplete="username" placeholder="voce@agencia.com.br"><span class="msg-e">Digite um e-mail válido.</span></div>
+        <div class="campo"><label for="ag-senha">Senha <a href="#" data-esqueci>Esqueci a senha</a></label>
+          <div class="senha"><input id="ag-senha" type="password" autocomplete="current-password" placeholder="••••••••"><button type="button" data-olho aria-label="Mostrar senha"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <span class="msg-e">A senha precisa ter pelo menos 6 caracteres.</span></div>
+        <label class="lembrar"><input type="checkbox" checked> Continuar conectado neste computador</label>
+        <div class="contas"><b>Contas de teste</b> · qualquer senha com 6 caracteres
+          <div data-contas></div></div>
+        <button class="btn primario entrar" data-entrar-ag>Entrar</button>
+      </form>
+      <div class="ou">ou</div>
+      <button class="btn google" data-google><svg width="17" height="17" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.6 3.9-5.5 3.9-3.3 0-6-2.7-6-6.1s2.7-6.1 6-6.1c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.3 14.6 2.3 12 2.3 6.7 2.3 2.4 6.6 2.4 12s4.3 9.7 9.6 9.7c5.5 0 9.2-3.9 9.2-9.4 0-.6-.1-1.1-.2-1.6z"/></svg>Entrar com Google</button>
+      <p class="rodape-l">Ainda não usa o Pulse Creator? <a href="#">Testar 30 dias grátis</a></p>
+    </div>
+
+    <!-- cliente -->
+    <div class="painel" data-painel="cliente">
+      <div data-pedir>
+        <h2>Entrar no seu portal</h2>
+        <p>Sem senha. Mandamos um link de acesso para o seu e-mail.</p>
+        <form data-form-cli novalidate>
+          <div class="campo"><label for="cli-email">Seu e-mail</label><input id="cli-email" type="email" autocomplete="email" placeholder="voce@suaempresa.com.br"><span class="msg-e">Digite o e-mail que a agência cadastrou.</span></div>
+          <button class="btn primario entrar" data-entrar-cli>Receber link de acesso</button>
+        </form>
+        <p class="rodape-l">Não recebeu convite? Peça para a sua agência te cadastrar.</p>
+      </div>
+      <div class="enviado" data-enviado>
+        <div class="env-ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 7l9 6 9-6"/></svg></div>
+        <h3>Confira o seu e-mail</h3>
+        <p>Enviamos um link para <b data-para></b>.<br>Ele vale por 15 minutos e só funciona uma vez.</p>
+        <div class="simula">No protótipo não sai e-mail de verdade. Use o botão abaixo como se fosse o link.<button class="btn primario" data-abrir-link>Abrir o link do e-mail</button></div>
+        <p class="link-t">Errou o e-mail? <button data-trocar>Trocar</button></p>
+      </div>
+    </div>
+
+    <p class="seguro" style="margin-bottom:-6px"><a href="telas.html" style="color:var(--texto-3);text-decoration:underline;text-underline-offset:3px">Ver todas as telas do protótipo</a></p>
+    <p class="seguro"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Conexão segura · seus dados ficam com a sua agência</p>
+  </section>
+</main>
+<!--SESSAO-->
+<div class="toast vidro" data-toast style="position:fixed;z-index:40;left:50%;top:22px;transform:translate(-50%,-20px);opacity:0;padding:12px 18px;border-radius:16px;font-size:13px;transition:all .35s var(--mola);pointer-events:none"></div>
+
+<script>
+(function(){
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  var EMAIL=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(/[?&]sair/.test(location.search))PULSE.sair();
+  $('[data-contas]').innerHTML=Object.keys(PULSE.EQUIPE).map(function(k){var u=PULSE.EQUIPE[k];return '<button type="button" data-conta="'+k+'">'+u.nome+' · '+PULSE.PAPEIS[u.papel].nome+'</button>'}).join('');
+  $$('[data-conta]').forEach(function(b){b.addEventListener('click',function(){var u=PULSE.EQUIPE[b.dataset.conta];$('#ag-email').value=u.email;$('#ag-senha').value='teste123';$$('.campo.erro').forEach(function(c){c.classList.remove('erro')})})});
+  function erro(inp,ruim){inp.closest('.campo').classList.toggle('erro',ruim);return !ruim}
+  function vai(btn,url,texto){btn.classList.add('carregando');btn.textContent=texto;setTimeout(function(){location.href=url},700)}
+
+  var g=$('[data-pilulas]'),lente=g.querySelector('.lente');
+  function move(b,an){lente.style.width=b.offsetWidth+'px';lente.style.transform='translateX('+b.offsetLeft+'px)';if(an){lente.classList.remove('esticando');void lente.offsetWidth;lente.classList.add('esticando')}}
+  function escolhe(q,an){var b=g.querySelector('[data-quem='+q+']');$$('button',g).forEach(function(x){x.setAttribute('aria-pressed',x===b)});move(b,an);
+    $$('[data-painel]').forEach(function(p){p.classList.toggle('on',p.dataset.painel===q)});setTimeout(function(){var i=$('[data-painel='+q+'] input');if(i&&innerWidth>900)i.focus()},50)}
+  lente.style.transition='none';move(g.querySelector('[aria-pressed=true]'));requestAnimationFrame(function(){lente.style.transition=''});
+  g.addEventListener('click',function(e){var b=e.target.closest('button');if(b)escolhe(b.dataset.quem,true)});
+  addEventListener('resize',function(){move(g.querySelector('[aria-pressed=true]'))});
+  if(location.hash==='#cliente')escolhe('cliente',false);
+
+  // agência
+  $('[data-olho]').addEventListener('click',function(){var i=$('#ag-senha');i.type=i.type==='password'?'text':'password'});
+  $('[data-form-ag]').addEventListener('submit',function(e){e.preventDefault();
+    var a=erro($('#ag-email'),!EMAIL.test($('#ag-email').value.trim())),b=erro($('#ag-senha'),$('#ag-senha').value.length<6);
+    if(a&&b){PULSE.entrar(PULSE.porEmail($('#ag-email').value)||'RN');vai($('[data-entrar-ag]'),'minhas-demandas.html','Entrando')}
+  });
+  $$('#ag-email,#ag-senha,#cli-email').forEach(function(i){i.addEventListener('input',function(){i.closest('.campo').classList.remove('erro')})});
+  $('[data-google]').addEventListener('click',function(){PULSE.entrar('RN');vai(this,'minhas-demandas.html','Conectando com Google')});
+  $('[data-esqueci]').addEventListener('click',function(e){e.preventDefault();aviso('Enviaríamos um link para criar uma senha nova.')});
+
+  // cliente
+  $('[data-form-cli]').addEventListener('submit',function(e){e.preventDefault();var v=$('#cli-email').value.trim();
+    if(!erro($('#cli-email'),!EMAIL.test(v)))return;
+    var b=$('[data-entrar-cli]');b.classList.add('carregando');b.textContent='Enviando';
+    setTimeout(function(){$('[data-para]').textContent=v;$('[data-pedir]').style.display='none';$('[data-enviado]').classList.add('on');b.classList.remove('carregando');b.textContent='Receber link de acesso'},700);
+  });
+  $('[data-trocar]').addEventListener('click',function(){$('[data-enviado]').classList.remove('on');$('[data-pedir]').style.display='';$('#cli-email').focus()});
+  $('[data-abrir-link]').addEventListener('click',function(){vai(this,'portal-planejamento.html','Abrindo o portal')});
+
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.style.opacity=1;t.style.transform='translate(-50%,0)';clearTimeout(tt);tt=setTimeout(function(){t.style.opacity=0;t.style.transform='translate(-50%,-20px)'},2600)}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<script>
+/* Conteúdos da Clínica Aurora (outubro/2026) e etapas do fluxo.
+   Quadro do cliente, preview de feed e link público de aprovação leem daqui.
+   O que muda (etapa, aprovação, comentários) fica salvo neste navegador. */
+window.CONTEUDOS=(function(){
+  // etapas padrão do fluxo; os nomes e quais aparecem vêm de Configurações › Status
+  var ETAPAS_PADRAO=[
+    {k:'copy',n:'Copy',cor:'#A8A29B'},
+    {k:'criacao',n:'Criação',cor:'#C9B79C'},
+    {k:'revisao_arte',n:'Revisão de arte',cor:'#FFB547'},
+    {k:'revisao_cliente',n:'Revisão do cliente',cor:'#FF6B1A'},
+    {k:'pronto',n:'Pronto para publicar',cor:'#9BE3B0'},
+    {k:'agendado',n:'Programado',cor:'#7DD3FC'},
+    {k:'publicado',n:'Publicado',cor:'#C6F432'}
+  ];
+  function lerJ(ch){try{return JSON.parse(localStorage.getItem(ch)||'{}')}catch(e){return {}}}
+  function gravaJ(ch,v){try{localStorage.setItem(ch,JSON.stringify(v))}catch(e){}}
+  function etapas(todas){var cfg=lerJ('pulse-status');return ETAPAS_PADRAO.map(function(e){var c=cfg[e.k]||{};return {k:e.k,n:c.n||e.n,cor:e.cor,oculta:!!c.oculta}}).filter(function(e){return todas||!e.oculta})}
+  var LEG={
+    'Rotina de skincare em 3 passos':'Rotina boa é rotina que você consegue manter.\n\nLimpeza, hidratação e protetor solar: esses 3 passos já cuidam de quase tudo o que a sua pele precisa no dia a dia.\n\nSalva esse post pra lembrar e marca aquela amiga que tem 12 produtos na pia.\n\nAgende sua avaliação pelo link da bio.',
+    'Protetor solar no inverno?':'Nublou, esfriou… e o protetor ficou na gaveta?\n\nA radiação UVA atravessa as nuvens e as janelas o ano inteiro. No inverno ela continua lá, só que a gente não sente.\n\nUse todo dia e reaplique a cada 3 horas se estiver na rua.',
+    'Peeling dói?':'A pergunta que mais ouvimos no consultório, respondida em 35 segundos.\n\nSpoiler: depende do tipo de peeling, e a gente te explica qual faz sentido pra sua pele.'
+  };
+  function leg(t){return LEG[t]||t+'.\n\nTexto da legenda escrito pela social media, no tom da Clínica Aurora: próximo, didático e sem promessa milagrosa.\n\nAgende sua avaliação pelo link da bio.'}
+  // [id, tipo, formato, título, chamada, estilo, etapa, dia, hora, nível, responsáveis, editor, nº de slides, duração]
+  var BASE=[
+    [1,'post','Estático','Nossos serviços','Nossos <em>serviços</em>','a1','publicado',2,'18:00','media',['BS'],'DL',1],
+    [2,'post','Carrossel','4 sinais de que sua pele pede hidratação','4 sinais de que sua pele pede <em>hidratação</em>','a2','publicado',6,'12:00','media',['BS'],'DL',5],
+    [3,'post','Estático','Perguntas que mais recebemos','Perguntas que mais <em>recebemos</em>','a3','publicado',9,'18:00','media',['BS'],'DL',1],
+    [4,'post','Carrossel','Rotina de skincare em 3 passos','Rotina de skincare em <em>3 passos</em>','a1','revisao_cliente',23,'18:00','media',['BS','DL'],'DL',5],
+    [5,'post','Estático','Protetor solar no inverno?','Protetor solar no <em>inverno?</em>','a2','revisao_cliente',27,'12:00','leve',['BS'],'LR',1],
+    [6,'post','Carrossel','Mitos sobre peeling','Mitos sobre <em>peeling</em>','a3','revisao_arte',30,'18:00','media',['BS','TM'],'DL',4],
+    [7,'post','Estático','Depoimento da Mariana','“Minha pele <em>mudou</em>”','a1','criacao',31,'12:00','leve',['BS'],'DL',1],
+    [8,'post','Estático','Agenda de novembro aberta','Agenda de <em>novembro</em> aberta','a2','copy',31,'18:00','leve',['BS'],'LR',1],
+    [9,'reels','Vídeo','Um dia na clínica','Um dia na <em>clínica</em>','a3','publicado',13,'19:00','alta',['BS','TM'],'TM',1,'0:42'],
+    [10,'reels','Vídeo','Peeling dói?','Peeling <em>dói?</em>','a1','agendado',24,'19:00','alta',['TM'],'TM',1,'0:35'],
+    [11,'reels','Vídeo','Bastidores do atendimento','Bastidores do <em>atendimento</em>','a2','criacao',28,'19:00','alta',['BS','TM'],'TM',1,'—'],
+    [12,'story','Story','Caixinha de perguntas','Manda a sua <em>dúvida</em>','a3','publicado',14,'10:00','leve',['LR'],'LR',1],
+    [13,'story','Story','Antes e depois · limpeza de pele','Antes &amp; <em>depois</em>','a1','publicado',15,'10:00','leve',['LR'],'LR',1],
+    [14,'story','Story','Enquete: qual tratamento?','Qual você <em>quer</em> fazer?','a2','pronto',25,'10:00','leve',['DL'],'DL',1],
+    [15,'story','Story','Lembrete de horários','Horários da <em>semana</em>','a3','criacao',27,'10:00','leve',['LR'],'LR',1],
+    [16,'mais','Material off','Banner da recepção','Cuidar da pele <em>é rotina</em>','a2','pronto',20,'—','media',['DL'],'DL',1]
+  ];
+  var ORDEM=['copy','criacao','revisao_arte','revisao_cliente','pronto','agendado','publicado'];
+  function historico(etapa,dia){var h=[],i=ORDEM.indexOf(etapa),d=Math.max(1,dia-9);
+    for(var k=0;k<=i;k++){h.push({tipo:'status',etapa:ORDEM[k],quando:('0'+Math.min(31,d+k)).slice(-2)+'/10/2026',quem:k<2?'BS':k<3?'DL':'BS'})}
+    return h}
+  var C=BASE.map(function(r){return {id:r[0],tipo:r[1],formato:r[2],titulo:r[3],chamada:r[4],estilo:r[5],etapa:r[6],dia:r[7],hora:r[8],nivel:r[9],resp:r[10],editor:r[11],slides:r[12],dur:r[13]||'',
+    legenda:leg(r[3]),portal:['copy','criacao','revisao_arte'].indexOf(r[6])<0,collab:'',aprovacao:null,
+    log:historico(r[6],r[7]).concat(r[0]===4?[{tipo:'comentario',quem:'cliente',texto:'Adorei! Dá pra trocar a foto do slide 3? Queria uma com a nossa sala de atendimento.',quando:'ontem, 16:40'},{tipo:'comentario',quem:'BS',texto:'@Davi pode usar as fotos do último ensaio no slide 3?',quando:'ontem, 17:05'}]:[])}});
+  // aplica o que já mudou neste navegador
+  (function(){var m=lerJ('pulse-conteudos');C.forEach(function(c){var x=m[c.id];if(x)for(var k in x)c[k]=x[k]})})();
+  function salva(id,patch){var c=C.filter(function(x){return x.id===id})[0];if(!c)return;for(var k in patch)c[k]=patch[k];
+    var m=lerJ('pulse-conteudos');m[id]=m[id]||{};for(var j in patch)m[id][j]=patch[j];m[id].log=c.log;gravaJ('pulse-conteudos',m)}
+  return {
+    lista:function(){return C},
+    pega:function(id){return C.filter(function(x){return x.id===id})[0]},
+    salva:salva,
+    etapas:etapas,
+    etapa:function(k){return etapas(true).filter(function(e){return e.k===k})[0]||{k:k,n:k,cor:'#888'}},
+    ordem:ORDEM,
+    salvaEtapas:function(cfg){gravaJ('pulse-status',cfg)},
+    configEtapas:function(){return lerJ('pulse-status')},
+    padraoEtapas:ETAPAS_PADRAO,
+    restaura:function(){try{localStorage.removeItem('pulse-conteudos');localStorage.removeItem('pulse-status')}catch(e){}}
+  };
+})();
+</script>

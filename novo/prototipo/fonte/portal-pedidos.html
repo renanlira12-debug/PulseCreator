@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clínica Aurora · Pedidos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/*BASE*/
+.duo-p{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;margin-top:22px;align-items:start}
+.form-p{padding:22px;border-radius:26px;position:sticky;top:130px}
+.form-p h3{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.form-p>p{color:var(--texto-3);font-size:12.5px;margin-top:3px}
+.campo{margin-top:16px}
+.campo>label,.campo>span{display:block;font-size:12px;font-weight:600;color:var(--texto-2);margin-bottom:8px}
+.tipos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tipos button{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:11px;border-radius:14px;font-size:12.5px;font-weight:600;text-align:left;
+  background:var(--fosco);border:1px solid var(--borda);color:var(--texto-2);transition:all .2s var(--mola)}
+.tipos button svg{width:17px;height:17px;color:var(--texto-3)}
+.tipos button:hover{color:var(--texto)}
+.tipos button[aria-pressed=true]{color:var(--texto);border-color:color-mix(in srgb,var(--laranja) 55%,transparent);background:color-mix(in srgb,var(--laranja) 10%,transparent);transform:scale(1.02)}
+.tipos button[aria-pressed=true] svg{color:var(--laranja-claro)}
+.campo textarea,.campo input{width:100%;padding:11px 14px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:13.5px;outline:none}
+.campo textarea{min-height:100px;resize:vertical}
+.campo textarea:focus,.campo input:focus{border-color:color-mix(in srgb,var(--laranja) 50%,transparent)}
+.campo input[type=date]{color-scheme:dark}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.urg{display:flex;gap:6px}
+.urg button{flex:1;padding:10px;border-radius:12px;font-size:12.5px;font-weight:600;background:var(--fosco);border:1px solid var(--borda);color:var(--texto-2)}
+.urg button[aria-pressed=true]{color:var(--texto);border-color:color-mix(in srgb,var(--laranja) 50%,transparent);background:color-mix(in srgb,var(--laranja) 10%,transparent)}
+.soltar{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px;border-radius:16px;text-align:center;cursor:pointer;
+  border:1.5px dashed color-mix(in srgb,var(--laranja) 35%,transparent);background:color-mix(in srgb,var(--laranja) 4%,transparent);transition:all .2s}
+.soltar:hover,.soltar.sobre{background:color-mix(in srgb,var(--laranja) 10%,transparent);border-color:var(--laranja)}
+.soltar svg{color:var(--laranja-claro)}
+.soltar b{font-size:13px}
+.soltar small{color:var(--texto-3);font-size:11.5px}
+.anexos{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.anexo{display:inline-flex;align-items:center;gap:6px;padding:5px 6px 5px 10px;border-radius:10px;font-size:12px;background:var(--vidro-2);border:1px solid var(--borda)}
+.anexo button{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;color:var(--texto-3)}
+.anexo button:hover{background:color-mix(in srgb,var(--tinta) 10%,transparent);color:var(--texto)}
+.form-p .enviar{width:100%;justify-content:center;margin-top:18px;padding:13px}
+
+.lista-ped h3{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--texto-3)}
+.lista-ped h3 span{padding:1px 8px;border-radius:99px;background:var(--fosco);border:1px solid var(--borda);letter-spacing:0}
+.ped{padding:18px;border-radius:22px;margin-bottom:12px}
+.ped.novo-p{animation:chega .6s var(--mola)}
+@keyframes chega{from{opacity:0;transform:translateY(-12px) scale(.98);filter:blur(6px)}}
+.ped-cab{display:flex;align-items:flex-start;gap:12px}
+.ped-cab .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--laranja) 13%,transparent);color:var(--laranja-claro)}
+.ped-cab .ic svg{width:18px;height:18px}
+.ped-cab div{flex:1;min-width:0}
+.ped-cab b{display:block;font-size:14px;font-weight:600}
+.ped-cab small{display:block;margin-top:2px;color:var(--texto-3);font-size:12px}
+.urg-tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;color:var(--vermelho);background:rgba(255,90,78,.12);white-space:nowrap}
+.ped p.desc{margin-top:10px;font-size:13px;color:var(--texto-2);line-height:1.55}
+.trilha{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+.passo{position:relative;padding-top:12px;font-size:11.5px;color:var(--texto-3)}
+.passo::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;border-radius:99px;background:color-mix(in srgb,var(--tinta) 8%,transparent)}
+.passo.ok{color:var(--texto-2)}
+.passo.ok::before{background:linear-gradient(90deg,var(--brasa),var(--laranja))}
+.passo.agora{color:var(--laranja-claro);font-weight:600}
+.passo.agora::before{background:linear-gradient(90deg,var(--brasa),var(--laranja));box-shadow:0 0 10px color-mix(in srgb,var(--laranja) 60%,transparent)}
+.passo small{display:block;color:var(--texto-3);font-weight:400;font-size:11px;margin-top:2px}
+.resposta{display:flex;gap:10px;margin-top:14px;padding:12px;border-radius:16px;background:var(--fosco)}
+.resposta .av{width:28px;height:28px;font-size:10px;margin:0;flex:none}
+.resposta b{font-size:12px;font-weight:600}
+.resposta p{font-size:13px;color:var(--texto-2);margin-top:2px}
+.entrega{display:flex;align-items:center;gap:10px;margin-top:12px}
+.entrega .min{width:44px;height:55px;border-radius:9px;background:#2F4A3F;color:#F1E9DC;display:grid;place-items:center;font-size:8px;font-weight:900;letter-spacing:.04em}
+.entrega a{font-size:12.5px;font-weight:600;color:var(--laranja-claro);text-decoration:none}
+
+@media (max-width:900px){.duo-p{grid-template-columns:1fr}.form-p{position:static}}
+@media (max-width:520px){.tipos{grid-template-columns:1fr 1fr}.duas{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<div class="portal-pag">
+<!--PORTAL:pedidos-->
+  <main class="conteudo-portal">
+    <div class="entra">
+      <h2 class="ola-p">Precisa de algo? <em>Peça aqui.</em></h2>
+      <p class="sub-p">Um post novo, uma arte para uma promoção, uma alteração ou só uma ideia. O pedido cai direto na fila da agência e você acompanha cada etapa.</p>
+    </div>
+
+    <div class="duo-p">
+      <form class="form-p vidro especular entra" style="animation-delay:.05s" data-form>
+        <h3>Novo pedido</h3>
+        <p>Quanto mais detalhe, mais rápido sai.</p>
+        <div class="campo"><span>O que você precisa?</span>
+          <div class="tipos" data-tipos>
+            <button type="button" data-t="Post" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 15l4-4 5 5 3-3 4 4"/></svg>Post</button>
+            <button type="button" data-t="Reels" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9l5 3-5 3z"/></svg>Reels</button>
+            <button type="button" data-t="Story" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="3"/></svg>Story</button>
+            <button type="button" data-t="Arte avulsa" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-1-.8-1.2-.8-2.2 0-.8.6-1.3 1.4-1.3H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>Arte avulsa</button>
+            <button type="button" data-t="Alteração" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Alteração</button>
+            <button type="button" data-t="Ideia" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>Ideia de conteúdo</button>
+          </div>
+        </div>
+        <div class="campo"><label for="p-titulo">Título</label><input id="p-titulo" required placeholder="Ex.: Arte para o Dia das Crianças"></div>
+        <div class="campo"><label for="p-desc">Descreva</label><textarea id="p-desc" placeholder="O que deve aparecer, o tom, alguma referência…"></textarea></div>
+        <div class="duas">
+          <div class="campo"><label for="p-data">Para quando?</label><input id="p-data" type="date" value="2026-10-30"></div>
+          <div class="campo"><span>Urgência</span><div class="urg" data-urg><button type="button" aria-pressed="true" data-u="normal">Normal</button><button type="button" aria-pressed="false" data-u="urgente">Urgente</button></div></div>
+        </div>
+        <div class="campo"><span>Anexos</span>
+          <label class="soltar" data-soltar>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg>
+            <b>Fotos, vídeos, logo ou documentos</b><small>Arraste aqui ou toque para escolher</small>
+            <input type="file" multiple hidden data-arq>
+          </label>
+          <div class="anexos" data-anexos></div>
+        </div>
+        <button class="btn primario enviar">Enviar pedido</button>
+      </form>
+
+      <section class="lista-ped entra" style="animation-delay:.1s">
+        <h3>Seus pedidos<span data-qtd></span></h3>
+        <div data-pedidos></div>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="toast vidro" data-toast></div>
+
+<script>
+(function(){
+  var ICONE={Post:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 15l4-4 5 5 3-3 4 4"/>',Reels:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9l5 3-5 3z"/>',
+    Story:'<rect x="7" y="2" width="10" height="20" rx="3"/>','Arte avulsa':'<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="14" cy="9" r="1"/>',
+    'Alteração':'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',Ideia:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>'};
+  var PEDIDOS=[
+    {tipo:'Alteração',titulo:'Trocar a foto do slide 3 do carrossel',desc:'Queria uma foto com a nossa sala de atendimento no lugar da janela.',data:'23/10',enviado:'ontem, 16:42',passo:1,urg:false,anexos:1,
+     resp:['BS','Bianca','Já estou trocando pelas fotos do último ensaio. Te mando hoje à tarde.']},
+    {tipo:'Arte avulsa',titulo:'Banner da promoção de novembro',desc:'15% em limpeza de pele no mês de novembro. Para usar no feed e no WhatsApp.',data:'28/10',enviado:'20/10, 10:15',passo:0,urg:true,anexos:2,resp:null},
+    {tipo:'Post',titulo:'Post sobre a nova dermatologista',desc:'A Dra. Paula começa dia 3. Mandei a foto e o currículo.',data:'15/10',enviado:'08/10, 14:02',passo:2,urg:false,anexos:2,
+     resp:['DL','Davi','Ficou pronto e já está no seu planejamento, publicado dia 16/10.'],entrega:true}
+  ];
+  var PASSOS=['Recebido','Em produção','Entregue'];
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function desenha(novo){
+    $('[data-qtd]').textContent=PEDIDOS.length;
+    $('[data-pedidos]').innerHTML=PEDIDOS.map(function(p,i){
+      return '<article class="ped vidro'+(novo&&i===0?' novo-p':'')+'"><div class="ped-cab"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+ICONE[p.tipo]+'</svg></span>'+
+        '<div><b>'+p.titulo+'</b><small>'+p.tipo+' · para '+p.data+' · enviado '+p.enviado+(p.anexos?' · '+p.anexos+' anexo'+(p.anexos>1?'s':''):'')+'</small></div>'+(p.urg?'<span class="urg-tag">Urgente</span>':'')+'</div>'+
+        (p.desc?'<p class="desc">'+p.desc+'</p>':'')+
+        '<div class="trilha">'+PASSOS.map(function(n,k){return '<div class="passo'+(k<p.passo||p.passo===2&&k===2?' ok':k===p.passo?' agora':'')+'">'+n+(k===p.passo?'<small>'+(k===0?'esperando a agência':k===1?'a agência está fazendo':'pronto')+'</small>':'')+'</div>'}).join('')+'</div>'+
+        (p.resp?'<div class="resposta"><span class="av" style="background:linear-gradient(135deg,#FF9A57,#C2410C)">'+p.resp[0]+'</span><div><b>'+p.resp[1]+' · Estúdio Faísca</b><p>'+p.resp[2]+'</p></div></div>':'')+
+        (p.entrega?'<div class="entrega"><span class="min">DRA.<br>PAULA</span><a href="portal-planejamento.html">Ver no planejamento →</a></div>':'')+
+        '</article>';
+    }).join('');
+  }
+  function escolha(sel){$$('button',$(sel)).forEach(function(b){b.addEventListener('click',function(){$$('button',$(sel)).forEach(function(x){x.setAttribute('aria-pressed',x===b)})})})}
+  escolha('[data-tipos]');escolha('[data-urg]');
+
+  var arquivos=[];
+  function mostra(){$('[data-anexos]').innerHTML=arquivos.map(function(n,i){return '<span class="anexo">'+n.replace(/</g,'&lt;')+'<button type="button" data-tira="'+i+'" aria-label="Remover">×</button></span>'}).join('');
+    $$('[data-tira]').forEach(function(b){b.addEventListener('click',function(){arquivos.splice(+b.dataset.tira,1);mostra()})})}
+  function pega(fs){[].forEach.call(fs,function(f){arquivos.push(f.name)});mostra()}
+  var sol=$('[data-soltar]');
+  $('[data-arq]').addEventListener('change',function(){pega(this.files);this.value=''});
+  ['dragover','dragenter'].forEach(function(t){sol.addEventListener(t,function(e){e.preventDefault();sol.classList.add('sobre')})});
+  ['dragleave','drop'].forEach(function(t){sol.addEventListener(t,function(){sol.classList.remove('sobre')})});
+  sol.addEventListener('drop',function(e){e.preventDefault();pega(e.dataTransfer.files)});
+
+  $('[data-form]').addEventListener('submit',function(e){
+    e.preventDefault();
+    var d=$('#p-data').value.split('-');
+    PEDIDOS.unshift({tipo:$('[data-tipos] [aria-pressed=true]').dataset.t,titulo:$('#p-titulo').value.replace(/</g,'&lt;'),desc:$('#p-desc').value.replace(/</g,'&lt;'),
+      data:d.length===3?d[2]+'/'+d[1]:'sem data',enviado:'agora',passo:0,urg:$('[data-urg] [aria-pressed=true]').dataset.u==='urgente',anexos:arquivos.length,resp:null});
+    this.reset();arquivos=[];mostra();
+    $$('[data-tipos] button').forEach(function(b,i){b.setAttribute('aria-pressed',i===0)});$$('[data-urg] button').forEach(function(b,i){b.setAttribute('aria-pressed',i===0)});
+    desenha(true);aviso('Pedido enviado. A agência recebeu e vai te responder por aqui.');
+  });
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},2800)}
+  desenha();
+})();
+</script>
+</body>
+</html>

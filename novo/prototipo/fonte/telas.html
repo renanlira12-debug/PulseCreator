@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Telas do protótipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/*BASE*/
+.capa{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:56px 24px 80px}
+.capa .marca{padding:0}
+.capa h1{margin-top:36px;font-size:clamp(30px,4.4vw,52px);font-weight:700;letter-spacing:-.04em;line-height:1.05}
+.capa h1 em{font-style:normal;color:var(--laranja)}
+.capa>p{margin-top:14px;max-width:600px;color:var(--texto-2);font-size:15px}
+.secao{margin-top:40px}
+.secao h2{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--texto-3);margin-bottom:14px}
+.telas{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.tela{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:22px;text-decoration:none;color:inherit;transition:transform .25s var(--mola),border-color .2s}
+.tela:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--laranja) 45%,transparent);color:inherit}
+.tela .ic{width:42px;height:42px;border-radius:14px;flex:none;display:grid;place-items:center;color:var(--laranja-claro);background:color-mix(in srgb,var(--laranja) 13%,transparent)}
+.tela b{display:block;font-size:15px}
+.tela small{display:block;margin-top:4px;color:var(--texto-3);font-size:12.5px;line-height:1.45}
+.aviso{margin-top:40px;padding:16px 18px;border-radius:18px;font-size:13px;color:var(--texto-2)}
+.aviso b{color:var(--texto)}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<main class="capa">
+  <div class="marca">
+    <div class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d0c03" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+    <div><b>Pulse Creator</b><small>protótipo navegável</small></div>
+  </div>
+  <h1>A agência opera.<br><em>O cliente acompanha.</em></h1>
+  <p>Gestão de conteúdo para agências de social media, com um portal de verdade para o cliente. Toque em uma tela para abrir.</p>
+
+  <section class="secao">
+    <h2>Começo</h2>
+    <div class="telas">
+      <a class="tela vidro" href="login.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></span><div><b>Login</b><small>Uma entrada só. A agência vai para o painel; o cliente recebe um link e cai no portal dele.</small></div></a>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Agência</h2>
+    <div class="telas">
+      <a class="tela vidro" href="minhas-demandas.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><div><b>Minhas demandas</b><small>A fila de cada pessoa, carga da semana e "ver como" para o gestor.</small></div></a>
+      <a class="tela vidro" href="dashboard.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><div><b>Dashboard</b><small>Entregas, prazo, meta do mês, ranking da equipe e resultados dos clientes.</small></div></a>
+      <a class="tela vidro" href="demandas.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="2"/><rect x="14" y="3" width="7" height="11" rx="2"/></svg></span><div><b>Demandas</b><small>Quadro com nível leve, média e alta, carga da equipe e nova demanda.</small></div></a>
+      <a class="tela vidro" href="cliente.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/></svg></span><div><b>Quadro do cliente</b><small>Posts, reels e stories do mês, contratado × feito, roteiro e comentários.</small></div></a>
+      <a class="tela vidro" href="calendario.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><div><b>Calendário</b><small>Publicações de todos os clientes no mês. Arraste para mudar a data.</small></div></a>
+      <a class="tela vidro" href="resultados.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg></span><div><b>Resultados</b><small>Todos os clientes lado a lado, metas, alertas e envio automático de relatório.</small></div></a>
+      <a class="tela vidro" href="mensagens.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><div><b>Mensagens</b><small>Caixa de entrada com todos os clientes, notas internas e pendências.</small></div></a>
+      <a class="tela vidro" href="ia.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg></span><div><b>Planejar com IA</b><small>Configura, acompanha a IA trabalhando e revisa o plano antes de criar os cards.</small></div></a>
+      <a class="tela vidro" href="ficha-cliente.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><div><b>Ficha do cliente</b><small>Dados, briefing, redes conectadas, cota e quem do cliente acessa o portal. Também em “Novo cliente”.</small></div></a>
+      <a class="tela vidro" href="entregas.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><div><b>Relatório de entregas</b><small>Fim do mês: material on e off do cliente, com imagens, em PDF e no portal.</small></div></a>
+      <a class="tela vidro" href="contratos.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><div><b>Contratos</b><small>Todos os contratos, subir PDF, escopo e o que aparece no portal.</small></div></a>
+      <a class="tela vidro" href="preview.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><div><b>Preview de feed (link público)</b><small>O cliente abre sem login, vê o feed e aprova ou sugere alteração post por post.</small></div></a>
+      <a class="tela vidro" href="lixeira.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span><div><b>Lixeira</b><small>Cards, arquivos e referências apagados ficam 30 dias. Restaure ou exclua de vez.</small></div></a>
+      <a class="tela vidro" href="novidades.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></span><div><b>Novidades</b><small>O que mudou no sistema, por categoria, com atalho para experimentar.</small></div></a>
+      <a class="tela vidro" href="biblioteca.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/></svg></span><div><b>Biblioteca</b><small>Referências gerais ou por cliente, coleções, nota de por que salvou e uso pela IA.</small></div></a>
+      <a class="tela vidro" href="configuracoes.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></span><div><b>Configurações</b><small>Marca da agência no portal, integrações, prazos por nível e frase do dia.</small></div></a>
+      <a class="tela vidro" href="equipe.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/></svg></span><div><b>Equipe</b><small>Login de cada pessoa, papéis, clientes atribuídos e "entrar como".</small></div></a>
+      <a class="tela vidro" href="financeiro.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="6" width="19" height="13" rx="3"/><path d="M2.5 10h19"/></svg></span><div><b>Financeiro</b><small>Cobranças dos clientes, receita do mês e a assinatura do Pulse Creator.</small></div></a>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Cliente</h2>
+    <div class="telas">
+      <a class="tela vidro" href="portal-planejamento.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><div><b>Portal · Planejamento</b><small>O mês do cliente em lista ou calendário. Aprova, pede ajuste e comenta um trecho.</small></div></a>
+      <a class="tela vidro" href="portal-pedidos.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg></span><div><b>Portal · Pedidos</b><small>O cliente pede post, arte ou alteração, anexa arquivos e acompanha cada etapa.</small></div></a>
+      <a class="tela vidro" href="portal-mensagens.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><div><b>Portal · Mensagens</b><small>Conversa direta com a equipe da agência, com fotos, arquivos e conteúdos.</small></div></a>
+      <a class="tela vidro" href="portal-relatorio.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg></span><div><b>Portal · Relatório</b><small>Métricas do mês com resumo escrito, melhores conteúdos, público e melhor horário.</small></div></a>
+      <a class="tela vidro" href="portal-agenda.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M8 15h3"/></svg></span><div><b>Portal · Agenda</b><small>O cliente marca reunião, ensaio de fotos ou gravação nos horários livres.</small></div></a>
+      <a class="tela vidro" href="portal-arquivos.html"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><div><b>Portal · Arquivos</b><small>Entregas por mês, fotos, marca e relatórios. Busca, baixa e envia arquivos.</small></div></a>
+      <a class="tela vidro" href="contratos.html#cliente"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><div><b>Portal · Contratos</b><small>O cliente vê os contratos dele, o que foi entregue e assina na tela.</small></div></a>
+    </div>
+  </section>
+
+  <p class="aviso vidro"><b>É só o visual.</b> Os dados são de exemplo e nada é salvo: ao recarregar a página, tudo volta ao começo.</p>
+</main>
+</body>
+</html>

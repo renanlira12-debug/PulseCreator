@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Configurações</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/*BASE*/
+:root{--leve:#CFC8C0;--media:#FFB547;--alta:#FF5A4E}
+.btn.fantasma{color:var(--texto-2);background:var(--fosco);border:1px solid var(--borda)}
+.btn.fantasma:hover{color:var(--texto)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.titulo{margin-bottom:16px}
+.titulo h2{font-size:28px;font-weight:700;letter-spacing:-.03em}
+.titulo p{color:var(--texto-2);margin-top:4px}
+.corpo{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:start}
+.corpo>*{min-width:0}
+.secoes{position:sticky;top:20px;padding:8px;border-radius:22px;display:flex;flex-direction:column;gap:2px}
+.secoes button{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;font-size:13px;font-weight:500;color:var(--texto-2);text-align:left}
+.secoes button:hover{background:var(--vidro-1);color:var(--texto)}
+.secoes button[aria-current=true]{color:var(--texto);background:var(--vidro-2);box-shadow:var(--brilho)}
+.secoes svg{width:17px;height:17px;flex:none}
+.pag{display:none}.pag.on{display:block;animation:entraP .35s ease}
+@keyframes entraP{from{opacity:0;filter:blur(6px)}}
+.bloco{padding:22px;border-radius:26px;margin-bottom:16px}
+.bloco>h3{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.bloco>p.d{color:var(--texto-3);font-size:12.5px;margin-top:3px}
+.grade2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.campo label,.campo>span{display:block;font-size:12px;font-weight:600;color:var(--texto-2);margin-bottom:7px}
+.campo label em,.campo>span em{font-style:normal;font-weight:400;color:var(--texto-3)}
+.campo input,.campo select,.campo textarea{width:100%;padding:11px 14px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:13.5px;outline:none}
+.campo select option{background:var(--superficie)}
+.campo input:focus,.campo select:focus,.campo textarea:focus{border-color:color-mix(in srgb,var(--laranja) 55%,transparent)}
+.campo input:disabled,.campo select:disabled,.campo textarea:disabled{opacity:.7}
+.prefixo{display:flex;align-items:center;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);overflow:hidden}
+.prefixo span{padding:0 0 0 14px;font-size:13.5px;color:var(--texto-3);white-space:nowrap}
+.prefixo input{border:0;background:none;padding-left:2px}
+.sub-t{margin:18px 0 8px;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--texto-3)}
+
+/* marca */
+.marca-g{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+.logo-up{display:flex;align-items:center;gap:14px}
+.logo-ag-g{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-weight:800;font-size:20px;color:#1d0c03;flex:none;background-size:cover;background-position:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 20px rgba(0,0,0,.4)}
+.logo-up small{display:block;color:var(--texto-3);font-size:12px;margin-top:4px}
+.cores{display:flex;gap:8px;flex-wrap:wrap}
+.cor{width:38px;height:38px;border-radius:12px;border:2px solid transparent;position:relative;transition:transform .2s var(--mola)}
+.cor[aria-pressed=true]{border-color:#fff;transform:scale(1.08)}
+.cor-livre{position:relative;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:var(--texto-3);border:1.5px dashed color-mix(in srgb,var(--tinta) 25%,transparent);overflow:hidden}
+.cor-livre input{position:absolute;inset:-6px;width:56px;height:56px;opacity:0;cursor:pointer}
+.previa{padding:14px;border-radius:22px;background:rgba(0,0,0,.25);border:1px solid var(--borda)}
+.previa>small{display:block;margin-bottom:10px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--texto-3)}
+.pv-portal{border-radius:16px;padding:12px;background:color-mix(in srgb,var(--superficie) 70%,transparent);border:1px solid var(--borda)}
+.pv-topo{display:flex;align-items:center;gap:9px}
+.pv-logo{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:11px;color:#1d0c03;background-size:cover;background-position:center}
+.pv-topo b{font-size:12.5px;display:block}
+.pv-topo small{font-size:10.5px;color:var(--texto-3)}
+.pv-abas{display:flex;gap:4px;margin-top:10px}
+.pv-abas span{padding:4px 9px;border-radius:99px;font-size:10.5px;color:var(--texto-3);background:var(--fosco)}
+.pv-abas span.on{color:var(--texto);background:color-mix(in srgb,var(--tinta) 14%,transparent)}
+.pv-card{margin-top:10px;padding:10px;border-radius:12px;background:var(--fosco)}
+.pv-card b{font-size:13px}
+.pv-card b em{font-style:normal}
+.pv-btn{display:inline-block;margin-top:8px;padding:6px 12px;border-radius:99px;font-size:11px;font-weight:700;color:#1d0c03}
+.pv-email{margin-top:10px;padding:10px 12px;border-radius:12px;font-size:11.5px;color:var(--texto-2);background:#f6f3ef0d;border:1px dashed var(--borda)}
+.pv-email b{color:var(--texto)}
+
+/* integrações */
+.ints{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.int{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:18px;background:var(--fosco);border:1px solid var(--borda);flex-wrap:wrap}
+.int .ic{width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;color:#fff}
+.int div.t{flex:1;min-width:200px}
+.int b{display:block;font-size:14px}
+.int small{display:block;margin-top:2px;color:var(--texto-3);font-size:12px;line-height:1.45}
+.int .det{flex-basis:100%;display:none;margin-top:4px;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.2);font-size:12.5px;color:var(--texto-2)}
+.int.aberta .det{display:block;animation:entraP .3s}
+.arvore{font-family:ui-monospace,SFMono-Regular,monospace;font-size:12px;line-height:1.7;color:var(--texto-2)}
+.st{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st.ok{color:#9BE3B0;background:rgba(155,227,176,.1)}
+.st.off{color:var(--texto-3);background:color-mix(in srgb,var(--tinta) 6%,transparent)}
+.ia-modo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ia-modo button{padding:11px 12px;border-radius:14px;text-align:left;background:var(--fosco);border:1px solid var(--borda)}
+.ia-modo button b{font-size:13px}
+.ia-modo button small{display:block;margin-top:3px;font-size:11.5px;color:var(--texto-3)}
+.ia-modo button[aria-pressed=true]{border-color:color-mix(in srgb,var(--laranja) 55%,transparent);background:color-mix(in srgb,var(--laranja) 10%,transparent)}
+.chave-api{display:none;margin-top:10px;gap:8px}
+.chave-api.on{display:flex}
+.chave-api input{flex:1;padding:10px 12px;border-radius:12px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:13px;outline:none;font-family:ui-monospace,monospace}
+
+/* prazos */
+.niveis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.nv{padding:16px;border-radius:20px;background:var(--fosco);border:1px solid var(--borda);border-top:3px solid var(--c)}
+.nv-cab{display:flex;align-items:center;gap:8px}
+.nv-cab b{font-size:15px;color:var(--c)}
+.nv-cab i{display:inline-flex;align-items:flex-end;gap:2px;height:12px}
+.nv-cab i s{width:3px;border-radius:1px;background:var(--c);opacity:.25;display:block}
+.nv-cab i s:nth-child(1){height:5px}.nv-cab i s:nth-child(2){height:8px}.nv-cab i s:nth-child(3){height:12px}
+.nv[data-n=leve] i s:nth-child(-n+1),.nv[data-n=media] i s:nth-child(-n+2),.nv[data-n=alta] i s{opacity:1}
+.nv-linha{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:12.5px;color:var(--texto-2)}
+.passo{display:flex;align-items:center;gap:8px}
+.passo button{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--texto-2);background:var(--vidro-2)}
+.passo button:hover:not(:disabled){color:var(--texto)}
+.passo button:disabled{opacity:.35}
+.passo b{min-width:58px;text-align:center;font-size:14px;color:var(--texto)}
+.nv small{display:block;margin-top:10px;font-size:11.5px;color:var(--texto-3);line-height:1.45}
+.formatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fmt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border-radius:13px;background:var(--fosco);font-size:13px}
+.fmt select{padding:6px 9px;border-radius:9px;background:rgba(0,0,0,.25);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:12.5px;outline:none}
+.fmt select option{background:var(--superficie)}
+.dias{display:flex;gap:6px;flex-wrap:wrap}
+.dias button{width:46px;height:40px;border-radius:12px;font-size:12.5px;font-weight:600;color:var(--texto-3);background:var(--fosco);border:1px solid var(--borda)}
+.dias button[aria-pressed=true]{color:#1d0c03;background:linear-gradient(135deg,var(--laranja-claro),var(--laranja));border-color:transparent}
+.exemplo{display:flex;gap:12px;align-items:center;margin-top:16px;padding:14px 16px;border-radius:18px;background:color-mix(in srgb,var(--laranja) 7%,transparent);border:1px solid color-mix(in srgb,var(--laranja) 30%,transparent);font-size:13px;color:var(--texto-2)}
+.exemplo b{color:var(--texto)}
+.exemplo svg{flex:none;color:var(--laranja-claro)}
+
+/* frase */
+.modos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.modos button{padding:12px;border-radius:15px;text-align:left;background:var(--fosco);border:1px solid var(--borda)}
+.modos button b{display:block;font-size:13px}
+.modos button small{display:block;margin-top:3px;font-size:11.5px;color:var(--texto-3)}
+.modos button[aria-pressed=true]{border-color:color-mix(in srgb,var(--laranja) 55%,transparent);background:color-mix(in srgb,var(--laranja) 10%,transparent)}
+.frases{display:flex;flex-direction:column;gap:6px}
+.fr{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:13px;background:var(--fosco);border:1px solid var(--borda)}
+.fr.hoje{border-color:color-mix(in srgb,var(--laranja) 50%,transparent)}
+.fr input{flex:1;background:none;border:0;outline:none;color:var(--texto);font:inherit;font-size:13px;padding:6px 0}
+.fr small{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--laranja-claro);white-space:nowrap}
+.fr button{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:var(--texto-3)}
+.fr button:hover{background:rgba(255,90,78,.12);color:var(--vermelho)}
+.add-fr{display:flex;gap:8px;margin-top:8px}
+.add-fr input{flex:1;padding:10px 12px;border-radius:12px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:13px;outline:none}
+.pv-ola{margin-top:16px;padding:20px 22px;border-radius:22px;background:linear-gradient(120deg,color-mix(in srgb,var(--laranja) 14%,transparent),color-mix(in srgb,var(--laranja) 2%,transparent));border:1px solid var(--borda)}
+.pv-ola small{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--laranja-claro)}
+.pv-ola h4{margin:6px 0 0;font-size:26px;font-weight:700;letter-spacing:-.03em}
+.pv-ola h4 em{font-style:normal;color:var(--laranja)}
+.pv-ola .q{margin-top:10px;padding-left:12px;border-left:2px solid var(--laranja);font-style:italic;font-size:14px}
+.pv-ola .q small{display:block;font-style:normal;margin-top:4px}
+
+.salvar{position:sticky;bottom:14px;z-index:5;display:flex;align-items:center;gap:12px;padding:12px 14px 12px 20px;border-radius:22px;background:color-mix(in srgb,var(--superficie) 80%,transparent);transform:translateY(20px);opacity:0;pointer-events:none;transition:all .35s var(--mola)}
+.salvar.on{transform:none;opacity:1;pointer-events:auto}
+.salvar span{flex:1;font-size:13px;color:var(--texto-2)}
+.salvar span b{color:var(--ambar)}
+.toast{position:fixed;z-index:40;left:50%;top:22px;transform:translate(-50%,-20px);opacity:0;padding:12px 18px;border-radius:16px;font-size:13px;transition:all .35s var(--mola);pointer-events:none;max-width:calc(100% - 24px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:1100px){.corpo{grid-template-columns:1fr}.secoes{position:static;flex-direction:row;overflow-x:auto}.secoes button{flex:none}.marca-g{grid-template-columns:1fr}}
+@media (max-width:640px){.grade2,.niveis,.modos,.ia-modo{grid-template-columns:1fr}.formatos{grid-template-columns:1fr 1fr}.titulo h2{font-size:23px}.bloco{padding:18px}.salvar{flex-wrap:wrap}}
+.etapas-cfg{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.ec{display:grid;grid-template-columns:28px 22px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 12px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda)}
+.ec.oculta{opacity:.5}
+.ec .num{font-size:12px;font-weight:700;color:var(--texto-3);text-align:center}
+.ec .bola{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.ec input{width:100%;padding:8px 10px;border-radius:10px;background:transparent;border:1px solid transparent;color:var(--texto);font:inherit;font-size:13.5px;font-weight:600;outline:none}
+.ec input:hover{border-color:var(--borda)}
+.ec input:focus{border-color:color-mix(in srgb,var(--laranja) 55%,transparent);background:var(--fosco)}
+.ec small{font-size:11.5px;color:var(--texto-3);white-space:nowrap}
+.ec .vis{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:99px;font-size:12px;color:var(--texto-2);background:var(--vidro-1);border:1px solid var(--borda)}
+.ec .vis[aria-pressed=false]{color:var(--texto-3)}
+.ec .vis:disabled{opacity:.5;cursor:not-allowed}
+@media (max-width:640px){.ec{grid-template-columns:22px minmax(0,1fr) auto}.ec .num,.ec small{display:none}}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<div class="app">
+<!--LATERAL:configuracoes-->
+  <main class="principal">
+    <header class="topo"><h1>Configurações</h1><div class="esp"></div><button class="btn fantasma" data-padrao style="padding:8px 13px;font-size:12.5px">Voltar ao padrão do protótipo</button></header>
+    <div class="titulo entra"><h2>Configurações da agência</h2><p>Valem para toda a equipe e para o portal de todos os clientes.</p></div>
+
+    <div class="corpo">
+      <nav class="secoes vidro entra" style="animation-delay:.05s" data-secoes>
+        <button aria-current="true" data-s="marca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-1-.8-1.2-.8-2.2 0-.8.6-1.3 1.4-1.3H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>Marca</button>
+        <button aria-current="false" data-s="integracoes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Integrações</button>
+        <button aria-current="false" data-s="prazos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Prazos por nível</button>
+        <button aria-current="false" data-s="frase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M7 7h4v4c0 3-1.5 5-4 6M14 7h4v4c0 3-1.5 5-4 6"/></svg>Frase do dia</button>
+        <button aria-current="false" data-s="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 12h3M14 12h3"/></svg>Status do fluxo</button>
+      </nav>
+
+      <div>
+        <!-- marca -->
+        <section class="pag on" data-pag="marca">
+          <div class="bloco vidro especular">
+            <h3>Marca da agência</h3><p class="d">Aparece no painel da equipe, no portal de cada cliente e nos e-mails que o sistema manda.</p>
+            <div class="marca-g" style="margin-top:16px">
+              <div>
+                <div class="logo-up"><span class="logo-ag-g" data-logo-g></span><div><label class="btn fantasma" style="cursor:pointer;padding:8px 13px;font-size:12.5px">Trocar logo<input type="file" accept="image/*" hidden data-logo></label><button class="btn fantasma" data-tirar-logo style="padding:8px 13px;font-size:12.5px;margin-left:4px">Usar a sigla</button><small>PNG ou SVG quadrado. Sem logo, usamos a sigla.</small></div></div>
+                <div class="grade2">
+                  <div class="campo"><label for="m-nome">Nome da agência</label><input id="m-nome" data-k="agencia"></div>
+                  <div class="campo"><label for="m-sigla">Sigla <em>· 2 letras</em></label><input id="m-sigla" data-k="sigla" maxlength="2"></div>
+                  <div class="campo"><label for="m-slogan">Slogan</label><input id="m-slogan" data-k="slogan"></div>
+                  <div class="campo"><label for="m-rem">Nome nos e-mails</label><input id="m-rem" data-k="remetente"></div>
+                  <div class="campo" style="grid-column:1/-1"><label for="m-end">Endereço do portal dos clientes</label><div class="prefixo"><span>pulse.app/</span><input id="m-end" data-k="endereco"></div></div>
+                </div>
+                <div class="sub-t">Cor da agência no portal</div>
+                <div class="cores" data-cores></div>
+                <p style="margin-top:8px;font-size:12px;color:var(--texto-3)">O painel da equipe continua preto e laranja. A cor da agência aparece no portal dos clientes e nos e-mails.</p>
+              </div>
+              <div class="previa"><small>Como o cliente vê</small>
+                <div class="pv-portal"><div class="pv-topo"><span class="pv-logo" data-pv-logo></span><div><b>Clínica Aurora</b><small data-pv-sub></small></div></div>
+                  <div class="pv-abas"><span class="on">Planejamento</span><span>Pedidos</span><span>Relatório</span></div>
+                  <div class="pv-card"><b>Seu planejamento de <em data-pv-cor>novembro</em></b><br><span class="pv-btn" data-pv-btn>Aprovar</span></div></div>
+                <div class="pv-email"><b data-pv-rem></b> &lt;no-reply@pulse.app&gt;<br>“2 conteúdos esperam a sua aprovação”</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- integrações -->
+        <section class="pag" data-pag="integracoes">
+          <div class="bloco vidro especular">
+            <h3>Integrações da agência</h3><p class="d">Conexões que valem para todos os clientes. As redes de cada cliente são conectadas na ficha dele.</p>
+            <div class="ints" data-ints></div>
+          </div>
+          <div class="bloco vidro">
+            <h3>IA</h3><p class="d">Como a agência paga pelo uso da IA.</p>
+            <div class="ia-modo" data-ia-modo>
+              <button aria-pressed="true" data-im="creditos"><b>Créditos do Pulse Creator</b><small>Preço fixo por uso, mostrado antes. Saldo atual: R$ 23,40.</small></button>
+              <button aria-pressed="false" data-im="chave"><b>Chave própria</b><small>Sem limite. O custo vai direto para o provedor de IA.</small></button>
+            </div>
+            <div class="chave-api" data-chave><input type="password" placeholder="Cole aqui a chave da sua conta de IA" aria-label="Chave de API" autocomplete="off" data-chave-in><button class="btn primario" data-chave-ok>Conectar</button></div>
+          </div>
+        </section>
+
+        <!-- prazos -->
+        <section class="pag" data-pag="prazos">
+          <div class="bloco vidro especular">
+            <h3>Prazos e pontos por nível</h3><p class="d">Quando alguém cria uma demanda, o prazo sai do nível. Os pontos medem a carga de cada pessoa na semana.</p>
+            <div class="niveis" data-niveis></div>
+            <div class="sub-t">Nível sugerido para cada formato</div>
+            <div class="formatos" data-formatos></div>
+            <div class="sub-t">Dias que contam no prazo</div>
+            <div class="dias" data-dias></div>
+            <div class="exemplo" data-exemplo></div>
+          </div>
+        </section>
+
+        <!-- frase -->
+        <section class="pag" data-pag="frase">
+          <div class="bloco vidro especular">
+            <h3>Frase do dia</h3><p class="d">Aparece para toda a equipe no topo do Minhas demandas.</p>
+            <div class="modos" data-modos>
+              <button data-fm="lista"><b>Uma por dia</b><small>Revezamos as frases da lista, uma a cada dia.</small></button>
+              <button data-fm="fixa"><b>Sempre a mesma</b><small>Uma frase só, até você trocar.</small></button>
+              <button data-fm="off"><b>Sem frase</b><small>O topo mostra só a saudação.</small></button>
+            </div>
+            <div data-fr-lista>
+              <div class="sub-t">Frases</div>
+              <div class="frases" data-frases></div>
+              <form class="add-fr" data-add-fr><input placeholder="Escreva uma frase nova" maxlength="140" aria-label="Frase nova"><button class="btn primario">Adicionar</button></form>
+            </div>
+            <div data-fr-fixa class="campo" style="margin-top:16px"><label for="f-fixa">A frase</label><input id="f-fixa" maxlength="140" data-fixa></div>
+            <div class="sub-t">Como a equipe vê hoje</div>
+            <div class="pv-ola"><small>Quinta, 22 de outubro</small><h4>Olá, <em>Bianca</em>!</h4><div class="q" data-pv-frase></div></div>
+          </div>
+        </section>
+
+        <section class="pag" data-pag="status">
+          <div class="bloco vidro especular">
+            <h3>Etapas do fluxo</h3><p class="d">São as etapas que cada conteúdo percorre, da copy à publicação. Renomeie com o nome que a sua agência usa, ou esconda a que vocês não têm (tipo “Revisão de arte”, se não fazem revisão separada).</p>
+            <div class="etapas-cfg" data-etapas-cfg></div>
+            <p class="d" style="margin-top:12px">Uma etapa escondida some do seletor, mas os conteúdos que estão nela continuam lá. Dá para mostrar de novo quando quiser. Salva na hora.</p>
+            <div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn fantasma" data-etapas-padrao>Voltar aos nomes padrão</button></div>
+          </div>
+        </section>
+
+        <div class="salvar vidro" data-salvar><span><b>Alterações não salvas.</b> Valem para todos depois de salvar.</span><button class="btn fantasma" data-descartar>Descartar</button><button class="btn primario" data-salva>Salvar</button></div>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="toast vidro" data-toast></div>
+<!--CONTEUDOS-->
+
+<script>
+(function(){
+  var P=window.PULSE,EU=P.atual(),EDITA=P.faz(EU,'configurar');
+  var salvo=P.config(),C=JSON.parse(JSON.stringify(salvo));
+  var CORES=['#FF6B1A','#E11D48','#7C3AED','#2563EB','#0D9488','#16A34A','#CA8A04','#F5F3F0'];
+  var NIVEIS=[['leve','Leve','var(--leve)','Story, ajuste de texto, troca de foto'],['media','Média','var(--media)','Post estático, carrossel, legenda + arte'],['alta','Alta','var(--alta)','Reels com edição, campanha, identidade']];
+  var INTS=[
+    ['google','Google Drive e Agenda','#4285F4','<path d="M8 3h8l6 10-4 7H6l-4-7z"/>',true,'renan@estudiofaisca.com.br · Drive com 3,4 GB usados',
+      '<b>Onde os arquivos ficam</b><div class="arvore">Meu Drive / Pulse Creator /<br>&nbsp;&nbsp;Clínica Aurora / Entregas / 2026-10 /<br>&nbsp;&nbsp;Clínica Aurora / Fotos dos ensaios /<br>&nbsp;&nbsp;Clínica Aurora / Enviado pelo cliente /<br>&nbsp;&nbsp;Forno Bravo / …</div><p style="margin-top:8px">A Agenda recebe as reuniões e os ensaios marcados no portal.</p>'],
+    ['meta','Meta (Instagram e Facebook)','linear-gradient(135deg,#F58529,#DD2A7B 55%,#8134AF)','<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/>',true,'App aprovado pela Meta · 4 contas de clientes conectadas','Publicação de feed, reels e stories e coleta diária de métricas. Cada cliente autoriza a própria conta na ficha dele.'],
+    ['tiktok','TikTok','#111','<path d="M15 3c.4 2.6 2 4.3 5 4.5v3.3c-1.9 0-3.5-.6-5-1.6V15a6 6 0 1 1-6-6v3.4A2.7 2.7 0 1 0 11.7 15V3z"/>',true,'Content Posting API aprovada · 1 conta conectada','Publicação de vídeos com privacidade, dueto e stitch escolhidos vídeo a vídeo.'],
+    ['whats','WhatsApp Business','#25D366','<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',false,'Avisos de aprovação, lembretes e cobranças pelo WhatsApp da agência','Precisa de uma conta Business verificada na Meta e de modelos de mensagem aprovados. Sem isso, os avisos saem por e-mail.'],
+    ['asaas','Asaas (cobranças)','#0F7CFF','<rect x="2.5" y="6" width="19" height="13" rx="3"/><path d="M2.5 10h19"/>',true,'Pix, boleto e cartão · repasse em D+1','As cobranças do Financeiro saem por aqui, a partir dos contratos.']
+  ];
+  var DS=['dom','seg','ter','qua','qui','sex','sáb'];
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
+  function texto(c){var h=c.replace('#','');var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);return (r*299+g*587+b*114)/1000>150?'#1d0c03':'#fff'}
+
+  function marca(){
+    $$('[data-k]').forEach(function(i){i.value=C[i.dataset.k];i.disabled=!EDITA});
+    var lg=$('[data-logo-g]'),pl=$('[data-pv-logo]');
+    [lg,pl].forEach(function(el){el.style.background=C.logo?'center/cover url('+C.logo+')':C.cor;el.style.color=texto(C.cor);el.textContent=C.logo?'':(C.sigla||'?').toUpperCase()});
+    $('[data-tirar-logo]').style.display=C.logo?'':'none';
+    $('[data-pv-sub]').textContent='Portal do cliente · '+(C.agencia||'Sua agência');
+    $('[data-pv-cor]').style.color=C.cor;var b=$('[data-pv-btn]');b.style.background=C.cor;b.style.color=texto(C.cor);
+    $('[data-pv-rem]').textContent=C.remetente||C.agencia;
+    $('[data-cores]').innerHTML=CORES.map(function(c){return '<button class="cor" style="background:'+c+'" aria-pressed="'+(c.toLowerCase()===C.cor.toLowerCase())+'" data-cor="'+c+'" aria-label="Cor '+c+'"'+(EDITA?'':' disabled')+'></button>'}).join('')+
+      (EDITA?'<label class="cor-livre" title="Outra cor"'+(CORES.indexOf(C.cor)<0?' style="border:2px solid #fff;background:'+C.cor+'"':'')+'>+<input type="color" value="'+C.cor+'" data-cor-livre aria-label="Escolher outra cor"></label>':'');
+    $$('[data-cor]').forEach(function(b){b.addEventListener('click',function(){C.cor=b.dataset.cor;marca();mudou()})});
+    var cl=$('[data-cor-livre]');if(cl)cl.addEventListener('input',function(){C.cor=cl.value;marca();mudou()});
+  }
+  $$('[data-k]').forEach(function(i){i.addEventListener('input',function(){C[i.dataset.k]=i.dataset.k==='endereco'?i.value.toLowerCase().replace(/[^a-z0-9-]/g,''):i.value;if(i.dataset.k==='endereco')i.value=C.endereco;marca();mudou()})});
+  $('[data-logo]').addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){C.logo=r.result;marca();mudou()};r.readAsDataURL(f);this.value=''});
+  $('[data-tirar-logo]').addEventListener('click',function(){C.logo=null;marca();mudou()});
+
+  function ints(){
+    $('[data-ints]').innerHTML=INTS.map(function(x){return '<div class="int" data-int="'+x[0]+'"><span class="ic" style="background:'+x[2]+'"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+x[3]+'</svg></span>'+
+      '<div class="t"><b>'+x[1]+'</b><small>'+x[5]+'</small></div><span class="st '+(x[4]?'ok':'off')+'">'+(x[4]?'Conectado':'Não conectado')+'</span>'+
+      '<button class="btn fantasma" style="padding:7px 12px;font-size:12px" data-det="'+x[0]+'">Detalhes</button>'+
+      (EDITA?(x[4]?'<button class="btn fantasma" style="padding:7px 12px;font-size:12px" data-tog="'+x[0]+'">Desconectar</button>':'<button class="btn primario" style="padding:7px 14px;font-size:12.5px" data-tog="'+x[0]+'">Conectar</button>'):'')+
+      '<div class="det">'+x[6]+'</div></div>'}).join('');
+    $$('[data-det]').forEach(function(b){b.addEventListener('click',function(){b.closest('.int').classList.toggle('aberta')})});
+    $$('[data-tog]').forEach(function(b){b.addEventListener('click',function(){var x=INTS.filter(function(i){return i[0]===b.dataset.tog})[0];
+      if(x[4]&&!confirm('Desconectar '+x[1]+'? '+(x[0]==='google'?'Os backups automáticos param.':'O que depende dessa conexão para de funcionar.'))) return;
+      x[4]=!x[4];ints();aviso(x[1]+(x[4]?' conectado':' desconectado'))})});
+  }
+  $$('[data-im]').forEach(function(b){b.addEventListener('click',function(){if(!EDITA)return;$$('[data-im]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});$('[data-chave]').classList.toggle('on',b.dataset.im==='chave')})});
+  $('[data-chave-ok]').addEventListener('click',function(){var v=$('[data-chave-in]').value.trim();if(v.length<20){aviso('Essa chave parece incompleta');return}
+    $('[data-chave-in]').value='';$('[data-chave-in]').placeholder='Chave conectada · termina em '+v.slice(-4);aviso('Chave conectada. A partir de agora a IA usa a conta da agência.')});
+
+  function prazos(){
+    $('[data-niveis]').innerHTML=NIVEIS.map(function(n){var v=C.niveis[n[0]];return '<div class="nv" data-n="'+n[0]+'" style="--c:'+n[2]+'"><div class="nv-cab"><i><s></s><s></s><s></s></i><b>'+n[1]+'</b></div>'+
+      '<div class="nv-linha"><span>Prazo</span><span class="passo"><button data-p="'+n[0]+'" data-c="dias" data-d="-1"'+(EDITA&&v.dias>1?'':' disabled')+' aria-label="Menos">−</button><b>'+v.dias+(v.dias>1?' dias':' dia')+'</b><button data-p="'+n[0]+'" data-c="dias" data-d="1"'+(EDITA&&v.dias<30?'':' disabled')+' aria-label="Mais">+</button></span></div>'+
+      '<div class="nv-linha"><span>Pontos</span><span class="passo"><button data-p="'+n[0]+'" data-c="pts" data-d="-1"'+(EDITA&&v.pts>1?'':' disabled')+' aria-label="Menos">−</button><b>'+v.pts+(v.pts>1?' pts':' pt')+'</b><button data-p="'+n[0]+'" data-c="pts" data-d="1"'+(EDITA&&v.pts<10?'':' disabled')+' aria-label="Mais">+</button></span></div>'+
+      '<small>'+n[3]+'</small></div>'}).join('');
+    $$('[data-p]').forEach(function(b){b.addEventListener('click',function(){var v=C.niveis[b.dataset.p];v[b.dataset.c]+= +b.dataset.d;prazos();mudou()})});
+    $('[data-formatos]').innerHTML=Object.keys(C.formato).map(function(f){return '<label class="fmt">'+f+'<select data-f="'+f+'"'+(EDITA?'':' disabled')+'>'+NIVEIS.map(function(n){return '<option value="'+n[0]+'"'+(C.formato[f]===n[0]?' selected':'')+'>'+n[1]+'</option>'}).join('')+'</select></label>'}).join('');
+    $$('[data-f]').forEach(function(s){s.addEventListener('change',function(){C.formato[s.dataset.f]=s.value;prazos();mudou()})});
+    $('[data-dias]').innerHTML=[1,2,3,4,5,6,0].map(function(d){return '<button aria-pressed="'+(C.uteis.indexOf(d)>=0)+'" data-dia="'+d+'"'+(EDITA?'':' disabled')+'>'+DS[d]+'</button>'}).join('');
+    $$('[data-dia]').forEach(function(b){b.addEventListener('click',function(){var d=+b.dataset.dia,i=C.uteis.indexOf(d);if(i>=0){if(C.uteis.length===1){aviso('Deixe pelo menos um dia');return}C.uteis.splice(i,1)}else C.uteis.push(d);prazos();mudou()})});
+    // exemplo: um reels criado hoje
+    var n=C.formato.Reels,dias=C.niveis[n].dias,d=new Date(2026,9,22),c=0;while(c<dias){d.setDate(d.getDate()+1);if(C.uteis.indexOf(d.getDay())>=0)c++}
+    $('[data-exemplo]').innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Exemplo: um <b>reels</b> criado hoje, qui 22/10, é nível <b>'+NIVEIS.filter(function(x){return x[0]===n})[0][1].toLowerCase()+'</b> e vence <b>'+DS[d.getDay()]+' '+('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'</b>, contando só os dias marcados.</span>';
+  }
+
+  function frase(){
+    $$('[data-fm]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.fm===C.frase.modo);b.disabled=!EDITA});
+    $('[data-fr-lista]').style.display=C.frase.modo==='lista'?'':'none';
+    $('[data-fr-fixa]').style.display=C.frase.modo==='fixa'?'':'none';
+    $('[data-fixa]').value=C.frase.fixa;$('[data-fixa]').disabled=!EDITA;
+    var hoje=Math.floor(new Date(2026,9,22).getTime()/864e5),l=C.frase.lista,ih=l.length?((hoje%l.length)+l.length)%l.length:-1;
+    $('[data-frases]').innerHTML=l.map(function(f,i){return '<div class="fr'+(i===ih?' hoje':'')+'"><input value="'+esc(f)+'" data-fr="'+i+'" maxlength="140" aria-label="Frase '+(i+1)+'"'+(EDITA?'':' disabled')+'>'+(i===ih?'<small>HOJE</small>':'')+(EDITA?'<button data-tira-fr="'+i+'" aria-label="Remover"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>':'')+'</div>'}).join('')||'<p style="font-size:12.5px;color:var(--texto-3)">Nenhuma frase. Adicione abaixo.</p>';
+    $$('[data-fr]').forEach(function(i){i.addEventListener('input',function(){C.frase.lista[+i.dataset.fr]=i.value;previa();mudou()})});
+    $$('[data-tira-fr]').forEach(function(b){b.addEventListener('click',function(){C.frase.lista.splice(+b.dataset.tiraFr,1);frase();mudou()})});
+    $('[data-add-fr]').style.display=EDITA?'':'none';
+    previa();
+  }
+  function previa(){
+    var hoje=Math.floor(new Date(2026,9,22).getTime()/864e5),l=C.frase.lista,f=C.frase.modo==='off'?null:C.frase.modo==='fixa'?C.frase.fixa:(l.length?l[((hoje%l.length)+l.length)%l.length]:C.frase.fixa);
+    $('[data-pv-frase]').innerHTML=f?'“'+esc(f)+'”<small style="color:var(--laranja-claro)">Frase do dia · '+esc(C.agencia)+'</small>':'<span style="font-style:normal;color:var(--texto-3)">Sem frase. Só a saudação aparece.</span>';
+    $('[data-pv-frase]').style.borderLeftColor=f?'':'transparent';
+  }
+  $$('[data-fm]').forEach(function(b){b.addEventListener('click',function(){C.frase.modo=b.dataset.fm;frase();mudou()})});
+  $('[data-fixa]').addEventListener('input',function(){C.frase.fixa=this.value;previa();mudou()});
+  $('[data-add-fr]').addEventListener('submit',function(e){e.preventDefault();var i=$('input',this),v=i.value.trim();if(!v)return;C.frase.lista.push(v);i.value='';frase();mudou();$('[data-add-fr] input').focus()});
+
+  function mudou(){if(!EDITA)return;$('[data-salvar]').classList.toggle('on',JSON.stringify(C)!==JSON.stringify(salvo))}
+  $('[data-salva]').addEventListener('click',function(){
+    if(!C.agencia.trim()){aviso('O nome da agência não pode ficar vazio');abre('marca');return}
+    if(!C.endereco){aviso('Escolha um endereço para o portal');abre('marca');return}
+    C.sigla=(C.sigla||C.agencia.split(' ').map(function(x){return x[0]}).join('')).toUpperCase().slice(0,2);
+    C.frase.lista=C.frase.lista.map(function(f){return f.trim()}).filter(Boolean);
+    P.salvaConfig(C);salvo=JSON.parse(JSON.stringify(C));tudo();
+    var nome=document.querySelector('.lateral [data-ag-nome]');if(nome)nome.textContent=C.agencia;
+    aviso('Configurações salvas. Já valem para a equipe e para os portais.')});
+  $('[data-descartar]').addEventListener('click',function(){C=JSON.parse(JSON.stringify(salvo));tudo();aviso('Alterações descartadas')});
+  $('[data-padrao]').addEventListener('click',function(){if(!EDITA)return;C=P.configPadrao();tudo();mudou()});
+  addEventListener('beforeunload',function(e){if($('[data-salvar]').classList.contains('on')){e.preventDefault();e.returnValue=''}});
+
+  function abre(s){$$('[data-s]').forEach(function(b){b.setAttribute('aria-current',b.dataset.s===s)});$$('[data-pag]').forEach(function(p){p.classList.toggle('on',p.dataset.pag===s)});history.replaceState(null,'','#'+s)}
+  $$('[data-s]').forEach(function(b){b.addEventListener('click',function(){abre(b.dataset.s)})});
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},3000)}
+  // etapas do fluxo (salva na hora)
+  var FIXAS=['revisao_cliente','publicado'];
+  function etapasCfg(){
+    if(!window.CONTEUDOS)return;var CT=window.CONTEUDOS,cfg=CT.configEtapas(),usos={};CT.lista().forEach(function(c){usos[c.etapa]=(usos[c.etapa]||0)+1});
+    $('[data-etapas-cfg]').innerHTML=CT.padraoEtapas.map(function(e,i){var c=cfg[e.k]||{},fixa=FIXAS.indexOf(e.k)>=0;
+      return '<div class="ec'+(c.oculta?' oculta':'')+'" style="--c:'+e.cor+'"><span class="num">'+(i+1)+'</span><span class="bola"></span><input value="'+esc(c.n||e.n)+'" data-en="'+e.k+'" aria-label="Nome da etapa '+esc(e.n)+'" maxlength="30"'+(EDITA?'':' disabled')+'>'+
+        '<small>'+(usos[e.k]||0)+' conteúdo'+((usos[e.k]||0)===1?'':'s')+'</small><button class="vis" aria-pressed="'+!c.oculta+'" data-ev="'+e.k+'"'+(EDITA&&!fixa?'':' disabled')+' title="'+(fixa?'Essa etapa é usada pelo portal e pela publicação, não dá para esconder':'Mostrar ou esconder')+'">'+(c.oculta?'Escondida':'Aparece')+'</button></div>'}).join('');
+    $$('[data-en]').forEach(function(i){i.addEventListener('change',function(){var cfg=CT.configEtapas();cfg[i.dataset.en]=cfg[i.dataset.en]||{};var v=i.value.trim();if(v)cfg[i.dataset.en].n=v;else delete cfg[i.dataset.en].n;CT.salvaEtapas(cfg);etapasCfg();aviso('Etapa renomeada')})});
+    $$('[data-ev]').forEach(function(b){b.addEventListener('click',function(){var cfg=CT.configEtapas(),k=b.dataset.ev;cfg[k]=cfg[k]||{};cfg[k].oculta=!cfg[k].oculta;CT.salvaEtapas(cfg);etapasCfg();aviso(cfg[k].oculta?'Etapa escondida do seletor':'Etapa visível de novo')})});
+  }
+  $('[data-etapas-padrao]').addEventListener('click',function(){if(!EDITA||!window.CONTEUDOS)return;CONTEUDOS.salvaEtapas({});etapasCfg();aviso('Etapas com os nomes padrão')});
+  function tudo(){marca();ints();prazos();frase();etapasCfg();mudou()}
+  if(!EDITA){$('[data-padrao]').style.display='none';var a=document.createElement('p');a.style.cssText='margin-bottom:14px;padding:12px 16px;border-radius:16px;font-size:13px;color:var(--ambar);background:rgba(255,181,71,.07);border:1px dashed rgba(255,181,71,.4)';a.textContent='Você pode ver as configurações, mas só quem tem a permissão “Mudar as configurações da agência” altera.';$('.titulo').after(a)}
+  var h=location.hash.slice(1);if(['marca','integracoes','prazos','frase','status'].indexOf(h)>=0)abre(h);
+  tudo();
+})();
+</script>
+</body>
+</html>

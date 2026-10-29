@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Novidades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+/*BASE*/
+.nov{max-width:820px}
+.titulo{margin-bottom:18px}
+.titulo h2{font-size:28px;font-weight:800;letter-spacing:-.03em}
+.titulo p{color:var(--texto-2);margin-top:4px}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;font-size:12.5px;color:var(--texto-2);background:var(--vidro-1);border:1px solid var(--borda)}
+.chip[aria-pressed=true]{color:#1d0c03;background:linear-gradient(135deg,var(--laranja-claro),var(--laranja));border-color:transparent;font-weight:600}
+.linha{position:relative;display:flex;flex-direction:column;gap:14px;padding-left:22px}
+.linha::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;border-radius:2px;background:var(--borda)}
+.item{position:relative;padding:18px 20px;border-radius:22px}
+.item::before{content:"";position:absolute;left:-21px;top:24px;width:12px;height:12px;border-radius:50%;background:var(--superficie);border:2px solid var(--laranja)}
+.item.novo::before{background:var(--laranja);box-shadow:0 0 10px var(--laranja)}
+.cab-i{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cat{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:6px;color:#1d0c03;background:var(--laranja)}
+.cat.cliente{background:#7DD3FC}.cat.correcoes{background:var(--texto-3);color:var(--superficie)}.cat.ia{background:#C6F432}
+.quando{font-size:12px;color:var(--texto-3)}
+.selo-novo{font-size:10.5px;font-weight:700;color:var(--laranja-claro)}
+.item h3{margin-top:10px;font-size:16px;font-weight:700;letter-spacing:-.01em}
+.item p{margin-top:6px;font-size:13.5px;line-height:1.6;color:var(--texto-2)}
+.item a{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:13px;font-weight:600;color:var(--laranja-claro);text-decoration:none}
+.item a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<div class="app">
+<!--LATERAL:novidades-->
+  <main class="principal">
+    <header class="topo"><h1>Novidades</h1><div class="esp"></div></header>
+    <div class="nov">
+      <div class="titulo entra"><h2>O que mudou no Pulse Creator</h2><p>Tudo o que entrou de novo, com atalho para experimentar.</p></div>
+      <div class="filtros entra" data-filtros></div>
+      <div class="linha" data-linha></div>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var N=[
+    ['cliente','23/10/2026, 20:30','Preview de feed com aprovação post por post','Na aba Preview de Feed do cliente, gere um link fixo que sempre mostra o mês mais recente. O cliente abre sem login, vê o feed como vai ficar e aprova ou sugere alteração em cada post. A aprovação volta para o quadro sozinha.','cliente.html#feed','Abrir o preview',1],
+    ['equipe','23/10/2026, 20:10','Lateral recolhível, tema claro e cor do sistema','A lateral agora vira uma faixa só de ícones (botão ao lado do título). No ícone de paleta, no topo, escolha a cor de destaque e o modo claro ou escuro. Vale só para você.','dashboard.html','Ver no dashboard',1],
+    ['equipe','23/10/2026, 19:50','Etapas do fluxo configuráveis','Em Configurações › Status do fluxo, renomeie as etapas com o nome que a sua agência usa ou esconda a que vocês não têm. Os conteúdos que estão nela continuam lá.','configuracoes.html#status','Configurar status',1],
+    ['equipe','23/10/2026, 19:30','Card aberto com histórico, responsáveis e publicação','Toda mudança de etapa fica registrada no card. Mencione alguém com @ nos comentários, coloque mais de um responsável, defina o editor e publique no Instagram na hora ou programe, com convite para perfil colaborador.','cliente.html','Abrir um card',1],
+    ['equipe','23/10/2026, 19:00','Metas por pessoa e relatório da equipe','Na Equipe, a aba Metas define quantos posts, reels, stories e gravações cada pessoa entrega no mês, com o realizado ao lado. A aba Relatório mostra as entregas por membro e os reels por formato.','equipe.html','Ver a equipe',0],
+    ['cliente','22/10/2026, 18:00','Relatório de entregas em PDF','Todo fim de mês, junte o material on e off do cliente num PDF com as imagens, na marca da agência, e envie direto para o portal.','entregas.html','Gerar um relatório',0],
+    ['ia','22/10/2026, 15:20','IA lê imagens e áudio do perfil','O planejamento com IA agora olha as imagens dos posts e ouve o áudio dos reels do cliente, além das legendas. A análise de marca fica bem mais precisa.','ia.html','Planejar com IA',0],
+    ['correcoes','21/10/2026, 11:17','Status da publicação atualiza sozinho','Quando a publicação automática sai, o card vai sozinho para “Publicado”, mesmo se estava programado.','','',0]
+  ];
+  var CAT={equipe:'Equipe',cliente:'Cliente e preview',ia:'IA',correcoes:'Correções e melhorias'},f='todas';
+  function $(s){return document.querySelector(s)}
+  function desenha(){
+    $('[data-filtros]').innerHTML='<button class="chip" aria-pressed="'+(f==='todas')+'" data-f="todas">Todas</button>'+Object.keys(CAT).map(function(k){return '<button class="chip" aria-pressed="'+(f===k)+'" data-f="'+k+'">'+CAT[k]+'</button>'}).join('');
+    document.querySelectorAll('[data-f]').forEach(function(b){b.addEventListener('click',function(){f=b.dataset.f;desenha()})});
+    $('[data-linha]').innerHTML=N.filter(function(n){return f==='todas'||n[0]===f}).map(function(n,i){return '<article class="item vidro'+(n[6]?' novo':'')+' entra" style="animation-delay:'+(i*.04)+'s"><div class="cab-i"><span class="cat '+n[0]+'">'+CAT[n[0]]+'</span><span class="quando">'+n[1]+'</span>'+(n[6]?'<span class="selo-novo">● novo</span>':'')+'</div><h3>'+n[2]+'</h3><p>'+n[3]+'</p>'+(n[4]?'<a href="'+n[4]+'">'+n[5]+' →</a>':'')+'</article>'}).join('');
+  }
+  desenha();
+  try{localStorage.setItem('pulse-novidades-vistas','1')}catch(e){}
+})();
+</script>
+</body>
+</html>

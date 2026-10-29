@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Portal do cliente — planejamento</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;-webkit-font-smoothing:antialiased;font-size:14px;font-variant-numeric:tabular-nums}
+h1,h2,h3,h4{margin:0;letter-spacing:-0.03em}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--act)}
+button{font:inherit;cursor:pointer}
+textarea{font:inherit;color:inherit}
+.mono{font-variant-numeric:tabular-nums}
+.ser{font-weight:600;letter-spacing:-0.04em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</helmet>
+
+<div style="{{raiz}}">
+
+  <div style="position:absolute;top:0;left:0;right:0;height:1000px;overflow:hidden;pointer-events:none">
+    <span style="{{aur1}}"></span>
+    <span style="{{aur2}}"></span>
+    <span style="{{aur3}}"></span>
+  </div>
+
+  <header style="position:relative;background:var(--side);backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);border-bottom:1px solid var(--stroke)">
+    <div style="max-width:1140px;margin:0 auto;padding:14px 28px;display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+      <div style="display:flex;align-items:baseline;gap:3px">
+        <b style="font-size:16px;font-weight:800;letter-spacing:-0.04em">PULSO</b>
+        <span style="width:5px;height:13px;background:linear-gradient(180deg,var(--ac),var(--vi));display:inline-block;transform:skewX(-14deg);border-radius:2px"></span>
+        <span style="font-size:16px;font-weight:400;letter-spacing:-0.03em;color:var(--mut)">CREATOR</span>
+      </div>
+      <span style="width:1px;height:18px;background:var(--stroke)"></span>
+      <span style="font-size:12.5px;color:var(--mut)">Estúdio Linha para <b style="color:var(--ink);font-weight:600">Clínica Bem Viver</b></span>
+      <span style="flex:1"></span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut)">
+        <span style="width:26px;height:26px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);font-size:10px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;color:var(--ink)">AC</span>Ana Costa
+      </span>
+    </div>
+    <div style="max-width:1140px;margin:0 auto;padding:0 28px">
+      <nav style="display:flex;flex-wrap:wrap;gap:3px">
+        <a href="PortalRelatorio.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Relatório</a>
+        <span style="padding:10px 15px 13px;font-size:13.5px;font-weight:700;border-bottom:2px solid var(--ac);margin-bottom:-1px">Planejamento</span>
+        <a href="PortalArquivos.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Arquivos</a>
+        <a href="PortalAgenda.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Agenda</a>
+        <a href="PortalRelatorio.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Linha do tempo</a>
+        <a href="PortalCofre.dc.html" style="padding:10px 15px 13px;font-size:13.5px;color:var(--mut)">Cofre</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="position:relative;max-width:1140px;margin:0 auto;padding:28px 28px 60px;width:100%">
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <span style="display:inline-flex;align-items:center;gap:7px;min-height:30px;padding:0 13px;border-radius:999px;background:var(--acs);border:1px solid var(--acb);font-size:10.5px;font-weight:700;letter-spacing:.15em;color:var(--act)">
+        <span style="width:5px;height:5px;border-radius:999px;background:var(--ac);box-shadow:0 0 8px var(--ac)"></span>NOVEMBRO 2026
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:4px;padding:4px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke)">
+        <a href="PortalPlanejamento.dc.html" aria-label="Mês anterior" style="width:30px;height:30px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+        <span class="mono" style="font-size:12.5px;font-weight:500;padding:0 12px">Novembro 2026</span>
+        <a href="PortalPlanejamento.dc.html" aria-label="Próximo mês" style="width:30px;height:30px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
+      </span>
+    </div>
+
+    <section style="position:relative;background:var(--glass);backdrop-filter:blur(28px) saturate(185%);-webkit-backdrop-filter:blur(28px) saturate(185%);border:1px solid var(--stroke);border-radius:26px;box-shadow:var(--sh),var(--glow);padding:28px 32px;overflow:hidden">
+      <span style="position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--spec),transparent);pointer-events:none"></span>
+      <h1 style="font-size:clamp(23px,2.9vw,35px);font-weight:700;letter-spacing:-0.055em;line-height:1.14;max-width:17ch">Seu novembro, <span style="color:var(--ac)">pronto pra você olhar</span>.</h1>
+      <p style="font-size:14.5px;color:var(--mut);margin-top:12px">12 conteúdos · 4 você já aprovou · 2 com sugestão sua · 6 esperando você.</p>
+      <span style="height:7px;border-radius:999px;background:var(--track);display:block;position:relative;overflow:hidden;margin-top:20px;max-width:420px"><i style="position:absolute;top:0;left:0;bottom:0;width:33%;background:linear-gradient(90deg,var(--vi),var(--ac));border-radius:999px;display:block"></i></span>
+    </section>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;margin-top:14px">
+
+      <div style="flex:999 1 440px;min-width:0;display:flex;flex-direction:column;gap:14px">
+
+        <article style="background:var(--glass);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);border:1px solid var(--acb);border-radius:24px;box-shadow:0 0 0 1px var(--acs), var(--sh),var(--glow);padding:24px 26px">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px">
+            <span class="mono" style="min-width:30px;height:26px;padding:0 9px;border-radius:9px;background:var(--acs);border:1px solid var(--acb);color:var(--act);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">01</span>
+            <span style="font-size:10.5px;font-weight:700;letter-spacing:.09em;color:var(--mut)">CARROSSEL · SEG 03 NOV · 11:00</span>
+            <span style="flex:1"></span>
+            <span style="font-size:11px;font-weight:600;background:var(--glass2);border:1px solid var(--stroke);border-radius:999px;padding:5px 11px">Esperando você</span>
+          </div>
+
+          <h2 style="font-size:19px;font-weight:700;letter-spacing:-0.03em;margin-bottom:18px">Mito x verdade: hidratante causa acne?</h2>
+
+          <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start">
+            <div style="flex:999 1 270px;min-width:0">
+              <h3 style="font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--mut);margin-bottom:9px">SLIDE 1</h3>
+              <p style="font-size:15px;line-height:1.65;margin-bottom:16px">Hidratante não causa acne. O que causa é usar o hidratante errado pro seu tipo de pele.</p>
+              <h3 style="font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--mut);margin-bottom:9px">SLIDE 2</h3>
+              <p style="font-size:15px;line-height:1.65;margin-bottom:16px">Pele oleosa também precisa de hidratação. Quando você resseca a pele, ela produz <span style="background:var(--acs);border:1px solid var(--acb);border-radius:6px;padding:2px 5px">mais sebo pra compensar</span> — e aí sim vem o cravo.</p>
+              <h3 style="font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--mut);margin-bottom:9px">SLIDE 3</h3>
+              <p style="font-size:15px;line-height:1.65">Procure "não comedogênico" no rótulo. É essa palavra que diz que o produto não entope o poro.</p>
+            </div>
+
+            <div style="flex:1 1 230px;min-width:220px;background:var(--glassLow);border:1px solid var(--stroke);border-radius:18px;padding:17px 18px">
+              <div style="display:flex;align-items:center;gap:7px;margin-bottom:11px">
+                <span style="width:6px;height:6px;border-radius:999px;background:var(--ac);box-shadow:0 0 8px var(--ac)"></span>
+                <span style="font-size:11.5px;font-weight:600">Seu comentário</span>
+              </div>
+              <p style="font-size:12px;color:var(--fai);border-left:2px solid var(--ac);padding-left:10px;margin-bottom:11px;line-height:1.45">"mais sebo pra compensar"</p>
+              <label class="sr" for="comentario">Escreva o que você quer mudar</label>
+              <textarea id="comentario" rows="3" placeholder="Escreva o que você quer mudar neste trecho..." style="width:100%;border:1px solid var(--stroke);background:var(--glass2);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5;outline:none;resize:none"></textarea>
+              <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+                <a href="PortalPlanejamento.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 14px;border-radius:999px;background:linear-gradient(140deg,var(--vi),var(--ac));color:#FFF;font-size:12px;font-weight:600">Enviar</a>
+                <a href="PortalPlanejamento.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 14px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);font-size:12px;font-weight:500">Sugerir outro texto</a>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:22px;border-top:1px solid var(--stroke);padding-top:18px">
+            <a href="PortalPlanejamento.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:linear-gradient(140deg,var(--vi),var(--ac));color:#FFF;font-size:13px;font-weight:600;box-shadow:0 8px 24px var(--acs)">Aprovar este conteúdo</a>
+            <a href="PortalPlanejamento.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);box-shadow:var(--glow);font-size:13px;font-weight:500">Pedir ajuste</a>
+          </div>
+        </article>
+
+        <a href="PortalPlanejamento.dc.html" style="display:flex;align-items:center;gap:14px;background:var(--glass);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--stroke);border-radius:20px;box-shadow:var(--sh),var(--glow);padding:16px 22px">
+          <span class="mono" style="flex:0 0 30px;height:26px;border-radius:9px;background:var(--glass2);border:1px solid var(--stroke);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">02</span>
+          <div style="flex:1;min-width:0">
+            <h4 style="font-size:14.5px;font-weight:600;letter-spacing:-0.015em">Quanto tempo dura um preenchimento?</h4>
+            <p style="font-size:12.5px;color:var(--mut);margin-top:3px">Você sugeriu trocar a abertura. O Estúdio Linha está ajustando.</p>
+          </div>
+          <span class="mono" style="flex:0 0 auto;font-size:11px;color:var(--fai)">REEL · QUA 05</span>
+          <span style="flex:0 0 auto;font-size:11px;font-weight:600;background:var(--acs);color:var(--act);border:1px solid var(--acb);border-radius:999px;padding:5px 11px">Sua sugestão</span>
+        </a>
+
+        <a href="PortalPlanejamento.dc.html" style="display:flex;align-items:center;gap:14px;background:var(--glass);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--stroke);border-radius:20px;box-shadow:var(--sh),var(--glow);padding:16px 22px">
+          <span class="mono" style="flex:0 0 30px;height:26px;border-radius:9px;background:var(--glass2);border:1px solid var(--stroke);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">03</span>
+          <div style="flex:1;min-width:0">
+            <h4 style="font-size:14.5px;font-weight:600;letter-spacing:-0.015em">O que é skinbooster, na prática</h4>
+            <p style="font-size:12.5px;color:var(--mut);margin-top:3px">Esperando a sua leitura.</p>
+          </div>
+          <span class="mono" style="flex:0 0 auto;font-size:11px;color:var(--fai)">POST · SEX 07</span>
+          <span style="flex:0 0 auto;font-size:11px;font-weight:600;background:var(--glass2);border:1px solid var(--stroke);border-radius:999px;padding:5px 11px">Esperando você</span>
+        </a>
+
+        <a href="PortalPlanejamento.dc.html" style="display:flex;align-items:center;gap:14px;background:var(--glassLow);border:1px solid var(--stroke);border-radius:20px;padding:16px 22px;opacity:.75">
+          <span class="mono" style="flex:0 0 30px;height:26px;border-radius:9px;background:var(--glass2);border:1px solid var(--stroke);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">04</span>
+          <div style="flex:1;min-width:0">
+            <h4 style="font-size:14.5px;font-weight:600;letter-spacing:-0.015em;color:var(--mut)">Rotina de manhã x rotina de noite</h4>
+            <p style="font-size:12.5px;color:var(--fai);margin-top:3px">Você aprovou em 19 de outubro.</p>
+          </div>
+          <span class="mono" style="flex:0 0 auto;font-size:11px;color:var(--fai)">CARROSSEL · SEG 10</span>
+          <span style="flex:0 0 auto;font-size:11px;font-weight:600;background:var(--glass2);border:1px solid var(--stroke);border-radius:999px;padding:5px 11px;color:var(--cy)">Aprovado</span>
+        </a>
+
+        <div style="background:var(--glassLow);border:1px solid var(--stroke);border-radius:20px;padding:16px 22px;text-align:center">
+          <p class="mono" style="font-size:12px;color:var(--fai)">+ 8 conteúdos em novembro</p>
+        </div>
+      </div>
+
+      <div style="flex:1 1 290px;min-width:280px;display:flex;flex-direction:column;gap:14px">
+
+        <section style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:22px 24px">
+          <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em;margin-bottom:16px">Como você aprova</h2>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;gap:12px">
+              <span class="mono" style="flex:0 0 17px;font-size:11.5px;color:var(--act);font-weight:600;padding-top:2px">01</span>
+              <span style="flex:1;font-size:13px;line-height:1.5">Leia o conteúdo aqui mesmo, do jeito que vai ao ar.</span>
+            </div>
+            <div style="display:flex;gap:12px">
+              <span class="mono" style="flex:0 0 17px;font-size:11.5px;color:var(--fai);padding-top:2px">02</span>
+              <span style="flex:1;font-size:13px;line-height:1.5">Não gostou de um trecho? Selecione e escreva ali do lado.</span>
+            </div>
+            <div style="display:flex;gap:12px">
+              <span class="mono" style="flex:0 0 17px;font-size:11.5px;color:var(--fai);padding-top:2px">03</span>
+              <span style="flex:1;font-size:13px;line-height:1.5">A agência ajusta e volta pra você, no mesmo lugar.</span>
+            </div>
+          </div>
+          <p style="font-size:11.5px;color:var(--fai);line-height:1.5;margin-top:16px">Nada de print, nada de áudio no WhatsApp. Fica tudo registrado com data.</p>
+        </section>
+
+        <section style="background:var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--stroke);border-radius:24px;box-shadow:var(--sh),var(--glow);padding:22px 24px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px">
+            <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em">Novembro</h2>
+            <span class="mono" style="font-size:12px;color:var(--fai)">4 de 12</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;gap:10px;font-size:12.5px;line-height:1.45">
+              <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;background:var(--cy);margin-top:6px"></span>
+              <span style="flex:1">4 aprovados por você</span>
+            </div>
+            <div style="display:flex;gap:10px;font-size:12.5px;line-height:1.45">
+              <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;background:var(--ac);margin-top:6px;box-shadow:0 0 8px var(--ac)"></span>
+              <span style="flex:1">2 com sugestão sua, em ajuste</span>
+            </div>
+            <div style="display:flex;gap:10px;font-size:12.5px;line-height:1.45">
+              <span style="flex:0 0 auto;width:6px;height:6px;border-radius:999px;background:var(--stroke);margin-top:6px"></span>
+              <span style="flex:1">6 esperando você ler</span>
+            </div>
+          </div>
+          <a href="PortalPlanejamento.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 16px;border-radius:999px;background:var(--glass2);border:1px solid var(--stroke);font-size:12px;font-weight:500;margin-top:16px;width:100%">Ver o mês inteiro</a>
+        </section>
+
+        <section style="background:var(--glassLow);border:1px solid var(--stroke);border-radius:24px;padding:22px 24px">
+          <h2 style="font-size:14px;font-weight:700;letter-spacing:-0.015em;margin-bottom:9px">Precisa falar com alguém?</h2>
+          <p style="font-size:12.5px;color:var(--mut);line-height:1.5;margin-bottom:14px">A Marina cuida da sua conta. Se for mais fácil conversar, marque 15 minutos com ela.</p>
+          <a href="PortalAgenda.dc.html" style="display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:999px;background:linear-gradient(140deg,var(--vi),var(--ac));color:#FFF;font-size:12.5px;font-weight:600;width:100%;box-shadow:0 8px 24px var(--acs)">Abrir a agenda</a>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1140}}'>
+class Component extends DCLogic {
+  tema() {
+    return { ink:'#F5F3F0', mut:'#A9A49D', fai:'#8A857E',
+          ac:'#FF6A1A', act:'#FF9254', acs:'rgba(255,106,26,.14)', acb:'rgba(255,106,26,.34)',
+          cy:'#FFB020', vi:'#C2410C',
+          glass:'rgba(255,255,255,.05)', glass2:'rgba(255,255,255,.085)', glass3:'rgba(255,255,255,.14)', glassLow:'rgba(255,255,255,.03)',
+          side:'rgba(8,8,9,.6)',
+          stroke:'rgba(255,255,255,.11)', spec:'rgba(255,255,255,.7)', track:'rgba(255,255,255,.08)',
+          sh:'0 2px 10px rgba(0,0,0,.45), 0 24px 60px rgba(0,0,0,.55)',
+          glow:'inset 0 1px 0 rgba(255,255,255,.2), inset 0 -1px 0 rgba(255,255,255,.04)',
+          fundo:'radial-gradient(120% 80% at 55% 0%, #1B120B 0%, #0C0A08 55%, #050505 100%)',
+          o1:'.5', o2:'.44', o3:'.3' };
+  }
+  blob(cor, css) {
+    return 'position:absolute;border-radius:999px;pointer-events:none;background:radial-gradient(circle,' + cor + ' 0%, transparent 68%);' + css;
+  }
+  renderVals() {
+    var t = this.tema();
+    var vars = '';
+    for (var k in t) { vars += '--' + k + ':' + t[k] + ';'; }
+    return {
+      raiz: vars + 'position:relative;min-height:100vh;background:' + t.fundo + ';color:' + t.ink + ';overflow-x:hidden',
+      aur1: this.blob(t.vi, 'top:-200px;left:4%;width:600px;height:580px;filter:blur(100px);opacity:' + t.o1),
+      aur2: this.blob(t.ac, 'top:-90px;left:42%;width:680px;height:560px;filter:blur(110px);opacity:' + t.o2),
+      aur3: this.blob(t.cy, 'top:90px;right:-120px;width:540px;height:540px;filter:blur(110px);opacity:' + t.o3)
+    };
+  }
+}
+</script>
+</body>
+</html>

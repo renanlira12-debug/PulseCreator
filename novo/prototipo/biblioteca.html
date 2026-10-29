@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Biblioteca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --tinta:#fff; --superficie:#16120f;
+  --bg:#060606;
+  --laranja:#FF6B1A; --laranja-claro:#FF9A57; --brasa:#C2410C; --ambar:#FFB547; --vermelho:#FF5A4E;
+  --texto:#F6F3EF; --texto-2:#A8A29B; --texto-3:#76716B;
+  --vidro-1:color-mix(in srgb,var(--tinta) 4.5%,transparent); --vidro-2:color-mix(in srgb,var(--tinta) 8%,transparent); --vidro-3:color-mix(in srgb,var(--tinta) 14%,transparent);
+  --fosco:color-mix(in srgb,var(--tinta) 3%,transparent); --borda:color-mix(in srgb,var(--tinta) 10%,transparent);
+  --brilho:inset 0 1px 0 rgba(255,255,255,.18), inset 0 -1px 0 rgba(255,255,255,.04);
+  --sombra:0 20px 50px rgba(0,0,0,.5);
+  --mola:cubic-bezier(.3,1.4,.5,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;overflow-x:clip}
+body{background:var(--bg);color:var(--texto);font:400 14px/1.45 Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+
+/* ---------- aurora ---------- */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora i{position:absolute;border-radius:50%;filter:blur(110px);opacity:.3}
+.aurora i:nth-child(1){width:620px;height:620px;left:22%;top:-300px;background:var(--brasa);animation:flutua 48s ease-in-out infinite}
+.aurora i:nth-child(2){width:480px;height:480px;right:-120px;top:120px;background:var(--laranja);opacity:.13;animation:flutua 56s ease-in-out infinite reverse}
+.aurora i:nth-child(3){width:420px;height:420px;left:40%;bottom:-260px;background:var(--ambar);opacity:.06;animation:flutua 62s ease-in-out infinite}
+@keyframes flutua{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,40px) scale(1.12)}}
+.grao{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- vidro ---------- */
+.vidro{position:relative;background:var(--vidro-1);backdrop-filter:blur(28px) saturate(170%);-webkit-backdrop-filter:blur(28px) saturate(170%);
+  border:1px solid var(--borda);border-radius:24px;box-shadow:var(--brilho),var(--sombra)}
+.vidro.especular::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--tinta) 70%,transparent),transparent);pointer-events:none}
+
+/* ---------- layout ---------- */
+.app{position:relative;z-index:1;display:grid;grid-template-columns:264px 1fr;min-height:100vh}
+.lateral{position:sticky;top:0;height:100vh;padding:16px 0 16px 16px}
+.lateral .vidro{height:100%;display:flex;flex-direction:column;padding:20px 14px;border-radius:26px;background:color-mix(in srgb,var(--superficie) 55%,transparent)}
+.principal{padding:20px 24px 48px;min-width:0}
+
+/* ---------- lateral ---------- */
+.marca{display:flex;align-items:center;gap:10px;padding:0 6px}
+.marca .logo{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#FF8A3D,var(--laranja) 45%,var(--brasa));box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 20px color-mix(in srgb,var(--laranja) 35%,transparent)}
+.marca b{display:block;font-size:15px;letter-spacing:-.02em}
+.marca small{display:block;font-size:11px;color:var(--texto-3)}
+.agencia{margin:18px 6px 6px;padding:12px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda)}
+.agencia b{display:block;font-size:13px}
+.selo{display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600;
+  color:var(--laranja-claro);background:color-mix(in srgb,var(--laranja) 12%,transparent);border:1px solid color-mix(in srgb,var(--laranja) 30%,transparent)}
+.nav{margin-top:14px;display:flex;flex-direction:column;gap:2px}
+.nav a{position:relative;display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:12px;color:var(--texto-2);text-decoration:none;font-weight:500}
+.nav a:hover{background:var(--vidro-1);color:var(--texto)}
+.nav a.ativo{background:var(--vidro-2);color:var(--texto);box-shadow:var(--brilho)}
+.nav a.ativo::before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--laranja);box-shadow:0 0 12px var(--laranja)}
+.nav svg{width:18px;height:18px;flex:none}
+.vendo-como{position:fixed;z-index:35;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 6px 6px 8px;border-radius:99px;font-size:13px;
+  background:color-mix(in srgb,var(--superficie) 80%,transparent);border-color:rgba(255,181,71,.45);white-space:nowrap;max-width:calc(100% - 24px)}
+.vendo-como .av{width:28px;height:28px;font-size:10px;margin:0}
+.vendo-como b{color:var(--ambar)}
+.vendo-como button{padding:7px 13px;border-radius:99px;font-size:12.5px;font-weight:600;color:#1d0c03;background:linear-gradient(135deg,#FFD08A,var(--ambar))}
+@media (max-width:520px){.vendo-como>span:nth-child(2){display:none}}
+.nav-baixo{margin-top:6px;padding-top:6px;border-top:1px solid color-mix(in srgb,var(--tinta) 7%,transparent)}
+.nav .cont{margin-left:auto;font-size:11px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--laranja);color:#1a0d05}
+.busca{margin:14px 0 8px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto-3)}
+.pastas{flex:none;margin-top:4px}
+.lateral .vidro{overflow-y:auto;scrollbar-width:none}
+.lateral .vidro::-webkit-scrollbar{display:none}
+.lateral .usuario{margin-top:auto}
+.pasta{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--texto-2)}
+.pasta:hover{background:var(--vidro-1)}
+.pasta span{margin-left:auto;font-weight:500;color:var(--texto-3)}
+.pasta.ex{color:var(--vermelho);opacity:.8}
+.grupo summary{list-style:none;cursor:pointer}
+.grupo summary::-webkit-details-marker{display:none}
+.clientes-lat{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 14px;padding-left:10px;border-left:1px solid color-mix(in srgb,var(--tinta) 7%,transparent)}
+.cli-lat{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:10px;font-size:12.5px;color:var(--texto-2);text-decoration:none}
+.cli-lat:hover{background:var(--vidro-1);color:var(--texto)}
+.cli-lat .av{width:22px;height:22px;font-size:8.5px;margin:0;flex:none}
+.cli-lat.ativo{background:var(--vidro-2);color:var(--texto);box-shadow:var(--brilho)}
+.usuario{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda)}
+.usuario small{display:block;color:var(--texto-3);font-size:11px}
+
+/* ---------- topo ---------- */
+.topo{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.topo h1{font-size:14px;font-weight:600;color:var(--texto-2)}
+.topo .esp{flex:1}
+.icone{width:40px;height:40px;border-radius:50%;display:grid;place-items:center}
+.icone svg{width:18px;height:18px}
+.icone .ponto{position:absolute;top:9px;right:10px;width:7px;height:7px;border-radius:50%;background:var(--laranja);box-shadow:0 0 8px var(--laranja)}
+
+/* ---------- pílula com lente (liquid glass) ---------- */
+.pilulas{position:relative;display:inline-flex;padding:4px;border-radius:99px}
+.pilulas button{position:relative;z-index:1;padding:8px 16px;border-radius:99px;font-size:13px;font-weight:500;color:var(--texto-2);transition:color .3s}
+.pilulas button[aria-pressed=true]{color:var(--texto)}
+.lente{position:absolute;z-index:0;top:4px;bottom:4px;left:0;border-radius:99px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tinta) 20%,transparent),color-mix(in srgb,var(--tinta) 7%,transparent));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 1px rgba(255,255,255,.08),0 4px 14px rgba(0,0,0,.35),0 0 0 1px color-mix(in srgb,var(--tinta) 8%,transparent);
+  transition:transform .45s var(--mola),width .45s var(--mola)}
+.lente.esticando{animation:estica .45s var(--mola)}
+@keyframes estica{0%{scale:1 1}40%{scale:1.18 .86}100%{scale:1 1}}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:99px;font-weight:600;font-size:13px;transition:transform .2s var(--mola)}
+.btn:active{transform:scale(.96)}
+.btn.primario{color:var(--texto-botao,#1d0c03);background:linear-gradient(135deg,var(--laranja-claro),var(--laranja) 45%,var(--brasa));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 24px color-mix(in srgb,var(--laranja) 35%,transparent)}
+
+/* ---------- comuns ---------- */
+.rotulo{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--laranja-claro)}
+.var{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:99px;font-size:12px;font-weight:600}
+.var.sobe{color:var(--ambar);background:rgba(255,181,71,.12)}
+.var.desce{color:var(--vermelho);background:rgba(255,90,78,.12)}
+.av{margin:0 auto;display:grid;place-items:center;border-radius:50%;font-weight:700;color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 18px rgba(0,0,0,.4)}
+/* ---------- cartão genérico ---------- */
+.cartao{padding:22px;border-radius:24px}
+.cab{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px}
+.cab h3{font-size:15px;font-weight:600}
+.cab p{color:var(--texto-3);font-size:12.5px;margin-top:2px}
+.cab .esp{flex:1}
+.mini{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:99px;font-size:12px;color:var(--texto-2);background:var(--fosco);border:1px solid var(--borda)}
+
+/* resultados */
+.tabela{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:13px}
+.tabela th{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--texto-3);text-align:right;padding:0 12px 4px}
+.tabela th:first-child{text-align:left}
+.tabela td{padding:11px 12px;text-align:right;background:var(--fosco)}
+.tabela td:first-child{text-align:left;border-radius:14px 0 0 14px}
+.tabela td:last-child{border-radius:0 14px 14px 0}
+.tabela tr:hover td{background:color-mix(in srgb,var(--tinta) 5%,transparent)}
+.cli{display:flex;align-items:center;gap:10px;font-weight:500}
+.cli .av{width:28px;height:28px;font-size:11px;margin:0}
+.spark{width:84px;height:26px}
+.rolagem{overflow-x:auto}
+
+/* entrada com blur */
+.entra{opacity:0;filter:blur(8px);transform:translateY(8px);animation:entra .7s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes entra{to{opacity:1;filter:blur(0);transform:none}}
+
+@media (max-width:1180px){.g4{grid-template-columns:repeat(2,1fr)}.g-2,.g-3{grid-template-columns:1fr}}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}.lateral{display:none}
+  .principal{padding:16px 16px 40px}
+  .hero{flex-direction:column-reverse;align-items:flex-start;padding:22px}
+  .anel{width:132px;height:132px}
+  .topo .ocultar{display:none}
+}
+@media (max-width:520px){.g4{grid-template-columns:1fr 1fr}.num{padding:16px 14px}.num .rotulo{letter-spacing:.04em}.num b{font-size:26px}.num small{display:block;margin:6px 0 0}.cab{flex-wrap:wrap}.barras-topo{flex-wrap:wrap}.colunas{gap:6px}.etapa{grid-template-columns:72px 1fr 34px}.lugar .av{width:46px;height:46px;font-size:14px}.lugar.p1 .av{width:58px;height:58px}.pilulas button{padding:7px 11px;font-size:12px}}
+@media (prefers-reduced-motion:reduce){
+  .aurora i,.lente.esticando{animation:none}.entra{animation:none;opacity:1;filter:none;transform:none}
+  .lente,.anel .valor,.trilho-b i,.etapa .faixa i{transition:none}
+}
+
+/* ---------- portal do cliente ---------- */
+.portal-pag{position:relative;z-index:1;min-height:100vh}
+.barra-portal{position:sticky;top:0;z-index:5;padding:14px 24px 0}
+.barra-portal>.vidro{border-radius:24px;padding:14px 18px 12px;background:color-mix(in srgb,var(--superficie) 60%,transparent)}
+.bp-topo{display:flex;align-items:center;gap:12px}
+.bp-topo .logo-ag{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#1d0c03;
+  background:linear-gradient(135deg,var(--laranja-claro),var(--laranja) 45%,var(--brasa));box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.bp-topo b{font-size:14px}
+.bp-topo small{display:block;color:var(--texto-3);font-size:11.5px}
+.bp-topo .esp{flex:1}
+.bp-topo .av{width:34px;height:34px;font-size:12px;margin:0}
+.bp-sino{position:relative;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--texto-2);background:var(--vidro-1);border:1px solid var(--borda)}
+.bp-sino span{position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--laranja);box-shadow:0 0 8px var(--laranja)}
+.abas{margin-top:12px;overflow-x:auto;scrollbar-width:none}
+.abas-portal{padding:4px;background:var(--fosco);border-radius:99px;display:inline-flex}
+.abas-portal a{position:relative;display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:99px;font-size:13px;font-weight:500;color:var(--texto-2);text-decoration:none;white-space:nowrap}
+.abas-portal a:hover{color:var(--texto)}
+.abas-portal a.ativo{color:var(--texto);background:linear-gradient(180deg,color-mix(in srgb,var(--tinta) 20%,transparent),color-mix(in srgb,var(--tinta) 7%,transparent));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 14px rgba(0,0,0,.35),0 0 0 1px color-mix(in srgb,var(--tinta) 8%,transparent)}
+.abas-portal a i{font-style:normal;font-size:10.5px;font-weight:700;padding:0 6px;border-radius:99px;background:var(--laranja);color:#1d0c03}
+.conteudo-portal{max-width:1040px;margin:0 auto;padding:28px 24px 80px}
+.ola-p{font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-.03em}
+.ola-p em{font-style:normal;color:var(--laranja)}
+.sub-p{color:var(--texto-2);margin-top:6px}
+.btn.fantasma{color:var(--texto-2);background:var(--fosco);border:1px solid var(--borda)}
+.btn.fantasma:hover{color:var(--texto)}
+.toast{position:fixed;z-index:40;left:50%;top:22px;transform:translate(-50%,-20px);opacity:0;padding:12px 18px;border-radius:16px;font-size:13px;transition:all .35s var(--mola);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:760px){.barra-portal{padding:10px 12px 0}.conteudo-portal{padding:22px 16px 60px}.bp-topo small{display:none}}
+
+
+/* ---------- tema claro (Aparência → Claro) ---------- */
+:root[data-modo=claro]{
+  color-scheme:light;
+  --tinta:#1c1916; --superficie:#fbf8f4; --bg:#f3eee8;
+  --texto:#1c1916; --texto-2:#5f5851; --texto-3:#8c857d;
+  --vidro-1:rgba(255,255,255,.55); --vidro-2:rgba(255,255,255,.75); --vidro-3:rgba(255,255,255,.95);
+  --fosco:color-mix(in srgb,var(--tinta) 4%,transparent); --borda:color-mix(in srgb,var(--tinta) 11%,transparent);
+  --brilho:inset 0 1px 0 rgba(255,255,255,.9), inset 0 -1px 0 rgba(0,0,0,.03);
+  --sombra:0 10px 30px rgba(60,40,20,.12);
+  --ambar:#B7791F; --vermelho:#D93A2B;
+}
+:root[data-modo=claro] .aurora i{opacity:.16}
+:root[data-modo=claro] .aurora i:nth-child(2){opacity:.12}
+:root[data-modo=claro] .grao{opacity:.025}
+:root[data-modo=claro] .lateral .vidro{background:rgba(255,255,255,.6)}
+
+/* ---------- lateral recolhida (só ícones) ---------- */
+.botao-lateral{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:var(--texto-2);flex:none}
+.botao-lateral:hover{background:var(--vidro-2);color:var(--texto)}
+.app{transition:grid-template-columns .35s var(--mola)}
+.app.recolhida{grid-template-columns:96px 1fr}
+.recolhida .lateral .vidro{padding:16px 10px;align-items:center}
+.recolhida .marca div:not(.logo),.recolhida .agencia,.recolhida .busca,.recolhida .pastas,.recolhida .usuario>div:not(.av),.recolhida .usuario>a{display:none!important}
+.recolhida .marca{padding:0;justify-content:center}
+.recolhida .nav{width:100%;align-items:center}
+.recolhida .nav a{width:46px;height:42px;padding:0;justify-content:center;font-size:0;gap:0}
+.recolhida .nav a.ativo::before{left:-10px}
+.recolhida .nav .cont{position:absolute;top:5px;right:5px;min-width:8px;height:8px;padding:0;font-size:0}
+.recolhida .usuario{padding:6px;justify-content:center;background:none;border:0}
+.recolhida .nav a::after{content:attr(data-rot);position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);padding:5px 10px;border-radius:9px;
+  font-size:12px;font-weight:500;white-space:nowrap;color:var(--texto);background:var(--superficie);border:1px solid var(--borda);box-shadow:var(--sombra);opacity:0;pointer-events:none;transition:opacity .15s;z-index:30}
+.recolhida .nav a:hover::after{opacity:1}
+.recolhida .lateral{overflow:visible}
+@media (max-width:900px){.botao-lateral[data-recolher]{display:none}}
+
+/* ---------- ícones do topo ---------- */
+.icones-topo{display:flex;align-items:center;gap:2px;margin-left:4px}
+.icones-topo>a,.icones-topo>button{position:relative;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:var(--texto-2);text-decoration:none}
+.icones-topo>a:hover,.icones-topo>button:hover,.icones-topo>button[aria-expanded=true]{background:var(--vidro-2);color:var(--texto)}
+.icones-topo svg{width:18px;height:18px}
+.icones-topo .ponto{position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--laranja);box-shadow:0 0 8px var(--laranja)}
+.icones-topo .eu{width:34px;height:34px;margin-left:4px;font-size:11px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff}
+.pop-topo{position:fixed;z-index:50;width:300px;max-width:calc(100vw - 24px);padding:14px;border-radius:20px;background:color-mix(in srgb,var(--superficie) 94%,transparent);
+  border:1px solid var(--borda);box-shadow:var(--brilho),0 20px 50px rgba(0,0,0,.35);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:none}
+.pop-topo.on{display:block;animation:popTopo .25s var(--mola)}
+@keyframes popTopo{from{opacity:0;transform:translateY(-6px) scale(.98)}}
+.pop-topo h4{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--texto-3)}
+.cores-tema{display:flex;gap:8px;flex-wrap:wrap}
+.cores-tema button{width:32px;height:32px;border-radius:50%;border:2px solid transparent;transition:transform .2s var(--mola)}
+.cores-tema button[aria-pressed=true]{border-color:var(--texto);transform:scale(1.1)}
+.cores-tema label{position:relative;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--texto-3);border:1.5px dashed var(--borda);overflow:hidden;cursor:pointer}
+.cores-tema input{position:absolute;inset:-6px;width:48px;height:48px;opacity:0;cursor:pointer}
+.modos-tema{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:14px;padding:4px;border-radius:14px;background:var(--fosco)}
+.modos-tema button{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;border-radius:11px;font-size:13px;font-weight:600;color:var(--texto-2)}
+.modos-tema button[aria-pressed=true]{color:#1d0c03;background:linear-gradient(135deg,var(--laranja-claro),var(--laranja))}
+.notifs{display:flex;flex-direction:column;gap:4px;max-height:360px;overflow:auto}
+.notif{display:flex;gap:10px;padding:9px;border-radius:12px;text-decoration:none;color:inherit;font-size:12.5px;line-height:1.4}
+.notif:hover{background:var(--fosco)}
+.notif.nova{background:color-mix(in srgb,var(--laranja) 7%,transparent)}
+.notif .av{width:28px;height:28px;font-size:10px;margin:0;flex:none}
+.notif small{display:block;margin-top:2px;color:var(--texto-3);font-size:11px}
+.pop-topo .rodape{display:flex;justify-content:space-between;margin-top:10px;font-size:12px}
+.pop-topo .rodape a,.pop-topo .rodape button{color:var(--laranja-claro);font-weight:600;text-decoration:none}
+
+@media (max-width:620px){.icones-topo>a[href="novidades.html"],.icones-topo>a[href="configuracoes.html"],.icones-topo .eu{display:none}}
+
+.btn.fantasma{color:var(--texto-2);background:var(--fosco);border:1px solid var(--borda)}
+.btn.fantasma:hover{color:var(--texto)}
+.busca-b{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:99px;min-width:240px;color:var(--texto-3)}
+.busca-b input{flex:1;background:none;border:0;outline:none;color:var(--texto);font:inherit;font-size:13px;min-width:0}
+.titulo{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.titulo h2{font-size:28px;font-weight:700;letter-spacing:-.03em}
+.titulo p{color:var(--texto-2);margin-top:4px}
+
+/* extensão */
+.extensao{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:center;padding:20px 24px;border-radius:26px;margin-bottom:16px;overflow:hidden}
+.extensao h3{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.extensao p{margin-top:6px;font-size:13px;color:var(--texto-2);line-height:1.55;max-width:520px}
+.extensao .acoes{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.extensao .fechar{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;color:var(--texto-3)}
+.extensao .fechar:hover{background:var(--vidro-2);color:var(--texto)}
+.mock{position:relative;border-radius:16px;background:#f3efe9;color:#1d1915;padding:10px;font-size:11px;box-shadow:0 16px 40px rgba(0,0,0,.5);transform:rotate(-2deg)}
+.mock .barra{display:flex;align-items:center;gap:6px;padding-bottom:8px;border-bottom:1px solid #e2dbd2}
+.mock .barra i{width:8px;height:8px;border-radius:50%;background:#d9d2c8}
+.mock .barra span{flex:1;padding:3px 8px;border-radius:6px;background:#e8e2da;color:#776e65;font-size:10px}
+.mock .barra b{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;background:linear-gradient(135deg,var(--laranja-claro),var(--laranja));color:#1d0c03;font-size:10px}
+.mock .pop{position:absolute;right:8px;top:36px;width:190px;padding:10px;border-radius:12px;background:#15110e;color:var(--texto);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.mock .pop small{display:block;font-size:9.5px;color:var(--texto-3)}
+.mock .pop .in{margin:4px 0 8px;padding:5px 7px;border-radius:7px;background:color-mix(in srgb,var(--tinta) 7%,transparent);font-size:10.5px}
+.mock .pop .ops{display:flex;gap:4px;margin-bottom:8px}
+.mock .pop .ops span{flex:1;padding:4px;border-radius:6px;text-align:center;font-size:9.5px;background:color-mix(in srgb,var(--tinta) 6%,transparent)}
+.mock .pop .ops span.on{background:var(--laranja);color:#1d0c03;font-weight:700}
+.mock .pop .ok{padding:5px;border-radius:99px;text-align:center;font-weight:700;font-size:10px;color:#1d0c03;background:linear-gradient(135deg,var(--laranja-claro),var(--laranja))}
+.mock .pagina{height:90px;margin-top:8px;border-radius:8px;background:linear-gradient(135deg,#d8cfc3,#b8ab9b)}
+
+/* filtros */
+.filtros{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.filtros .rot{font-size:12px;color:var(--texto-3);margin-right:2px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:99px;font-size:12.5px;color:var(--texto-2);background:var(--vidro-1);border:1px solid var(--borda);transition:all .2s}
+.chip .av{width:20px;height:20px;font-size:7.5px;margin:0 0 0 -6px}
+.chip span{font-size:11px;color:var(--texto-3)}
+.chip[aria-pressed=true]{color:#1d0c03;background:linear-gradient(135deg,var(--laranja-claro),var(--laranja));border-color:transparent;font-weight:600}
+.chip[aria-pressed=true] span{color:#1d0c03;opacity:.7}
+.colecoes{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;margin:6px 0 16px;scrollbar-width:thin}
+.col{flex:none;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:16px;text-align:left;background:var(--fosco);border:1px solid var(--borda);transition:all .2s}
+.col:hover{border-color:color-mix(in srgb,var(--tinta) 20%,transparent)}
+.col[aria-pressed=true]{border-color:color-mix(in srgb,var(--laranja) 55%,transparent);background:color-mix(in srgb,var(--laranja) 10%,transparent)}
+.col .mos{display:grid;grid-template-columns:1fr 1fr;gap:2px;width:38px;height:38px;border-radius:10px;overflow:hidden;flex:none}
+.col .mos i{display:block}
+.col b{display:block;font-size:13px}
+.col small{font-size:11.5px;color:var(--texto-3)}
+.col.nova{color:var(--laranja-claro);border-style:dashed}
+
+/* grade */
+.grade{columns:4 250px;column-gap:14px}
+.ref{break-inside:avoid;margin-bottom:14px;border-radius:22px;padding:8px;cursor:pointer;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tinta) 6.5%,transparent),color-mix(in srgb,var(--tinta) 3%,transparent));border:1px solid var(--borda);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 10px 26px rgba(0,0,0,.4);transition:transform .25s var(--mola)}
+.ref:hover{transform:translateY(-3px)}
+.ref.nova{animation:chega .6s var(--mola)}
+@keyframes chega{from{opacity:0;transform:scale(.96);filter:blur(6px)}}
+.thumb{position:relative;border-radius:15px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;color:#fff;isolation:isolate}
+.thumb::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.55))}
+.thumb .fonte{position:absolute;top:10px;left:10px;display:inline-flex;align-items:center;gap:5px;padding:3px 8px 3px 5px;border-radius:99px;font-size:10.5px;font-weight:600;background:rgba(0,0,0,.45);backdrop-filter:blur(6px)}
+.thumb .fonte svg{width:12px;height:12px}
+.thumb .play{position:absolute;top:50%;left:50%;width:42px;height:42px;margin:-21px 0 0 -21px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--tinta) 22%,transparent);backdrop-filter:blur(8px)}
+.thumb .grande{font-size:20px;font-weight:900;line-height:1.02;letter-spacing:-.03em;text-transform:uppercase;text-shadow:0 2px 12px rgba(0,0,0,.3)}
+.thumb .ia{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:99px;font-size:10px;font-weight:700;color:#1d0c03;background:var(--ambar)}
+.info{padding:10px 4px 4px}
+.info b{display:block;font-size:13.5px;font-weight:600;line-height:1.35}
+.info .nota{margin-top:6px;font-size:12px;color:var(--texto-2);line-height:1.45;padding-left:8px;border-left:2px solid color-mix(in srgb,var(--laranja) 55%,transparent)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tag{font-size:11px;padding:2px 8px;border-radius:7px;color:var(--texto-2);background:color-mix(in srgb,var(--tinta) 6%,transparent)}
+.pe{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:11.5px;color:var(--texto-3)}
+.pe .av{width:20px;height:20px;font-size:7.5px;margin:0}
+.pe .esp{flex:1}
+.onde{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 8px 2px 3px;border-radius:99px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto-2)}
+.onde .av{width:16px;height:16px;font-size:6.5px}
+.onde.geral{padding-left:8px}
+.vazio{padding:50px 20px;text-align:center;color:var(--texto-3);border:1px dashed color-mix(in srgb,var(--tinta) 12%,transparent);border-radius:22px}
+.vazio b{display:block;color:var(--texto);font-size:15px;margin-bottom:4px}
+
+/* modais */
+.veu{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:16px;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);overflow:auto}
+.veu.aberto{display:grid;animation:aparece .25s}
+@keyframes aparece{from{opacity:0}}
+.modal{width:min(600px,100%);padding:24px;border-radius:28px;background:color-mix(in srgb,var(--superficie) 88%,transparent)}
+.modal h3{font-size:19px;font-weight:700;letter-spacing:-.02em}
+.modal>p{color:var(--texto-3);font-size:12.5px;margin-top:3px}
+.campo{margin-top:14px}
+.campo label,.campo>span{display:block;font-size:12px;font-weight:600;color:var(--texto-2);margin-bottom:7px}
+.campo input,.campo select,.campo textarea{width:100%;padding:11px 14px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;font-size:13.5px;outline:none}
+.campo textarea{min-height:70px;resize:vertical}
+.campo select option{background:var(--superficie)}
+.campo input:focus,.campo select:focus,.campo textarea:focus{border-color:color-mix(in srgb,var(--laranja) 55%,transparent)}
+.detectado{display:none;align-items:center;gap:12px;margin-top:10px;padding:10px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda)}
+.detectado.on{display:flex;animation:aparece .3s}
+.detectado .mini{width:56px;height:56px;border-radius:11px;flex:none;display:grid;place-items:center;color:#fff}
+.detectado b{display:block;font-size:13px}
+.detectado small{color:var(--texto-3);font-size:11.5px}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.destino{display:flex;gap:6px;flex-wrap:wrap}
+.destino button{display:inline-flex;align-items:center;gap:6px;padding:6px 12px 6px 6px;border-radius:99px;font-size:12.5px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto-2)}
+.destino button.geral{padding-left:12px}
+.destino button .av{width:20px;height:20px;font-size:7.5px;margin:0}
+.destino button[aria-pressed=true]{color:var(--texto);border-color:color-mix(in srgb,var(--laranja) 60%,transparent);background:color-mix(in srgb,var(--laranja) 12%,transparent)}
+.interruptor{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda);cursor:pointer;width:100%;text-align:left}
+.interruptor div{flex:1}
+.interruptor b{display:block;font-size:13px;font-weight:600}
+.interruptor small{color:var(--texto-3);font-size:11.5px}
+.chave{width:42px;height:24px;border-radius:99px;flex:none;position:relative;background:color-mix(in srgb,var(--tinta) 12%,transparent);transition:background .25s}
+.chave::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4);transition:transform .35s var(--mola)}
+[aria-checked=true] .chave{background:var(--laranja)}
+[aria-checked=true] .chave::after{transform:translateX(18px)}
+.acoes-m{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;flex-wrap:wrap}
+.acoes-m .esp{flex:1}
+.det{width:min(860px,100%);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;border-radius:28px;overflow:hidden;background:color-mix(in srgb,var(--superficie) 90%,transparent)}
+.det .lado{padding:18px;background:rgba(0,0,0,.25);display:flex;align-items:center}
+.det .lado .thumb{width:100%;min-height:360px}
+.det .lado .thumb .grande{font-size:30px}
+.det .txt{padding:22px;display:flex;flex-direction:column;gap:12px;max-height:88vh;overflow:auto}
+.det .txt h3{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.det .link{font-size:12.5px;color:var(--laranja-claro);text-decoration:none;word-break:break-all}
+.toast{position:fixed;z-index:40;left:50%;top:22px;transform:translate(-50%,-20px);opacity:0;padding:12px 18px;border-radius:16px;font-size:13px;transition:all .35s var(--mola);pointer-events:none;max-width:calc(100% - 24px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:900px){.extensao{grid-template-columns:1fr}.mock{display:none}.det{grid-template-columns:1fr}.det .lado .thumb{min-height:220px}}
+@media (max-width:620px){.busca-b{min-width:0;width:100%;order:3}.topo h1{display:none}.titulo h2{font-size:23px}.duas{grid-template-columns:1fr}.grade{columns:2 150px;column-gap:10px}.thumb .grande{font-size:15px}.topo [data-salvar]{font-size:0;gap:0;padding:11px}}
+</style>
+</head>
+<body>
+<div class="aurora"><i></i><i></i><i></i></div>
+<div class="grao"></div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs><linearGradient id="gradAnel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--laranja-claro)"/><stop offset=".5" style="stop-color:var(--laranja)"/><stop offset="1" style="stop-color:var(--brasa)"/></linearGradient></defs>
+</svg>
+<div class="app">
+  <aside class="lateral">
+    <div class="vidro especular">
+      <a class="marca" href="minhas-demandas.html" title="Minhas demandas" style="text-decoration:none;color:inherit">
+        <div class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d0c03" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+        <div><b>Pulse Creator</b><small>gestão de conteúdo</small></div>
+      </a>
+
+      <div class="agencia">
+        <b data-ag-nome>Estúdio Faísca</b>
+        <span class="selo"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg>Plano Pro</span>
+      </div>
+
+      <nav class="nav">
+        <a href="minhas-demandas.html" data-nav="minhas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Minhas demandas</a>
+        <a href="dashboard.html" data-nav="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Dashboard</a>
+        <a href="demandas.html" data-nav="demandas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="18" rx="2"/><rect x="14" y="3" width="7" height="11" rx="2"/></svg>Demandas</a>
+        <a href="calendario.html" data-nav="calendario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendário</a>
+        <a href="ia.html" data-nav="ia"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6zM19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Planejar com IA</a>
+        <a href="resultados.html" data-nav="resultados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg>Resultados</a>
+        <a href="mensagens.html" data-nav="mensagens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Mensagens<span class="cont">5</span></a>
+        <a href="contratos.html" data-nav="contratos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Contratos</a>
+        <a href="cliente.html" data-nav="clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></svg>Clientes</a>
+      </nav>
+
+      <div class="busca"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>Buscar cliente…</div>
+
+      <div class="pastas">
+        <details class="grupo" open><summary class="pasta"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>SOCIAL MEDIA<span>14</span></summary>
+          <div class="clientes-lat">
+            <a href="cliente.html" class="cli-lat" data-cli="CA"><span class="av" style="background:linear-gradient(135deg,#FF9A57,#C2410C)">CA</span>Clínica Aurora</a>
+            <a href="cliente.html" class="cli-lat" data-cli="FB"><span class="av" style="background:linear-gradient(135deg,#f59e0b,#b45309)">FB</span>Forno Bravo</a>
+            <a href="cliente.html" class="cli-lat" data-cli="SM"><span class="av" style="background:linear-gradient(135deg,#78716c,#44403c)">SM</span>Studio Move</a>
+            <a href="cliente.html" class="cli-lat" data-cli="CL"><span class="av" style="background:linear-gradient(135deg,#ea580c,#7c2d12)">CL</span>Casa Lume</a>
+            <a href="cliente.html" class="cli-lat" data-cli="OD"><span class="av" style="background:linear-gradient(135deg,#d97706,#78350f)">OD</span>Odonto Prado</a>
+          </div></details>
+        <div class="pasta"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>PACK COMPLETO<span>5</span></div>
+        <div class="pasta"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>AVULSOS<span>3</span></div>
+        <a href="ficha-cliente.html?novo" class="pasta novo-cli" data-novo-cli style="text-decoration:none;color:var(--laranja-claro)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>NOVO CLIENTE</a>
+        <div class="pasta ex"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>EX-CLIENTES<span>9</span></div>
+      </div>
+
+      <nav class="nav nav-baixo">
+        <a href="biblioteca.html" data-nav="biblioteca" class="ativo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2zM4 19a2 2 0 0 1 2-2h12M9 7h5"/></svg>Biblioteca</a>
+        <a href="equipe.html" data-nav="equipe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M15 14.5a5 5 0 0 1 6.5 4.8"/></svg>Equipe</a>
+        <a href="configuracoes.html" data-nav="configuracoes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Configurações</a>
+        <a href="lixeira.html" data-nav="lixeira"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Lixeira</a>
+        <a href="financeiro.html" data-nav="financeiro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="6" width="19" height="13" rx="3"/><path d="M2.5 10h19M7 15h3"/></svg>Financeiro</a>
+      </nav>
+
+      <div class="usuario">
+        <div class="av" data-u-av style="width:34px;height:34px;font-size:13px;background:linear-gradient(135deg,#FFB547,#C2410C)">R</div>
+        <div style="min-width:0"><b style="font-size:13px" data-u-nome>Renan</b><small data-u-papel>Administrador</small></div>
+        <a href="login.html?sair" title="Sair" aria-label="Sair" style="margin-left:auto;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--texto-3)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg></a>
+      </div>
+    </div>
+  </aside>
+<script>
+/* Sessão do protótipo: quem está logado, a função de cada pessoa e o que cada função pode fazer.
+   O administrador define a função; a função traz um conjunto padrão de permissões, que ele pode ajustar. */
+window.PULSE=(function(){
+  var ACOES=[
+    {g:'Conteúdo',k:'criar_card',n:'Criar demandas e cards'},
+    {g:'Conteúdo',k:'atribuir',n:'Atribuir responsável'},
+    {g:'Conteúdo',k:'editar_copy',n:'Editar roteiro, legenda e título'},
+    {g:'Conteúdo',k:'editar_prazo',n:'Mudar prazo e data de publicação'},
+    {g:'Conteúdo',k:'subir_arte',n:'Subir arte, vídeo e arquivos'},
+    {g:'Conteúdo',k:'comentar',n:'Comentar nos cards'},
+    {g:'Conteúdo',k:'excluir_card',n:'Excluir cards'},
+    {g:'Fluxo',k:'mover_producao',n:'Pegar e devolver para produção'},
+    {g:'Fluxo',k:'enviar_revisao',n:'Mandar para aprovação interna'},
+    {g:'Fluxo',k:'aprovar',n:'Aprovar internamente'},
+    {g:'Fluxo',k:'enviar_cliente',n:'Enviar para o cliente aprovar'},
+    {g:'Fluxo',k:'agendar',n:'Agendar e publicar'},
+    {g:'Clientes',k:'editar_cliente',n:'Cadastrar clientes e editar a ficha'},
+    {g:'Clientes',k:'falar_cliente',n:'Conversar com o cliente'},
+    {g:'Clientes',k:'usar_ia',n:'Usar a IA (gasta créditos)'},
+    {g:'Clientes',k:'ver_numeros',n:'Ver dashboard e resultados'},
+    {g:'Gestão',k:'ver_todas',n:'Ver demandas de toda a equipe'},
+    {g:'Gestão',k:'gerir_contratos',n:'Subir e editar contratos'},
+    {g:'Gestão',k:'gerir_equipe',n:'Adicionar pessoas e definir funções'},
+    {g:'Gestão',k:'configurar',n:'Mudar as configurações da agência'},
+    {g:'Gestão',k:'ver_financeiro',n:'Ver e mexer no financeiro'}
+  ];
+  var TODAS=ACOES.map(function(a){return a.k});
+  function sem(lista){return TODAS.filter(function(k){return lista.indexOf(k)<0})}
+  var PAPEIS={
+    admin:{nome:'Administrador',ve:'Tudo. É quem adiciona pessoas e define a função de cada uma',padrao:TODAS},
+    gestor:{nome:'Gestor',ve:'Toda a operação e a equipe, sem o financeiro',padrao:sem(['ver_financeiro'])},
+    social:{nome:'Social media',ve:'Cria os cards, atribui pessoas, edita copy e prazos, fala com o cliente',padrao:['criar_card','atribuir','editar_copy','editar_prazo','subir_arte','comentar','mover_producao','enviar_revisao','aprovar','enviar_cliente','agendar','editar_cliente','falar_cliente','usar_ia','ver_numeros']},
+    designer:{nome:'Designer',ve:'Sobe a arte e manda para aprovação. Não edita prazo nem copy',padrao:['subir_arte','comentar','mover_producao','enviar_revisao']},
+    video:{nome:'Videomaker',ve:'Sobe o vídeo e manda para aprovação. Não edita prazo nem copy',padrao:['subir_arte','comentar','mover_producao','enviar_revisao']}
+  };
+  // telas da lateral: as que dependem de uma permissão
+  var NAV_ACAO={dashboard:'ver_numeros',resultados:'ver_numeros',ia:'usar_ia',mensagens:'falar_cliente',contratos:'gerir_contratos',equipe:'gerir_equipe',financeiro:'ver_financeiro',configuracoes:'configurar'};
+  // para onde o card vai → permissão necessária
+  var ETAPA_ACAO={fazer:'mover_producao',producao:'mover_producao',copy:'mover_producao',criacao:'mover_producao',revisao:'enviar_revisao',interna:'enviar_revisao',revisao_arte:'enviar_revisao',cliente:'enviar_cliente',revisao_cliente:'enviar_cliente',aprovado:'aprovar',pronto:'aprovar',agendado:'agendar',publicado:'agendar'};
+  var EQUIPE={
+    RN:{k:'RN',nome:'Renan',completo:'Renan Lira',papel:'admin',email:'renan@estudiofaisca.com.br',cor:'#FFB547,#C2410C',clientes:['CA','FB','SM','CL','OD'],cap:10},
+    BS:{k:'BS',nome:'Bianca',completo:'Bianca Souza',papel:'social',email:'bianca@estudiofaisca.com.br',cor:'#FF9A57,#C2410C',clientes:['CA','FB','CL'],cap:14},
+    TM:{k:'TM',nome:'Tiago',completo:'Tiago Melo',papel:'video',email:'tiago@estudiofaisca.com.br',cor:'#6b7280,#374151',clientes:['CA','FB','SM','OD'],cap:7},
+    DL:{k:'DL',nome:'Davi',completo:'Davi Lopes',papel:'designer',email:'davi@estudiofaisca.com.br',cor:'#a16207,#713f12',clientes:['FB','SM','CL','OD'],cap:14},
+    LR:{k:'LR',nome:'Lia',completo:'Lia Ramos',papel:'designer',email:'lia@estudiofaisca.com.br',cor:'#9a3412,#431407',clientes:['FB','CL','OD'],cap:10}
+  };
+  function lerJ(ch){try{return JSON.parse(localStorage.getItem(ch)||'{}')}catch(e){return {}}}
+  function gravaJ(ch,v){try{localStorage.setItem(ch,JSON.stringify(v))}catch(e){}}
+  // pessoas que aceitaram convite neste navegador
+  (function(){var n=lerJ('pulse-novos');for(var k in n)EQUIPE[k]=n[k]})();
+  // trocas de função e de clientes feitas na tela de Equipe
+  (function(){var a=lerJ('pulse-ajustes');for(var k in a)if(EQUIPE[k]){if(a[k].papel&&PAPEIS[a[k].papel])EQUIPE[k].papel=a[k].papel;if(a[k].clientes)EQUIPE[k].clientes=a[k].clientes}})();
+  // permissões de cada função, ajustadas pelo administrador
+  var PERM={};(function(){var p=lerJ('pulse-perm');for(var r in PAPEIS)PERM[r]=(r!=='admin'&&p[r])?p[r]:PAPEIS[r].padrao.slice()})();
+  function ajusta(k,campo,v){var a=lerJ('pulse-ajustes');a[k]=a[k]||{};a[k][campo]=v;gravaJ('pulse-ajustes',a);EQUIPE[k][campo]=v}
+  function ler(){try{return localStorage.getItem('pulse-usuario')}catch(e){return null}}
+  function gravar(v){try{if(v)localStorage.setItem('pulse-usuario',v);else localStorage.removeItem('pulse-usuario')}catch(e){}}
+  // configurações da agência (marca, prazos por nível, frase do dia)
+  var CONFIG_PADRAO={agencia:'Estúdio Faísca',sigla:'EF',slogan:'Conteúdo que dá faísca',cor:'#FF6B1A',logo:null,remetente:'Estúdio Faísca',endereco:'estudiofaisca',
+    niveis:{leve:{pts:1,dias:1},media:{pts:2,dias:3},alta:{pts:3,dias:5}},
+    formato:{Story:'leve',Ajuste:'leve',Post:'media',Carrossel:'media',Reels:'alta',Campanha:'alta'},
+    uteis:[1,2,3,4,5],
+    frase:{modo:'lista',fixa:'Feito é melhor que perfeito, mas revisado é melhor que feito.',
+      lista:['Feito é melhor que perfeito, mas revisado é melhor que feito.','Um bom gancho vale mais que dez hashtags.','O cliente não compra post, compra resultado.','Prazo combinado é prazo cumprido.','Menos texto na arte, mais história na legenda.']}};
+  function config(){var c=JSON.parse(JSON.stringify(CONFIG_PADRAO)),g=lerJ('pulse-config');for(var k in g)c[k]=g[k];return c}
+  function faz(u,acao){return u.papel==='admin'||PERM[u.papel].indexOf(acao)>=0}
+  // tema pessoal: cor de destaque e modo claro/escuro (Aparência, no topo)
+  function tema(){var t={cor:'#FF6B1A',modo:'escuro'};try{var g=JSON.parse(localStorage.getItem('pulse-tema')||'{}');if(g.cor)t.cor=g.cor;if(g.modo)t.modo=g.modo}catch(e){}return t}
+  function mistura(h,alvo,f){h=h.replace('#','');var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);function m(x){return Math.round(x+(alvo-x)*f)}return 'rgb('+m(r)+','+m(g)+','+m(b)+')'}
+  function aplicaTema(){
+    if(document.querySelector('.portal-pag'))return; // o portal do cliente usa a marca da agência
+    var t=tema(),el=document.documentElement;el.setAttribute('data-modo',t.modo);
+    if(t.cor.toLowerCase()==='#ff6b1a'&&t.modo==='escuro'){['--laranja','--laranja-claro','--brasa'].forEach(function(v){el.style.removeProperty(v)});return}
+    el.style.setProperty('--laranja',t.cor);
+    var h=t.cor.replace('#',''),lum=(parseInt(h.substr(0,2),16)*299+parseInt(h.substr(2,2),16)*587+parseInt(h.substr(4,2),16)*114)/1000;
+    el.style.setProperty('--laranja-claro',t.modo==='claro'?mistura(t.cor,0,lum>150?.5:.18):mistura(t.cor,255,.35));
+    el.style.setProperty('--brasa',mistura(t.cor,0,.3));
+  }
+  aplicaTema();
+  return {
+    tema:tema,aplicaTema:aplicaTema,salvaTema:function(t){try{localStorage.setItem('pulse-tema',JSON.stringify(t))}catch(e){}aplicaTema()},
+    ACOES:ACOES,PAPEIS:PAPEIS,EQUIPE:EQUIPE,PERM:PERM,ETAPA_ACAO:ETAPA_ACAO,
+    atual:function(){return EQUIPE[ler()]||EQUIPE.RN},
+    entrar:function(k){gravar(EQUIPE[k]?k:'RN');try{localStorage.removeItem('pulse-como')}catch(e){}},
+    entrarComo:function(k){var de=ler()||'RN';gravar(k);try{localStorage.setItem('pulse-como',de)}catch(e){}},
+    voltar:function(){var de=null;try{de=localStorage.getItem('pulse-como');localStorage.removeItem('pulse-como')}catch(e){}gravar(de||'RN')},
+    comoDe:function(){try{return localStorage.getItem('pulse-como')}catch(e){return null}},
+    sair:function(){gravar(null);try{localStorage.removeItem('pulse-como')}catch(e){}},
+    ajusta:ajusta,
+    perm:function(papel,acao,v){if(papel==='admin')return;var l=PERM[papel],i=l.indexOf(acao);if(v&&i<0)l.push(acao);if(!v&&i>=0)l.splice(i,1);var p=lerJ('pulse-perm');p[papel]=l;gravaJ('pulse-perm',p)},
+    padraoFuncao:function(papel){PERM[papel]=PAPEIS[papel].padrao.slice();var p=lerJ('pulse-perm');delete p[papel];gravaJ('pulse-perm',p)},
+    aceitar:function(c){var k=(c.nome.split(' ').map(function(x){return x[0]}).join('').toUpperCase()+'XX').slice(0,2);while(EQUIPE[k])k=k[0]+String.fromCharCode(65+Math.floor(Math.random()*26));
+      var u={k:k,nome:c.nome.split(' ')[0],completo:c.nome,papel:c.papel,email:c.email.toLowerCase(),cor:'#57534e,#292524',clientes:c.clientes,cap:10,novo:true};
+      EQUIPE[k]=u;var n=lerJ('pulse-novos');n[k]=u;gravaJ('pulse-novos',n);return u},
+    config:config,configPadrao:function(){return JSON.parse(JSON.stringify(CONFIG_PADRAO))},
+    salvaConfig:function(c){gravaJ('pulse-config',c)},
+    fraseDoDia:function(d){var f=config().frase;if(f.modo==='off')return null;if(f.modo==='fixa')return f.fixa;var l=f.lista.length?f.lista:[f.fixa];d=d||new Date(2026,9,22);var n=Math.floor(d.getTime()/864e5);return l[((n%l.length)+l.length)%l.length]},
+    restaura:function(){try{['pulse-ajustes','pulse-perm','pulse-novos','pulse-config','pulse-tema','pulse-conteudos','pulse-status'].forEach(function(c){localStorage.removeItem(c)})}catch(e){}},
+    porEmail:function(e){e=(e||'').toLowerCase().trim();for(var k in EQUIPE)if(EQUIPE[k].email===e)return k;for(var j in EQUIPE)if(EQUIPE[j].email.split('@')[0]===e.split('@')[0])return j;return null},
+    faz:faz,
+    gerencia:function(u){return faz(u,'ver_todas')},
+    pode:function(u,nav){var a=NAV_ACAO[nav];return !a||faz(u,a)},
+    podeMover:function(u,para){var a=ETAPA_ACAO[para];return !a||faz(u,a)},
+    atende:function(u,cli){return u.clientes.indexOf(cli)>=0},
+    lista:function(u){return ACOES.filter(function(a){return faz(u,a.k)}).map(function(a){return a.n})}
+  };
+})();
+</script>
+<script>
+/* Aplica o papel de quem entrou: esconde o que a pessoa não acessa. */
+(function(){
+  var P=window.PULSE;if(!P)return;var u=P.atual(),papel=P.PAPEIS[u.papel];
+  var lat=document.querySelector('.lateral');
+  lat.querySelector('[data-u-av]').textContent=u.k;lat.querySelector('[data-u-av]').style.background='linear-gradient(135deg,'+u.cor+')';
+  lat.querySelector('[data-u-nome]').textContent=u.nome;lat.querySelector('[data-u-papel]').textContent=papel.nome;
+  [].forEach.call(lat.querySelectorAll('[data-nav]'),function(a){if(!P.pode(u,a.dataset.nav))a.style.display='none'});
+  var nb=lat.querySelector('.nav-baixo');if(nb&&![].some.call(nb.children,function(a){return a.style.display!=='none'}))nb.style.display='none';
+  var total=0;[].forEach.call(lat.querySelectorAll('[data-cli]'),function(a){if(!P.atende(u,a.dataset.cli))a.style.display='none';else total++});
+  if(!P.gerencia(u)){var g=lat.querySelector('.grupo summary span');if(g)g.textContent=total;[].forEach.call(lat.querySelectorAll('.pastas>.pasta'),function(p){p.style.display='none'})}
+  // lateral recolhível: nomes viram tooltip
+  [].forEach.call(lat.querySelectorAll('.nav a'),function(a){a.setAttribute('data-rot',a.textContent.trim().replace(/\d+$/,'').trim())});
+  var app=document.querySelector('.app');function recolhe(v){app.classList.toggle('recolhida',v);try{localStorage.setItem('pulse-lateral',v?'1':'')}catch(e){}}
+  try{if(localStorage.getItem('pulse-lateral'))app.classList.add('recolhida')}catch(e){}
+  document.addEventListener('DOMContentLoaded',function(){
+    var topo=document.querySelector('.principal .topo');if(!topo)return;
+    var b=document.createElement('button');b.className='botao-lateral';b.setAttribute('data-recolher','');b.setAttribute('aria-label','Recolher a lateral');b.title='Recolher ou abrir a lateral';
+    b.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>';
+    b.addEventListener('click',function(){recolhe(!app.classList.contains('recolhida'))});topo.insertBefore(b,topo.firstChild);
+    // ícones do topo: novidades, aparência, notificações, configurações, você
+    var ic=document.createElement('div');ic.className='icones-topo';
+    var SVG={nov:'<path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6zM19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9z" fill="currentColor" stroke="none"/>',
+      tema:'<path d="M12 3a9 9 0 1 0 0 18c1 0 1.5-.8 1.5-1.5 0-1-.8-1.2-.8-2.2 0-.8.6-1.3 1.4-1.3H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',
+      sino:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21a2 2 0 0 0 4 0"/>',
+      cfg:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>'};
+    function s_(k){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+SVG[k]+'</svg>'}
+    ic.innerHTML='<a href="novidades.html" title="Novidades" aria-label="Novidades">'+s_('nov')+'<span class="ponto"></span></a>'+
+      '<button data-pop="tema" title="Aparência" aria-label="Aparência" aria-expanded="false">'+s_('tema')+'</button>'+
+      '<button data-pop="notif" title="Notificações" aria-label="Notificações" aria-expanded="false">'+s_('sino')+'<span class="ponto"></span></button>'+
+      (P.pode(u,'configuracoes')?'<a href="configuracoes.html" title="Configurações" aria-label="Configurações">'+s_('cfg')+'</a>':'')+
+      '<span class="eu" style="background:linear-gradient(135deg,'+u.cor+')" title="'+u.completo+' · '+papel.nome+'">'+u.k+'</span>';
+    topo.appendChild(ic);
+    var CORES=['#FF6B1A','#C6F432','#2563EB','#E11D48','#7C3AED','#10B981','#EC4899'];
+    var pops={};
+    pops.tema=document.createElement('div');pops.tema.className='pop-topo';
+    function desenhaTema(){var t=P.tema();pops.tema.innerHTML='<h4>Cor de destaque</h4><div class="cores-tema">'+CORES.map(function(c){return '<button style="background:'+c+'" aria-pressed="'+(c.toLowerCase()===t.cor.toLowerCase())+'" data-cor="'+c+'" aria-label="Cor '+c+'"></button>'}).join('')+
+      '<label title="Outra cor">+<input type="color" value="'+t.cor+'" data-cor-livre aria-label="Outra cor"></label></div>'+
+      '<h4 style="margin-top:16px">Aparência</h4><div class="modos-tema" style="margin-top:0"><button data-modo="escuro" aria-pressed="'+(t.modo==='escuro')+'">☾ Escuro</button><button data-modo="claro" aria-pressed="'+(t.modo==='claro')+'">☀ Claro</button></div>'+
+      '<div class="rodape"><span style="color:var(--texto-3)">Vale só para você</span><button data-tema-padrao>Padrão</button></div>';
+      [].forEach.call(pops.tema.querySelectorAll('[data-cor]'),function(b){b.addEventListener('click',function(){var t=P.tema();t.cor=b.dataset.cor;P.salvaTema(t);desenhaTema()})});
+      pops.tema.querySelector('[data-cor-livre]').addEventListener('input',function(){var t=P.tema();t.cor=this.value;P.salvaTema(t)});
+      [].forEach.call(pops.tema.querySelectorAll('[data-modo]'),function(b){b.addEventListener('click',function(){var t=P.tema();t.modo=b.dataset.modo;P.salvaTema(t);desenhaTema()})});
+      pops.tema.querySelector('[data-tema-padrao]').addEventListener('click',function(){P.salvaTema({cor:'#FF6B1A',modo:'escuro'});desenhaTema()})}
+    desenhaTema();
+    pops.notif=document.createElement('div');pops.notif.className='pop-topo';
+    var N=[['AR','#7FA08A,#2F4A3F','Ana aprovou “Peeling dói?”','há 10 min','cliente.html',1],['FB','#f59e0b,#b45309','Novo pedido do Forno Bravo: arte para sábado','há 40 min','demandas.html',1],
+      ['BS','#FF9A57,#C2410C','Bianca te mencionou em “Skincare em 3 passos”','há 2 h','cliente.html',1],['SM','#78716c,#44403c','Contrato do Studio Move vence em 9 dias','ontem','contratos.html',0],['DL','#a16207,#713f12','Davi mandou “Mitos sobre peeling” para revisão','ontem','cliente.html',0]];
+    pops.notif.innerHTML='<h4>Notificações</h4><div class="notifs">'+N.map(function(n){return '<a class="notif'+(n[5]?' nova':'')+'" href="'+n[4]+'"><span class="av" style="background:linear-gradient(135deg,'+n[1]+')">'+n[0]+'</span><span>'+n[2]+'<small>'+n[3]+'</small></span></a>'}).join('')+'</div><div class="rodape"><button data-lidas>Marcar todas como lidas</button><a href="minhas-demandas.html">Minhas demandas →</a></div>';
+    pops.notif.querySelector('[data-lidas]').addEventListener('click',function(){[].forEach.call(pops.notif.querySelectorAll('.nova'),function(x){x.classList.remove('nova')});var p=ic.querySelector('[data-pop=notif] .ponto');if(p)p.remove()});
+    Object.keys(pops).forEach(function(k){document.body.appendChild(pops[k])});
+    function fecha(){Object.keys(pops).forEach(function(k){pops[k].classList.remove('on')});[].forEach.call(ic.querySelectorAll('[data-pop]'),function(b){b.setAttribute('aria-expanded','false')})}
+    [].forEach.call(ic.querySelectorAll('[data-pop]'),function(b){b.addEventListener('click',function(e){e.stopPropagation();var p=pops[b.dataset.pop],aberto=p.classList.contains('on');fecha();if(aberto)return;
+      var r=b.getBoundingClientRect();p.style.top=(r.bottom+8)+'px';p.style.left=Math.max(12,Math.min(innerWidth-p.offsetWidth-12,r.right-300))+'px';p.classList.add('on');b.setAttribute('aria-expanded','true');
+      p.style.left=Math.max(12,Math.min(innerWidth-p.offsetWidth-12,r.right-p.offsetWidth))+'px'})});
+    Object.keys(pops).forEach(function(k){pops[k].addEventListener('click',function(e){e.stopPropagation()})});
+    document.addEventListener('click',fecha);addEventListener('keydown',function(e){if(e.key==='Escape')fecha()});addEventListener('scroll',fecha,{passive:true});
+  });
+  var cfg=P.config();lat.querySelector('[data-ag-nome]').textContent=cfg.agencia;
+  var de=P.comoDe();
+  if(de&&P.EQUIPE[de]){var f=document.createElement('div');f.className='vendo-como vidro';
+    f.innerHTML='<span class="av" style="background:linear-gradient(135deg,'+u.cor+')">'+u.k+'</span><span>Vendo como <b>'+u.nome+'</b> · '+papel.nome+'</span><button>Voltar para '+P.EQUIPE[de].nome+'</button>';
+    f.querySelector('button').addEventListener('click',function(){P.voltar();location.href='equipe.html'});document.body.appendChild(f)}
+  var nc=lat.querySelector('[data-novo-cli]');if(nc&&!P.faz(u,'editar_cliente'))nc.style.display='none';
+  var aceso=lat.querySelector('[data-nav].ativo'),cli=lat.querySelector('.cli-lat.ativo');
+  var bloqueia=(aceso&&!P.pode(u,aceso.dataset.nav))||(cli&&!P.atende(u,cli.dataset.cli));
+  if(bloqueia)document.addEventListener('DOMContentLoaded',function(){var m=document.querySelector('.principal');m.innerHTML='<div style="min-height:70vh;display:grid;place-items:center;text-align:center"><div class="vidro especular" style="padding:36px 30px;border-radius:28px;max-width:440px">'+
+    '<div style="width:56px;height:56px;margin:0 auto;border-radius:18px;display:grid;place-items:center;background:rgba(255,107,26,.14);color:var(--laranja-claro)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>'+
+    '<h2 style="margin-top:16px;font-size:20px;letter-spacing:-.02em">Esta tela não faz parte do seu acesso</h2><p style="margin-top:8px;color:var(--texto-2);font-size:13.5px">'+u.nome+', o seu papel é <b>'+papel.nome+'</b>: '+papel.ve.charAt(0).toLowerCase()+papel.ve.slice(1)+'. Se precisar, peça para o administrador.</p>'+
+    '<a class="btn primario" href="minhas-demandas.html" style="margin-top:20px;text-decoration:none">Ir para as minhas demandas</a></div></div>'});
+})();
+</script>
+  <main class="principal">
+    <header class="topo">
+      <h1>Biblioteca</h1>
+      <div class="esp"></div>
+      <label class="busca-b vidro"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="Buscar por título, nota ou etiqueta…" data-busca aria-label="Buscar referência"></label>
+      <button class="btn primario" data-salvar><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Salvar referência</button>
+    </header>
+
+    <div class="titulo entra"><div><h2>Biblioteca de referências</h2><p data-resumo></p></div></div>
+
+    <section class="extensao vidro especular entra" style="animation-delay:.04s;position:relative" data-ext>
+      <button class="fechar" data-fechar-ext aria-label="Esconder"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <div>
+        <h3>Salve sem trocar de aba</h3>
+        <p>Viu um reels, um post ou um site que serve de referência? Clique na extensão do Pulse Creator, escolha se é geral ou de um cliente, e pronto. O título e o link vêm preenchidos.</p>
+        <div class="acoes"><button class="btn primario" data-instalar>Instalar extensão do Chrome</button><button class="btn fantasma" data-salvar-2>Colar um link aqui</button></div>
+      </div>
+      <div class="mock" aria-hidden="true">
+        <div class="barra"><i></i><i></i><span>instagram.com/reel/…</span><b>P</b></div>
+        <div class="pagina"></div>
+        <div class="pop"><small>Salvar na Biblioteca</small><div class="in">Rotina de skincare em 30s</div><div class="ops"><span>Geral</span><span class="on">Clínica Aurora</span></div><div class="ok">Salvar</div></div>
+      </div>
+    </section>
+
+    <div class="filtros entra" style="animation-delay:.08s"><span class="rot">De quem</span><span data-f-cli style="display:contents"></span></div>
+    <div class="filtros entra" style="animation-delay:.1s"><span class="rot">Tipo</span><span data-f-tipo style="display:contents"></span></div>
+    <div class="colecoes entra" style="animation-delay:.12s" data-colecoes></div>
+
+    <section class="grade" data-grade></section>
+  </main>
+</div>
+
+<!-- salvar -->
+<div class="veu" data-veu="salvar">
+  <form class="modal vidro especular" data-form>
+    <h3>Salvar referência</h3>
+    <p>Cole o link. A gente reconhece de onde é e sugere o título.</p>
+    <div class="campo"><label for="r-url">Link</label><input id="r-url" type="url" required placeholder="https://www.instagram.com/reel/…" data-url></div>
+    <div class="detectado" data-detectado></div>
+    <div class="campo"><label for="r-tit">Título</label><input id="r-tit" required data-tit placeholder="Como você vai lembrar dessa referência"></div>
+    <div class="campo"><span>Onde guardar</span><div class="destino" data-destino></div></div>
+    <div class="duas">
+      <div class="campo"><label for="r-col">Coleção</label><select id="r-col" data-col></select></div>
+      <div class="campo"><label for="r-tags">Etiquetas <span style="font-weight:400;color:var(--texto-3)">· separe por vírgula</span></label><input id="r-tags" data-tags placeholder="gancho, bastidores"></div>
+    </div>
+    <div class="campo"><label for="r-nota">Por que salvou?</label><textarea id="r-nota" data-nota placeholder="Ex.: o jeito de abrir o vídeo com uma pergunta, a paleta, a transição…"></textarea></div>
+    <button type="button" class="interruptor" role="switch" aria-checked="true" data-ia><div><b>A IA pode usar no planejamento</b><small>A referência entra no que a IA lê ao planejar o mês do cliente.</small></div><span class="chave"></span></button>
+    <div class="acoes-m"><button type="button" class="btn fantasma" data-fechar>Cancelar</button><button class="btn primario">Salvar</button></div>
+  </form>
+</div>
+<!-- detalhe -->
+<div class="veu" data-veu="det"><div class="det vidro especular" data-det role="dialog" aria-modal="true"></div></div>
+<div class="toast vidro" data-toast></div>
+
+<script>
+(function(){
+  var P=window.PULSE,EU=P?P.atual():{k:'RN',papel:'admin',clientes:['CA','FB','SM','CL','OD']},GERE=!P||P.gerencia(EU);
+  var CLI={CA:['Clínica Aurora','#7FA08A,#2F4A3F'],FB:['Forno Bravo','#f59e0b,#b45309'],SM:['Studio Move','#78716c,#44403c'],CL:['Casa Lume','#ea580c,#7c2d12'],OD:['Odonto Prado','#d97706,#78350f']};
+  var EQ=P?P.EQUIPE:{};
+  var FONTES={
+    instagram:['Instagram','linear-gradient(135deg,#F58529,#DD2A7B 55%,#8134AF)','<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>'],
+    tiktok:['TikTok','#111','<path d="M15 3c.4 2.6 2 4.3 5 4.5v3.3c-1.9 0-3.5-.6-5-1.6V15a6 6 0 1 1-6-6v3.4A2.7 2.7 0 1 0 11.7 15V3z" fill="currentColor"/>'],
+    youtube:['YouTube','#FF0000','<rect x="2" y="5" width="20" height="14" rx="4" fill="currentColor"/><path d="M10 9l5 3-5 3z" fill="#fff"/>'],
+    pinterest:['Pinterest','#E60023','<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 8c3 0 4 2 3.5 4s-2 2.5-3 2l-1 4" fill="none" stroke="currentColor" stroke-width="2"/>'],
+    behance:['Behance','#1769FF','<path d="M3 7h5a2.5 2.5 0 0 1 0 5H3zM3 12h5.5a2.5 2.5 0 0 1 0 5H3zM14 8h5M13.5 14h7a3.5 3.5 0 1 0-1 2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>'],
+    site:['Site','#57534e','<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="2"/>']
+  };
+  var TIPOS=['Reels','Post','Carrossel','Vídeo','Site','Imagem'];
+  var COLECOES=[['todas','Todas'],['nov-azul','Novembro Azul'],['ganchos','Ganchos que funcionam'],['visual','Visual e paleta'],['black','Black Friday']];
+  // [título, fonte, tipo, cliente ('' = geral), coleção, etiquetas, nota, quem, quando, IA usa, chamada da arte, cor da arte, link, alto]
+  var R=[
+    ['Rotina de skincare em 30 segundos','instagram','Reels','CA','ganchos',['gancho','tutorial'],'Abre com a pergunta “quantos passos você faz?”. Dá para usar no reels da semana 2.','BS','ontem',true,'3 passos. 30 segundos.','linear-gradient(160deg,#7FA08A,#2F4A3F)','https://www.instagram.com/reel/skincare30s',1],
+    ['Campanha Novembro Azul com humor','instagram','Carrossel','','nov-azul',['campanha','humor'],'O tom leve funciona sem banalizar o tema.','RN','3 dias',true,'Novembro azul sem drama','linear-gradient(160deg,#1e3a8a,#3b82f6)','https://www.instagram.com/p/novembroazul',0],
+    ['Paleta sálvia e creme · moodboard','pinterest','Imagem','CA','visual',['paleta','marca'],'Referência para as artes da Clínica Aurora em novembro.','DL','1 sem',false,'Sálvia + creme','linear-gradient(160deg,#F1E9DC 40%,#2F4A3F 40%)','https://pinterest.com/pin/salvia-creme',1],
+    ['Pizza saindo do forno em câmera lenta','tiktok','Vídeo','FB','ganchos',['bastidores','câmera lenta'],'Os primeiros 2 segundos seguram o vídeo inteiro.','TM','2 dias',true,'Forno a 450°','linear-gradient(160deg,#7c2d12,#f59e0b)','https://www.tiktok.com/@forno/video/1',1],
+    ['Landing de Black Friday com contagem regressiva','site','Site','','black',['black friday','urgência'],'Gostei do contador fixo no topo.','BS','5 dias',false,'Faltam 3 dias','linear-gradient(160deg,#0a0a0a,#3f3f46)','https://exemplo.com/black-friday',0],
+    ['Carrossel “mitos e verdades” com cartas','behance','Carrossel','OD','visual',['carrossel','didático'],'Layout de cartas viradas: mito de um lado, verdade do outro.','LR','1 sem',true,'Mito ou verdade?','linear-gradient(160deg,#d97706,#78350f)','https://www.behance.net/gallery/mitos',0],
+    ['Aula de pilates para iniciantes · formato vertical','youtube','Vídeo','SM','ganchos',['tutorial','iniciante'],'Corte rápido entre exercícios e legenda grande.','TM','2 sem',false,'Comece do zero','linear-gradient(160deg,#44403c,#a8a29e)','https://youtube.com/shorts/pilates',1],
+    ['Fotos de luminária com luz quente','pinterest','Imagem','CL','visual',['luz','produto'],'Para o próximo ensaio da Casa Lume.','DL','3 sem',true,'Luz quente','linear-gradient(160deg,#ea580c,#fde68a)','https://pinterest.com/pin/luz-quente',1],
+    ['Post de depoimento com foto real do cliente','instagram','Post','','ganchos',['depoimento','prova social'],'Sem arte, só foto e aspas grandes. Funciona muito bem.','RN','1 mês',true,'“Mudou a minha pele”','linear-gradient(160deg,#57534e,#1c1917)','https://www.instagram.com/p/depoimento',0]
+  ].map(function(r,i){return {i:i,t:r[0],f:r[1],tipo:r[2],cli:r[3],col:r[4],tags:r[5],nota:r[6],quem:r[7],quando:r[8],ia:r[9],ch:r[10],cor:r[11],url:r[12],alto:r[13]}});
+  var filtro={cli:'todos',tipo:'todos',col:'todas',busca:''};
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
+  function avC(k){return '<span class="av" style="background:linear-gradient(135deg,'+CLI[k][1]+')">'+k+'</span>'}
+  function avE(k){var u=EQ[k];return '<span class="av" style="background:linear-gradient(135deg,'+(u?u.cor:'#57534e,#292524')+')" title="'+(u?u.nome:k)+'">'+k+'</span>'}
+  function vejo(r){return !r.cli||GERE||(EU.clientes||[]).indexOf(r.cli)>=0}
+  function clientesVisiveis(){return Object.keys(CLI).filter(function(k){return GERE||(EU.clientes||[]).indexOf(k)>=0})}
+  function passa(r){
+    if(!vejo(r))return false;
+    if(filtro.cli==='geral'&&r.cli)return false;
+    if(filtro.cli!=='todos'&&filtro.cli!=='geral'&&r.cli!==filtro.cli)return false;
+    if(filtro.tipo!=='todos'&&r.tipo!==filtro.tipo)return false;
+    if(filtro.col!=='todas'&&r.col!==filtro.col)return false;
+    if(filtro.busca){var b=(r.t+' '+r.nota+' '+r.tags.join(' ')+' '+(r.cli?CLI[r.cli][0]:'geral')).toLowerCase();if(b.indexOf(filtro.busca)<0)return false}
+    return true;
+  }
+  function thumb(r,grande){var F=FONTES[r.f],video=r.tipo==='Reels'||r.tipo==='Vídeo';
+    return '<div class="thumb" style="background:'+r.cor+';min-height:'+(grande?360:r.alto?260:170)+'px"><span class="fonte"><span style="width:16px;height:16px;border-radius:50%;display:grid;place-items:center;background:'+F[1]+'"><svg viewBox="0 0 24 24" style="width:10px;height:10px;color:#fff">'+F[2]+'</svg></span>'+F[0]+'</span>'+
+      (r.ia?'<span class="ia" title="A IA usa no planejamento"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg>IA</span>':'')+
+      (video?'<span class="play"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>':'')+'<span class="grande">'+esc(r.ch)+'</span></div>'}
+  function onde(r){return r.cli?'<span class="onde">'+avC(r.cli)+CLI[r.cli][0]+'</span>':'<span class="onde geral">Geral da agência</span>'}
+  function filtros(){
+    var vis=R.filter(vejo);
+    function cont(fn){return vis.filter(fn).length}
+    var c='<button class="chip" aria-pressed="'+(filtro.cli==='todos')+'" data-fc="todos">Todas <span>'+vis.length+'</span></button><button class="chip" aria-pressed="'+(filtro.cli==='geral')+'" data-fc="geral">Geral <span>'+cont(function(r){return !r.cli})+'</span></button>'+
+      clientesVisiveis().map(function(k){return '<button class="chip" aria-pressed="'+(filtro.cli===k)+'" data-fc="'+k+'">'+avC(k)+CLI[k][0]+' <span>'+cont(function(r){return r.cli===k})+'</span></button>'}).join('');
+    $('[data-f-cli]').innerHTML=c;
+    $('[data-f-tipo]').innerHTML='<button class="chip" aria-pressed="'+(filtro.tipo==='todos')+'" data-ft="todos">Todos</button>'+TIPOS.map(function(t){var n=cont(function(r){return r.tipo===t});return n?'<button class="chip" aria-pressed="'+(filtro.tipo===t)+'" data-ft="'+t+'">'+t+' <span>'+n+'</span></button>':''}).join('');
+    $('[data-colecoes]').innerHTML=COLECOES.map(function(c){var it=c[0]==='todas'?vis:vis.filter(function(r){return r.col===c[0]});
+      return '<button class="col" aria-pressed="'+(filtro.col===c[0])+'" data-fcol="'+c[0]+'"><span class="mos">'+[0,1,2,3].map(function(i){return '<i style="background:'+(it[i]?it[i].cor:'color-mix(in srgb,var(--tinta) 5%,transparent)')+'"></i>'}).join('')+'</span><span><b>'+c[1]+'</b><small>'+it.length+' referência'+(it.length===1?'':'s')+'</small></span></button>'}).join('')+
+      '<button class="col nova" data-nova-col><span class="mos" style="display:grid;place-items:center;grid-template-columns:1fr;border:1.5px dashed currentColor">+</span><span><b>Nova coleção</b><small>Agrupe por campanha</small></span></button>';
+    $$('[data-fc]').forEach(function(b){b.addEventListener('click',function(){filtro.cli=b.dataset.fc;tudo()})});
+    $$('[data-ft]').forEach(function(b){b.addEventListener('click',function(){filtro.tipo=b.dataset.ft;tudo()})});
+    $$('[data-fcol]').forEach(function(b){b.addEventListener('click',function(){filtro.col=b.dataset.fcol;tudo()})});
+    $('[data-nova-col]').addEventListener('click',function(){var n=prompt('Nome da coleção');if(!n||!n.trim())return;var id='c'+Date.now();COLECOES.push([id,n.trim()]);filtro.col=id;tudo();aviso('Coleção “'+n.trim()+'” criada')});
+  }
+  function grade(nova){
+    var it=R.filter(passa);
+    var ia=R.filter(function(r){return vejo(r)&&r.ia}).length;
+    $('[data-resumo]').textContent=R.filter(vejo).length+' referências salvas pela equipe · '+ia+' usadas pela IA no planejamento';
+    $('[data-grade]').innerHTML=it.length?it.map(function(r){
+      return '<article class="ref'+(r===nova?' nova':'')+'" data-r="'+r.i+'" tabindex="0">'+thumb(r)+'<div class="info"><b>'+esc(r.t)+'</b>'+(r.nota?'<p class="nota">'+esc(r.nota)+'</p>':'')+
+        (r.tags.length?'<div class="tags">'+r.tags.map(function(t){return '<span class="tag">#'+esc(t)+'</span>'}).join('')+'</div>':'')+
+        '<div class="pe">'+onde(r)+'<span class="esp"></span>'+avE(r.quem)+'<span>'+r.quando+'</span></div></div></article>'}).join(''):
+      '<div class="vazio" style="column-span:all"><b>Nada por aqui</b>'+(filtro.busca?'Nenhuma referência com “'+esc(filtro.busca)+'”.':'Salve a primeira referência com o botão acima ou pela extensão.')+'</div>';
+    $$('[data-r]').forEach(function(a){a.addEventListener('click',function(){detalhe(+a.dataset.r)});a.addEventListener('keydown',function(e){if(e.key==='Enter')detalhe(+a.dataset.r)})});
+  }
+  function tudo(nova){filtros();grade(nova)}
+
+  // detalhe
+  function detalhe(i){var r=R[i],meu=r.quem===EU.k||GERE;
+    $('[data-det]').innerHTML='<div class="lado">'+thumb(r,true)+'</div><div class="txt">'+
+      '<div style="display:flex;align-items:center;gap:8px">'+onde(r)+'<span class="tag">'+r.tipo+'</span><span style="flex:1"></span><button class="btn fantasma" style="padding:7px 10px" data-fechar-det aria-label="Fechar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'+
+      '<h3>'+esc(r.t)+'</h3><a class="link" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+esc(r.url)+' ↗</a>'+
+      '<div class="campo" style="margin:0"><label for="d-nota">Por que salvou</label><textarea id="d-nota" data-d-nota'+(meu?'':' disabled')+'>'+esc(r.nota)+'</textarea></div>'+
+      (r.tags.length?'<div class="tags">'+r.tags.map(function(t){return '<span class="tag">#'+esc(t)+'</span>'}).join('')+'</div>':'')+
+      '<button class="interruptor" role="switch" aria-checked="'+r.ia+'" data-d-ia'+(meu?'':' disabled')+' style="margin:0"><div><b>A IA pode usar no planejamento</b><small>'+(r.cli?'Entra no planejamento de '+CLI[r.cli][0]:'Entra no planejamento de todos os clientes')+'</small></div><span class="chave"></span></button>'+
+      '<div class="pe" style="margin:0">Salva por '+avE(r.quem)+(EQ[r.quem]?EQ[r.quem].nome:r.quem)+' · '+r.quando+'</div>'+
+      '<div class="acoes-m" style="margin-top:4px">'+(meu?'<button class="btn fantasma" data-d-excluir style="color:var(--vermelho)">Excluir</button><span class="esp"></span>':'<span class="esp"></span>')+(r.tipo!=='Site'&&(!P||P.faz(EU,'criar_card'))?'<button class="btn fantasma" data-d-card>Virar card</button>':'')+'<a class="btn primario" href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Abrir original</a></div></div>';
+    abre('det');
+    $('[data-fechar-det]').addEventListener('click',fecha);
+    var n=$('[data-d-nota]');n.addEventListener('change',function(){r.nota=n.value;grade();aviso('Nota salva')});
+    var s=$('[data-d-ia]');s.addEventListener('click',function(){if(s.disabled)return;r.ia=!r.ia;s.setAttribute('aria-checked',r.ia);grade();aviso(r.ia?'A IA vai considerar esta referência':'A IA não vai mais usar esta referência')});
+    var x=$('[data-d-excluir]');if(x)x.addEventListener('click',function(){if(!confirm('Excluir esta referência?'))return;R.splice(R.indexOf(r),1);R.forEach(function(q,j){q.i=j});fecha();tudo();aviso('Referência excluída')});
+    var c=$('[data-d-card]');if(c)c.addEventListener('click',function(){fecha();aviso('Card criado em “A fazer”'+(r.cli?' de '+CLI[r.cli][0]:'')+', com esta referência anexada')});
+  }
+
+  // salvar
+  var destino='',iaNova=true;
+  function detecta(u){u=(u||'').toLowerCase();if(/instagram\.com/.test(u))return 'instagram';if(/tiktok\.com/.test(u))return 'tiktok';if(/youtu\.?be/.test(u))return 'youtube';if(/pinterest\./.test(u)||/pin\.it/.test(u))return 'pinterest';if(/behance\.net/.test(u))return 'behance';return 'site'}
+  function tipoDe(f,u){if(f==='instagram')return /\/reel/.test(u)?'Reels':'Post';if(f==='tiktok'||f==='youtube')return 'Vídeo';if(f==='pinterest')return 'Imagem';if(f==='behance')return 'Carrossel';return 'Site'}
+  function sugereTitulo(f,u){var m={instagram:'Referência do Instagram',tiktok:'Vídeo do TikTok',youtube:'Vídeo do YouTube',pinterest:'Imagem do Pinterest',behance:'Projeto no Behance',site:''};
+    if(f==='site'){try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return ''}}return m[f]}
+  function destinos(){
+    $('[data-destino]').innerHTML='<button type="button" class="geral" aria-pressed="'+(destino==='')+'" data-d="">Geral da agência</button>'+clientesVisiveis().map(function(k){return '<button type="button" aria-pressed="'+(destino===k)+'" data-d="'+k+'">'+avC(k)+CLI[k][0]+'</button>'}).join('');
+    $$('[data-d]').forEach(function(b){b.addEventListener('click',function(){destino=b.dataset.d;destinos()})});
+  }
+  function abreSalvar(){$('[data-form]').reset();$('[data-detectado]').classList.remove('on');destino=filtro.cli!=='todos'&&filtro.cli!=='geral'?filtro.cli:'';iaNova=true;$('[data-ia]').setAttribute('aria-checked','true');
+    $('[data-col]').innerHTML='<option value="">Sem coleção</option>'+COLECOES.slice(1).map(function(c){return '<option value="'+c[0]+'"'+(filtro.col===c[0]?' selected':'')+'>'+esc(c[1])+'</option>'}).join('');
+    destinos();abre('salvar');setTimeout(function(){$('[data-url]').focus()},60)}
+  $('[data-salvar]').addEventListener('click',abreSalvar);$('[data-salvar-2]').addEventListener('click',abreSalvar);
+  $('[data-url]').addEventListener('input',function(){var u=this.value.trim(),box=$('[data-detectado]');if(!/^https?:\/\/.+\..+/.test(u)){box.classList.remove('on');return}
+    var f=detecta(u),F=FONTES[f];box.innerHTML='<span class="mini" style="background:'+F[1]+'"><svg viewBox="0 0 24 24" style="width:24px;height:24px;color:#fff">'+F[2]+'</svg></span><div><b>'+F[0]+' · '+tipoDe(f,u)+'</b><small>Título e capa vêm do link quando a extensão salva. Aqui, ajuste o título abaixo.</small></div>';box.classList.add('on');
+    var t=$('[data-tit]');if(!t.value||t.dataset.auto)  {t.value=sugereTitulo(f,u);t.dataset.auto='1'}});
+  $('[data-tit]').addEventListener('input',function(){delete this.dataset.auto});
+  $('[data-ia]').addEventListener('click',function(){iaNova=!iaNova;this.setAttribute('aria-checked',iaNova)});
+  $('[data-form]').addEventListener('submit',function(e){e.preventDefault();var u=$('[data-url]').value.trim(),f=detecta(u),tipo=tipoDe(f,u);
+    var cores=['linear-gradient(160deg,#9a3412,#fdba74)','linear-gradient(160deg,#1f2937,#6b7280)','linear-gradient(160deg,#3f6212,#bef264)','linear-gradient(160deg,#701a75,#f0abfc)'];
+    var r={t:$('[data-tit]').value.trim(),f:f,tipo:tipo,cli:destino,col:$('[data-col]').value,tags:$('[data-tags]').value.split(',').map(function(x){return x.trim().replace(/^#/,'')}).filter(Boolean),
+      nota:$('[data-nota]').value.trim(),quem:EU.k,quando:'agora',ia:iaNova,ch:$('[data-tit]').value.trim().split(' ').slice(0,4).join(' '),cor:cores[R.length%cores.length],url:u,alto:tipo==='Reels'||tipo==='Vídeo'||tipo==='Imagem'?1:0};
+    R.unshift(r);R.forEach(function(q,j){q.i=j});
+    if(filtro.cli!=='todos'&&filtro.cli!==(destino||'geral'))filtro.cli='todos';
+    if(filtro.tipo!=='todos'&&filtro.tipo!==tipo)filtro.tipo='todos';
+    if(filtro.col!=='todas'&&filtro.col!==r.col)filtro.col='todas';
+    fecha();tudo(r);aviso('Referência salva em '+(destino?CLI[destino][0]:'Geral')+(iaNova?'. A IA vai considerar no próximo planejamento.':'.'));
+  });
+
+  function abre(n){$('[data-veu="'+n+'"]').classList.add('aberto')}
+  function fecha(){$$('.veu').forEach(function(v){v.classList.remove('aberto')})}
+  $$('[data-fechar]').forEach(function(b){b.addEventListener('click',fecha)});
+  $$('.veu').forEach(function(v){v.addEventListener('click',function(e){if(e.target===v)fecha()})});
+  addEventListener('keydown',function(e){if(e.key==='Escape')fecha()});
+  var bt;$('[data-busca]').addEventListener('input',function(){var v=this.value.trim().toLowerCase();clearTimeout(bt);bt=setTimeout(function(){filtro.busca=v;grade()},150)});
+  $('[data-instalar]').addEventListener('click',function(){aviso('Abriria a página da extensão na Chrome Web Store')});
+  try{if(localStorage.getItem('pulse-ext-fechada'))$('[data-ext]').style.display='none'}catch(e){}
+  $('[data-fechar-ext]').addEventListener('click',function(){$('[data-ext]').style.display='none';try{localStorage.setItem('pulse-ext-fechada','1')}catch(e){}});
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},3000)}
+  tudo();
+})();
+</script>
+</body>
+</html>

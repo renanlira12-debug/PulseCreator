@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clínica Aurora · Arquivos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+/*BASE*/
+.cab-a{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.cab-a .esp{flex:1}
+.busca-a{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:99px;min-width:240px;color:var(--texto-3)}
+.busca-a input{flex:1;background:none;border:0;outline:none;color:var(--texto);font:inherit;font-size:13px;min-width:0}
+.drive{display:flex;align-items:center;gap:10px;margin-top:16px;padding:11px 14px;border-radius:16px;font-size:12.5px;color:var(--texto-2);background:var(--fosco);border:1px solid var(--borda)}
+.drive svg{flex:none}
+.drive a{margin-left:auto;color:var(--laranja-claro);font-weight:600;text-decoration:none;white-space:nowrap}
+
+.corpo-a{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;margin-top:18px;align-items:start}
+.pastas-a{padding:10px;border-radius:22px;position:sticky;top:130px}
+.pastas-a button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:14px;font-size:13px;font-weight:500;color:var(--texto-2);text-align:left}
+.pastas-a button:hover{background:var(--vidro-1);color:var(--texto)}
+.pastas-a button[aria-current=true]{color:var(--texto);background:var(--vidro-2);box-shadow:var(--brilho)}
+.pastas-a button svg{flex:none;color:var(--texto-3)}
+.pastas-a button[aria-current=true] svg{color:var(--laranja-claro)}
+.pastas-a button span{margin-left:auto;font-size:11.5px;color:var(--texto-3)}
+.pastas-a .sep-a{height:1px;margin:6px 8px;background:color-mix(in srgb,var(--tinta) 7%,transparent)}
+.uso{margin:10px 8px 4px;font-size:11.5px;color:var(--texto-3)}
+.uso i{display:block;height:5px;margin-top:6px;border-radius:99px;background:color-mix(in srgb,var(--tinta) 8%,transparent);overflow:hidden}
+.uso i b{display:block;height:100%;width:23%;background:var(--laranja);border-radius:99px}
+
+.area-a{min-width:0}
+.barra-a{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.migalha-a{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--texto-3)}
+.migalha-a button{color:var(--texto-3);font-weight:600}
+.migalha-a button:hover{color:var(--texto)}
+.migalha-a b{color:var(--texto)}
+.barra-a .esp{flex:1}
+.barra-a .pilulas button{padding:7px 10px;display:grid;place-items:center}
+.selecao{display:none;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:99px;font-size:13px;background:color-mix(in srgb,var(--laranja) 12%,transparent);border:1px solid color-mix(in srgb,var(--laranja) 35%,transparent)}
+.selecao.on{display:flex;animation:chega .3s var(--mola)}
+@keyframes chega{from{opacity:0;transform:translateY(-6px)}}
+.selecao .btn{padding:7px 14px;font-size:12.5px}
+
+.grade-a{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.item-a{position:relative;display:flex;flex-direction:column;padding:8px;border-radius:18px;text-align:left;width:100%;cursor:pointer;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--tinta) 6%,transparent),color-mix(in srgb,var(--tinta) 2.5%,transparent));border:1px solid var(--borda);transition:transform .2s var(--mola),border-color .2s}
+.item-a:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--tinta) 20%,transparent)}
+.item-a.sel{border-color:var(--laranja);background:color-mix(in srgb,var(--laranja) 10%,transparent)}
+.thumb{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;display:grid;place-items:center;font-weight:900;font-size:10px;letter-spacing:-.01em;text-transform:uppercase;text-align:center;padding:8px;line-height:1.05}
+.thumb.pasta-t{background:color-mix(in srgb,var(--laranja) 10%,transparent);color:var(--laranja-claro)}
+.thumb.pdf{background:linear-gradient(180deg,#f3eee8,#d9d2ca);color:#7a2e0e;font-size:13px}
+.thumb.vid::after{content:"";position:absolute;width:30px;height:30px;border-radius:50%;background:color-mix(in srgb,var(--tinta) 25%,transparent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 6v12l10-6z' fill='white'/%3E%3C/svg%3E") center/14px no-repeat;backdrop-filter:blur(6px)}
+.t1{background:#2F4A3F;color:#F1E9DC}.t2{background:#F1E9DC;color:#2F4A3F}.t3{background:radial-gradient(120% 90% at 20% 10%,#7FA08A,#2F4A3F 70%);color:#F1E9DC}
+.t4{background:linear-gradient(135deg,#c9b8a3,#8a7564)}.t5{background:linear-gradient(135deg,#a7b8a8,#4f6b5a)}.t6{background:linear-gradient(160deg,#e9dccb,#b49a7e)}
+.item-a .nome{display:block;margin-top:8px;padding:0 4px;font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-a .meta-a{display:block;padding:0 4px 2px;font-size:11px;color:var(--texto-3)}
+.marca-sel{position:absolute;top:14px;left:14px;z-index:2;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;color:transparent;
+  background:rgba(0,0,0,.45);border:1.5px solid color-mix(in srgb,var(--tinta) 60%,transparent);opacity:0;transition:opacity .15s}
+.item-a:hover .marca-sel,.item-a.sel .marca-sel,.com-sel .marca-sel{opacity:1}
+.item-a.sel .marca-sel{background:var(--laranja);border-color:var(--laranja);color:#1d0c03}
+.lista-v .grade-a{grid-template-columns:1fr;gap:6px}
+.lista-v .item-a{flex-direction:row;align-items:center;gap:12px;padding:8px 12px}
+.lista-v .thumb{width:46px;aspect-ratio:1;font-size:6px;padding:3px;flex:none}
+.lista-v .item-a .nome{margin:0;flex:1}
+.lista-v .marca-sel{position:static;opacity:1;order:-1}
+.envio{display:none;margin-bottom:14px}
+.envio.on{display:flex}
+.soltar{flex:1;display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:18px;cursor:pointer;border:1.5px dashed color-mix(in srgb,var(--laranja) 40%,transparent);background:color-mix(in srgb,var(--laranja) 5%,transparent);transition:all .2s}
+.soltar:hover,.soltar.sobre{background:color-mix(in srgb,var(--laranja) 10%,transparent);border-color:var(--laranja)}
+.soltar svg{color:var(--laranja-claro);flex:none}
+.soltar b{display:block;font-size:13.5px}
+.soltar small{color:var(--texto-3);font-size:12px}
+.vazio-a{grid-column:1/-1;padding:36px;text-align:center;color:var(--texto-3);border:1px dashed color-mix(in srgb,var(--tinta) 10%,transparent);border-radius:18px}
+.novo-a{animation:chega .5s var(--mola)}
+
+.veu{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:16px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px)}
+.veu.aberto{display:grid;animation:aparece .25s}
+@keyframes aparece{from{opacity:0}}
+.prev{width:min(720px,100%);border-radius:26px;padding:16px;background:color-mix(in srgb,var(--superficie) 85%,transparent)}
+.prev .thumb{aspect-ratio:4/3;font-size:34px;border-radius:16px}
+.prev .thumb.pdf{font-size:40px}
+.prev-pe{display:flex;align-items:center;gap:10px;margin-top:14px}
+.prev-pe div{flex:1;min-width:0}
+.prev-pe b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prev-pe small{color:var(--texto-3);font-size:12px}
+@media (max-width:860px){.corpo-a{grid-template-columns:1fr}.pastas-a{position:static;display:flex;overflow-x:auto;gap:4px;padding:6px}.pastas-a button{width:auto;flex:none;white-space:nowrap}.pastas-a .sep-a,.uso{display:none}.pastas-a button span{margin-left:4px}}
+@media (max-width:520px){.grade-a{grid-template-columns:repeat(2,minmax(0,1fr))}.busca-a{min-width:0;width:100%}.drive{flex-wrap:wrap}.drive a{margin-left:0}}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<div class="portal-pag">
+<!--PORTAL:arquivos-->
+  <main class="conteudo-portal">
+    <div class="cab-a entra">
+      <div><h2 class="ola-p">Seus <em>arquivos</em></h2><p class="sub-p">Tudo o que foi produzido para a Clínica Aurora, organizado por pasta e por mês.</p></div>
+      <div class="esp"></div>
+      <label class="busca-a vidro"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="Buscar arquivo…" data-busca aria-label="Buscar arquivo"></label>
+    </div>
+    <div class="drive entra" style="animation-delay:.05s"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3h8l6 10-4 7H6l-4-7z"/><path d="M8 3l6 10H2M16 3l-6 10 4 7"/></svg>Os arquivos ficam no Google Drive do Estúdio Faísca, na pasta da Clínica Aurora. São seus, mesmo se o contrato acabar.<a href="#" onclick="return false">Abrir no Drive ↗</a></div>
+
+    <div class="corpo-a">
+      <nav class="pastas-a vidro entra" style="animation-delay:.1s" data-pastas aria-label="Pastas"></nav>
+      <section class="area-a entra" style="animation-delay:.15s" id="area">
+        <div class="barra-a">
+          <div class="migalha-a" data-migalha></div>
+          <div class="esp"></div>
+          <div class="selecao" data-selecao><span data-qtd-sel></span><button class="btn fantasma" data-limpar>Limpar</button><button class="btn primario" data-baixar-sel>Baixar</button></div>
+          <div class="pilulas vidro" role="group" aria-label="Visualização" data-pilulas>
+            <span class="lente"></span>
+            <button aria-pressed="true" data-v="grade" aria-label="Grade"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></button>
+            <button aria-pressed="false" data-v="lista" aria-label="Lista"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></button>
+          </div>
+        </div>
+        <div class="envio" data-envio>
+          <label class="soltar" data-soltar><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg><div><b>Envie fotos, vídeos e documentos para a agência</b><small>Arraste para cá ou toque para escolher. A equipe é avisada na hora.</small></div><input type="file" multiple hidden data-arq></label>
+        </div>
+        <div class="grade-a" data-grade></div>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="veu" data-veu><div class="prev vidro especular" data-prev></div></div>
+<div class="toast vidro" data-toast></div>
+
+<script>
+(function(){
+  var ICP='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+  // pasta: [nome, subpastas ou arquivos]; arquivo: [nome, tipo, estilo, rótulo, tamanho, data]
+  var RAIZ={
+    entregas:{nome:'Entregas',sub:{
+      outubro:{nome:'Outubro 2026',arq:[['nossos-servicos.png','img','t1','Nossos serviços','1,8 MB','02/10'],['4-sinais-hidratacao-carrossel.zip','img','t2','4 sinais','6,2 MB','06/10'],['perguntas-frequentes.png','img','t3','Perguntas','1,6 MB','09/10'],['um-dia-na-clinica.mp4','vid','t3','Um dia na clínica','48 MB','13/10'],['caixinha-perguntas-story.png','img','t1','Story','0,9 MB','14/10']]},
+      setembro:{nome:'Setembro 2026',arq:[['dra-paula-apresentacao.png','img','t2','Dra. Paula','1,7 MB','16/09'],['skincare-noturno-carrossel.zip','img','t1','Skincare noturno','5,4 MB','20/09'],['bastidores-recepcao.mp4','vid','t3','Bastidores','39 MB','25/09']]},
+      agosto:{nome:'Agosto 2026',arq:[['mes-da-pele.png','img','t3','Mês da pele','1,5 MB','05/08'],['equipe-aurora.png','img','t2','Equipe','2,1 MB','19/08'],['rotina-da-manha-carrossel.zip','img','t1','Rotina','4,8 MB','26/08']]}
+    }},
+    fotos:{nome:'Fotos dos ensaios',sub:{
+      ens1:{nome:'Ensaio · setembro',arq:[['IMG_0412.jpg','img','t4','','4,2 MB','12/09'],['IMG_0418.jpg','img','t5','','3,9 MB','12/09'],['IMG_0431.jpg','img','t6','','4,4 MB','12/09'],['IMG_0447.jpg','img','t4','','4,1 MB','12/09'],['IMG_0452.jpg','img','t5','','4,0 MB','12/09'],['IMG_0466.jpg','img','t6','','4,6 MB','12/09']]}
+    }},
+    marca:{nome:'Marca',arq:[['logo-aurora.svg','img','t1','AURORA','24 KB','10/03'],['logo-aurora-claro.svg','img','t2','AURORA','24 KB','10/03'],['manual-da-marca.pdf','pdf','pdf','PDF','3,1 MB','10/03'],['paleta-e-fontes.pdf','pdf','pdf','PDF','840 KB','10/03']]},
+    enviado:{nome:'Enviado por você',envio:true,arq:[['sala-atendimento-1.jpg','img','t6','','3,2 MB','21/10'],['sala-atendimento-2.jpg','img','t4','','3,0 MB','21/10'],['tabela-precos-novembro.pdf','pdf','pdf','PDF','210 KB','20/10']]},
+    relatorios:{nome:'Relatórios',arq:[['entregas-outubro-2026.pdf','pdf','pdf','PDF','8,4 MB','31/10'],['relatorio-setembro.pdf','pdf','pdf','PDF','1,2 MB','01/10'],['entregas-setembro-2026.pdf','pdf','pdf','PDF','5,1 MB','30/09'],['relatorio-agosto.pdf','pdf','pdf','PDF','1,1 MB','01/09']]},
+    contratos:{nome:'Contratos',arq:[['contrato-clinica-aurora.pdf','pdf','pdf','PDF','184 KB','19/02']]}
+  };
+  var ORDEM=['entregas','fotos','marca','enviado','relatorios','contratos'];
+  var caminho=['entregas'],selecionados={},busca='';
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function conta(p){if(p.arq)return p.arq.length;var n=0;for(var k in p.sub)n+=conta(p.sub[k]);return n}
+  function atual(){var p=RAIZ[caminho[0]];for(var i=1;i<caminho.length;i++)p=p.sub[caminho[i]];return p}
+  function todos(){var r=[];function vai(p,c){if(p.arq)p.arq.forEach(function(a){r.push([a,c.concat(p.nome)])});if(p.sub)for(var k in p.sub)vai(p.sub[k],c.concat(p.nome))}ORDEM.forEach(function(k){vai(RAIZ[k],[])});return r}
+  function pastas(){
+    $('[data-pastas]').innerHTML=ORDEM.map(function(k,i){var p=RAIZ[k];
+      return (i===3?'<div class="sep-a"></div>':'')+'<button data-p="'+k+'" aria-current="'+(caminho[0]===k&&!busca)+'">'+ICP+p.nome+'<span>'+conta(p)+'</span></button>'}).join('')+
+      '<div class="uso">Usando 3,4 GB<i><b></b></i></div>';
+    $$('[data-p]').forEach(function(b){b.addEventListener('click',function(){caminho=[b.dataset.p];busca='';$('[data-busca]').value='';limpa();tudo()})});
+  }
+  function thumb(a){return '<span class="thumb '+a[2]+(a[1]==='vid'?' vid':'')+'">'+(a[3]||'')+'</span>'}
+  function grade(){
+    var p=atual(),h='',itens;
+    if(busca){
+      itens=todos().filter(function(x){return x[0][0].toLowerCase().indexOf(busca)>=0});
+      $('[data-migalha]').innerHTML='<b>'+itens.length+' resultado'+(itens.length===1?'':'s')+' para “'+busca.replace(/</g,'&lt;')+'”</b>';
+      $('[data-envio]').classList.remove('on');
+      h=itens.map(function(x){return item(x[0],x[1].join(' / '))}).join('')||'<p class="vazio-a">Nada encontrado.</p>';
+    } else {
+      var m=[],q=RAIZ[caminho[0]];m.push('<button data-volta="1">'+q.nome+'</button>');
+      for(var i=1;i<caminho.length;i++){q=q.sub[caminho[i]];m.push('<button data-volta="'+(i+1)+'">'+q.nome+'</button>')}
+      m[m.length-1]=m[m.length-1].replace(/<button[^>]*>(.*)<\/button>/,'<b>$1</b>');
+      $('[data-migalha]').innerHTML=m.join(' <span>/</span> ');
+      $$('[data-volta]').forEach(function(b){b.addEventListener('click',function(){caminho=caminho.slice(0,+b.dataset.volta);limpa();tudo()})});
+      $('[data-envio]').classList.toggle('on',!!p.envio);
+      if(p.sub)for(var k in p.sub)h+='<button class="item-a" data-abre="'+k+'"><span class="thumb pasta-t"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="nome">'+p.sub[k].nome+'</span><span class="meta-a">'+conta(p.sub[k])+' arquivos</span></button>';
+      if(p.arq)h+=p.arq.map(function(a){return item(a)}).join('');
+      if(!h)h='<p class="vazio-a">Pasta vazia.</p>';
+    }
+    $('[data-grade]').innerHTML=h;
+    $$('[data-abre]').forEach(function(b){b.addEventListener('click',function(){caminho.push(b.dataset.abre);limpa();tudo()})});
+    $$('[data-arq-n]').forEach(function(b){
+      b.addEventListener('click',function(e){
+        if(e.target.closest('.marca-sel')||Object.keys(selecionados).length){alterna(b.dataset.arqN);return}
+        previa(b.dataset.arqN)});
+    });
+  }
+  function acha(n){var r=null;todos().forEach(function(x){if(x[0][0]===n)r=x[0]});return r}
+  function item(a,onde){
+    return '<div class="item-a'+(selecionados[a[0]]?' sel':'')+(a.novo?' novo-a':'')+'" data-arq-n="'+a[0]+'" role="button" tabindex="0"><span class="marca-sel" aria-label="Selecionar"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4"><path d="M5 12l5 5L20 7"/></svg></span>'+
+      thumb(a)+'<span class="nome" title="'+a[0]+'">'+a[0]+'</span><span class="meta-a">'+(onde?onde+' · ':'')+a[4]+' · '+a[5]+'</span></div>';
+  }
+  function alterna(n){if(selecionados[n])delete selecionados[n];else selecionados[n]=1;sel();grade()}
+  function limpa(){selecionados={};sel()}
+  function sel(){var n=Object.keys(selecionados).length;$('[data-selecao]').classList.toggle('on',n>0);$('[data-qtd-sel]').textContent=n+' selecionado'+(n>1?'s':'');$('#area').classList.toggle('com-sel',n>0)}
+  function previa(n){var a=acha(n);if(!a)return;
+    $('[data-prev]').innerHTML=thumb(a)+'<div class="prev-pe"><div><b>'+a[0]+'</b><small>'+a[4]+' · '+a[5]+'/2026</small></div><button class="btn fantasma" data-fechar>Fechar</button><button class="btn primario" data-baixar>Baixar</button></div>';
+    $('[data-veu]').classList.add('aberto');
+    $('[data-fechar]').addEventListener('click',fecha);
+    $('[data-baixar]').addEventListener('click',function(){aviso('Baixando '+a[0]);fecha()});
+  }
+  function fecha(){$('[data-veu]').classList.remove('aberto')}
+  $('[data-veu]').addEventListener('click',function(e){if(e.target===this)fecha()});
+  addEventListener('keydown',function(e){if(e.key==='Escape')fecha()});
+  $('[data-limpar]').addEventListener('click',function(){limpa();grade()});
+  $('[data-baixar-sel]').addEventListener('click',function(){var n=Object.keys(selecionados).length;aviso('Preparando '+n+' arquivo'+(n>1?'s':'')+' em um .zip para baixar');limpa();grade()});
+  var bt;$('[data-busca]').addEventListener('input',function(){var v=this.value.trim().toLowerCase();clearTimeout(bt);bt=setTimeout(function(){busca=v;limpa();tudo()},150)});
+  // envio
+  var sol=$('[data-soltar]');
+  function envia(fs){var p=RAIZ.enviado;[].forEach.call(fs,function(f){var img=/^image/.test(f.type),vid=/^video/.test(f.type);var a=[f.name,img?'img':vid?'vid':'pdf',img?'t5':vid?'t3':'pdf',img||vid?'':'ARQ',(f.size<102400?Math.max(1,Math.round(f.size/1024))+' KB':(f.size/1048576).toLocaleString('pt-BR',{maximumFractionDigits:1})+' MB'),'23/10'];a.novo=true;p.arq.unshift(a)});
+    tudo();aviso(fs.length+' arquivo'+(fs.length>1?'s enviados':' enviado')+'. A agência foi avisada.')}
+  $('[data-arq]').addEventListener('change',function(){if(this.files.length)envia(this.files);this.value=''});
+  ['dragover','dragenter'].forEach(function(t){sol.addEventListener(t,function(e){e.preventDefault();sol.classList.add('sobre')})});
+  ['dragleave','drop'].forEach(function(t){sol.addEventListener(t,function(){sol.classList.remove('sobre')})});
+  sol.addEventListener('drop',function(e){e.preventDefault();if(e.dataTransfer.files.length)envia(e.dataTransfer.files)});
+  // grade / lista
+  var g=$('[data-pilulas]'),lente=g.querySelector('.lente');
+  function move(b,an){lente.style.width=b.offsetWidth+'px';lente.style.transform='translateX('+b.offsetLeft+'px)';if(an){lente.classList.remove('esticando');void lente.offsetWidth;lente.classList.add('esticando')}}
+  lente.style.transition='none';move(g.querySelector('[aria-pressed=true]'));requestAnimationFrame(function(){lente.style.transition=''});
+  g.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;$$('button',g).forEach(function(x){x.setAttribute('aria-pressed',x===b)});move(b,true);$('#area').classList.toggle('lista-v',b.dataset.v==='lista')});
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},2600)}
+  function tudo(){pastas();grade()}
+  tudo();
+})();
+</script>
+</body>
+</html>

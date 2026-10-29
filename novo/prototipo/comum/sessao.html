@@ -1,0 +1,109 @@
+<script>
+/* Sessão do protótipo: quem está logado, a função de cada pessoa e o que cada função pode fazer.
+   O administrador define a função; a função traz um conjunto padrão de permissões, que ele pode ajustar. */
+window.PULSE=(function(){
+  var ACOES=[
+    {g:'Conteúdo',k:'criar_card',n:'Criar demandas e cards'},
+    {g:'Conteúdo',k:'atribuir',n:'Atribuir responsável'},
+    {g:'Conteúdo',k:'editar_copy',n:'Editar roteiro, legenda e título'},
+    {g:'Conteúdo',k:'editar_prazo',n:'Mudar prazo e data de publicação'},
+    {g:'Conteúdo',k:'subir_arte',n:'Subir arte, vídeo e arquivos'},
+    {g:'Conteúdo',k:'comentar',n:'Comentar nos cards'},
+    {g:'Conteúdo',k:'excluir_card',n:'Excluir cards'},
+    {g:'Fluxo',k:'mover_producao',n:'Pegar e devolver para produção'},
+    {g:'Fluxo',k:'enviar_revisao',n:'Mandar para aprovação interna'},
+    {g:'Fluxo',k:'aprovar',n:'Aprovar internamente'},
+    {g:'Fluxo',k:'enviar_cliente',n:'Enviar para o cliente aprovar'},
+    {g:'Fluxo',k:'agendar',n:'Agendar e publicar'},
+    {g:'Clientes',k:'editar_cliente',n:'Cadastrar clientes e editar a ficha'},
+    {g:'Clientes',k:'falar_cliente',n:'Conversar com o cliente'},
+    {g:'Clientes',k:'usar_ia',n:'Usar a IA (gasta créditos)'},
+    {g:'Clientes',k:'ver_numeros',n:'Ver dashboard e resultados'},
+    {g:'Gestão',k:'ver_todas',n:'Ver demandas de toda a equipe'},
+    {g:'Gestão',k:'gerir_contratos',n:'Subir e editar contratos'},
+    {g:'Gestão',k:'gerir_equipe',n:'Adicionar pessoas e definir funções'},
+    {g:'Gestão',k:'configurar',n:'Mudar as configurações da agência'},
+    {g:'Gestão',k:'ver_financeiro',n:'Ver e mexer no financeiro'}
+  ];
+  var TODAS=ACOES.map(function(a){return a.k});
+  function sem(lista){return TODAS.filter(function(k){return lista.indexOf(k)<0})}
+  var PAPEIS={
+    admin:{nome:'Administrador',ve:'Tudo. É quem adiciona pessoas e define a função de cada uma',padrao:TODAS},
+    gestor:{nome:'Gestor',ve:'Toda a operação e a equipe, sem o financeiro',padrao:sem(['ver_financeiro'])},
+    social:{nome:'Social media',ve:'Cria os cards, atribui pessoas, edita copy e prazos, fala com o cliente',padrao:['criar_card','atribuir','editar_copy','editar_prazo','subir_arte','comentar','mover_producao','enviar_revisao','aprovar','enviar_cliente','agendar','editar_cliente','falar_cliente','usar_ia','ver_numeros']},
+    designer:{nome:'Designer',ve:'Sobe a arte e manda para aprovação. Não edita prazo nem copy',padrao:['subir_arte','comentar','mover_producao','enviar_revisao']},
+    video:{nome:'Videomaker',ve:'Sobe o vídeo e manda para aprovação. Não edita prazo nem copy',padrao:['subir_arte','comentar','mover_producao','enviar_revisao']}
+  };
+  // telas da lateral: as que dependem de uma permissão
+  var NAV_ACAO={dashboard:'ver_numeros',resultados:'ver_numeros',ia:'usar_ia',mensagens:'falar_cliente',contratos:'gerir_contratos',equipe:'gerir_equipe',financeiro:'ver_financeiro',configuracoes:'configurar'};
+  // para onde o card vai → permissão necessária
+  var ETAPA_ACAO={fazer:'mover_producao',producao:'mover_producao',copy:'mover_producao',criacao:'mover_producao',revisao:'enviar_revisao',interna:'enviar_revisao',revisao_arte:'enviar_revisao',cliente:'enviar_cliente',revisao_cliente:'enviar_cliente',aprovado:'aprovar',pronto:'aprovar',agendado:'agendar',publicado:'agendar'};
+  var EQUIPE={
+    RN:{k:'RN',nome:'Renan',completo:'Renan Lira',papel:'admin',email:'renan@estudiofaisca.com.br',cor:'#FFB547,#C2410C',clientes:['CA','FB','SM','CL','OD'],cap:10},
+    BS:{k:'BS',nome:'Bianca',completo:'Bianca Souza',papel:'social',email:'bianca@estudiofaisca.com.br',cor:'#FF9A57,#C2410C',clientes:['CA','FB','CL'],cap:14},
+    TM:{k:'TM',nome:'Tiago',completo:'Tiago Melo',papel:'video',email:'tiago@estudiofaisca.com.br',cor:'#6b7280,#374151',clientes:['CA','FB','SM','OD'],cap:7},
+    DL:{k:'DL',nome:'Davi',completo:'Davi Lopes',papel:'designer',email:'davi@estudiofaisca.com.br',cor:'#a16207,#713f12',clientes:['FB','SM','CL','OD'],cap:14},
+    LR:{k:'LR',nome:'Lia',completo:'Lia Ramos',papel:'designer',email:'lia@estudiofaisca.com.br',cor:'#9a3412,#431407',clientes:['FB','CL','OD'],cap:10}
+  };
+  function lerJ(ch){try{return JSON.parse(localStorage.getItem(ch)||'{}')}catch(e){return {}}}
+  function gravaJ(ch,v){try{localStorage.setItem(ch,JSON.stringify(v))}catch(e){}}
+  // pessoas que aceitaram convite neste navegador
+  (function(){var n=lerJ('pulse-novos');for(var k in n)EQUIPE[k]=n[k]})();
+  // trocas de função e de clientes feitas na tela de Equipe
+  (function(){var a=lerJ('pulse-ajustes');for(var k in a)if(EQUIPE[k]){if(a[k].papel&&PAPEIS[a[k].papel])EQUIPE[k].papel=a[k].papel;if(a[k].clientes)EQUIPE[k].clientes=a[k].clientes}})();
+  // permissões de cada função, ajustadas pelo administrador
+  var PERM={};(function(){var p=lerJ('pulse-perm');for(var r in PAPEIS)PERM[r]=(r!=='admin'&&p[r])?p[r]:PAPEIS[r].padrao.slice()})();
+  function ajusta(k,campo,v){var a=lerJ('pulse-ajustes');a[k]=a[k]||{};a[k][campo]=v;gravaJ('pulse-ajustes',a);EQUIPE[k][campo]=v}
+  function ler(){try{return localStorage.getItem('pulse-usuario')}catch(e){return null}}
+  function gravar(v){try{if(v)localStorage.setItem('pulse-usuario',v);else localStorage.removeItem('pulse-usuario')}catch(e){}}
+  // configurações da agência (marca, prazos por nível, frase do dia)
+  var CONFIG_PADRAO={agencia:'Estúdio Faísca',sigla:'EF',slogan:'Conteúdo que dá faísca',cor:'#FF6B1A',logo:null,remetente:'Estúdio Faísca',endereco:'estudiofaisca',
+    niveis:{leve:{pts:1,dias:1},media:{pts:2,dias:3},alta:{pts:3,dias:5}},
+    formato:{Story:'leve',Ajuste:'leve',Post:'media',Carrossel:'media',Reels:'alta',Campanha:'alta'},
+    uteis:[1,2,3,4,5],
+    frase:{modo:'lista',fixa:'Feito é melhor que perfeito, mas revisado é melhor que feito.',
+      lista:['Feito é melhor que perfeito, mas revisado é melhor que feito.','Um bom gancho vale mais que dez hashtags.','O cliente não compra post, compra resultado.','Prazo combinado é prazo cumprido.','Menos texto na arte, mais história na legenda.']}};
+  function config(){var c=JSON.parse(JSON.stringify(CONFIG_PADRAO)),g=lerJ('pulse-config');for(var k in g)c[k]=g[k];return c}
+  function faz(u,acao){return u.papel==='admin'||PERM[u.papel].indexOf(acao)>=0}
+  // tema pessoal: cor de destaque e modo claro/escuro (Aparência, no topo)
+  function tema(){var t={cor:'#FF6B1A',modo:'escuro'};try{var g=JSON.parse(localStorage.getItem('pulse-tema')||'{}');if(g.cor)t.cor=g.cor;if(g.modo)t.modo=g.modo}catch(e){}return t}
+  function mistura(h,alvo,f){h=h.replace('#','');var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);function m(x){return Math.round(x+(alvo-x)*f)}return 'rgb('+m(r)+','+m(g)+','+m(b)+')'}
+  function aplicaTema(){
+    if(document.querySelector('.portal-pag'))return; // o portal do cliente usa a marca da agência
+    var t=tema(),el=document.documentElement;el.setAttribute('data-modo',t.modo);
+    if(t.cor.toLowerCase()==='#ff6b1a'&&t.modo==='escuro'){['--laranja','--laranja-claro','--brasa'].forEach(function(v){el.style.removeProperty(v)});return}
+    el.style.setProperty('--laranja',t.cor);
+    var h=t.cor.replace('#',''),lum=(parseInt(h.substr(0,2),16)*299+parseInt(h.substr(2,2),16)*587+parseInt(h.substr(4,2),16)*114)/1000;
+    el.style.setProperty('--laranja-claro',t.modo==='claro'?mistura(t.cor,0,lum>150?.5:.18):mistura(t.cor,255,.35));
+    el.style.setProperty('--brasa',mistura(t.cor,0,.3));
+  }
+  aplicaTema();
+  return {
+    tema:tema,aplicaTema:aplicaTema,salvaTema:function(t){try{localStorage.setItem('pulse-tema',JSON.stringify(t))}catch(e){}aplicaTema()},
+    ACOES:ACOES,PAPEIS:PAPEIS,EQUIPE:EQUIPE,PERM:PERM,ETAPA_ACAO:ETAPA_ACAO,
+    atual:function(){return EQUIPE[ler()]||EQUIPE.RN},
+    entrar:function(k){gravar(EQUIPE[k]?k:'RN');try{localStorage.removeItem('pulse-como')}catch(e){}},
+    entrarComo:function(k){var de=ler()||'RN';gravar(k);try{localStorage.setItem('pulse-como',de)}catch(e){}},
+    voltar:function(){var de=null;try{de=localStorage.getItem('pulse-como');localStorage.removeItem('pulse-como')}catch(e){}gravar(de||'RN')},
+    comoDe:function(){try{return localStorage.getItem('pulse-como')}catch(e){return null}},
+    sair:function(){gravar(null);try{localStorage.removeItem('pulse-como')}catch(e){}},
+    ajusta:ajusta,
+    perm:function(papel,acao,v){if(papel==='admin')return;var l=PERM[papel],i=l.indexOf(acao);if(v&&i<0)l.push(acao);if(!v&&i>=0)l.splice(i,1);var p=lerJ('pulse-perm');p[papel]=l;gravaJ('pulse-perm',p)},
+    padraoFuncao:function(papel){PERM[papel]=PAPEIS[papel].padrao.slice();var p=lerJ('pulse-perm');delete p[papel];gravaJ('pulse-perm',p)},
+    aceitar:function(c){var k=(c.nome.split(' ').map(function(x){return x[0]}).join('').toUpperCase()+'XX').slice(0,2);while(EQUIPE[k])k=k[0]+String.fromCharCode(65+Math.floor(Math.random()*26));
+      var u={k:k,nome:c.nome.split(' ')[0],completo:c.nome,papel:c.papel,email:c.email.toLowerCase(),cor:'#57534e,#292524',clientes:c.clientes,cap:10,novo:true};
+      EQUIPE[k]=u;var n=lerJ('pulse-novos');n[k]=u;gravaJ('pulse-novos',n);return u},
+    config:config,configPadrao:function(){return JSON.parse(JSON.stringify(CONFIG_PADRAO))},
+    salvaConfig:function(c){gravaJ('pulse-config',c)},
+    fraseDoDia:function(d){var f=config().frase;if(f.modo==='off')return null;if(f.modo==='fixa')return f.fixa;var l=f.lista.length?f.lista:[f.fixa];d=d||new Date(2026,9,22);var n=Math.floor(d.getTime()/864e5);return l[((n%l.length)+l.length)%l.length]},
+    restaura:function(){try{['pulse-ajustes','pulse-perm','pulse-novos','pulse-config','pulse-tema','pulse-conteudos','pulse-status'].forEach(function(c){localStorage.removeItem(c)})}catch(e){}},
+    porEmail:function(e){e=(e||'').toLowerCase().trim();for(var k in EQUIPE)if(EQUIPE[k].email===e)return k;for(var j in EQUIPE)if(EQUIPE[j].email.split('@')[0]===e.split('@')[0])return j;return null},
+    faz:faz,
+    gerencia:function(u){return faz(u,'ver_todas')},
+    pode:function(u,nav){var a=NAV_ACAO[nav];return !a||faz(u,a)},
+    podeMover:function(u,para){var a=ETAPA_ACAO[para];return !a||faz(u,a)},
+    atende:function(u,cli){return u.clientes.indexOf(cli)>=0},
+    lista:function(u){return ACOES.filter(function(a){return faz(u,a.k)}).map(function(a){return a.n})}
+  };
+})();
+</script>

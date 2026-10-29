@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse Creator · Contratos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/*BASE*/
+.titulo{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.titulo h2{font-size:28px;font-weight:700;letter-spacing:-.03em}
+.titulo p{color:var(--texto-2);margin-top:4px}
+.btn.fantasma{color:var(--texto-2);background:var(--fosco);border:1px solid var(--borda)}
+.btn.fantasma:hover{color:var(--texto)}
+
+/* resumo */
+.resumo{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.res{padding:16px 18px;border-radius:20px}
+.res .rotulo{color:var(--texto-3)}
+.res b{display:block;margin:8px 0 4px;font-size:28px;font-weight:700;letter-spacing:-.04em}
+.res small{color:var(--texto-3);font-size:12px}
+.res.ambar{border-color:rgba(255,181,71,.35);background:linear-gradient(180deg,rgba(255,181,71,.09),rgba(255,181,71,.02))}
+.res.ambar b{color:var(--ambar)}
+.res.lar b{color:var(--laranja-claro)}
+
+/* status */
+.st{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st.ativo{color:#9BE3B0;background:rgba(155,227,176,.10)}
+.st.vencer{color:var(--ambar);background:rgba(255,181,71,.12)}
+.st.aguardando{color:var(--laranja-claro);background:color-mix(in srgb,var(--laranja) 13%,transparent)}
+.st.encerrado{color:var(--texto-3);background:color-mix(in srgb,var(--tinta) 6%,transparent)}
+
+/* layout lista + detalhe */
+.duo{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(340px,1fr);gap:16px;align-items:start}
+.filtros{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filtros .pilulas button{padding:7px 13px;font-size:12.5px}
+.linhas{display:flex;flex-direction:column;gap:8px}
+.linha{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 92px 158px 20px;gap:14px;align-items:center;padding:12px 14px;border-radius:16px;
+  background:var(--fosco);border:1px solid transparent;cursor:pointer;transition:all .2s;text-align:left;width:100%}
+.linha:hover{background:color-mix(in srgb,var(--tinta) 5%,transparent);border-color:var(--borda)}
+.linha.sel{background:color-mix(in srgb,var(--laranja) 8%,transparent);border-color:color-mix(in srgb,var(--laranja) 38%,transparent);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.linha .cli{min-width:0}
+.linha .cli div{min-width:0}
+.linha .cli b{display:block;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.linha .cli small{display:block;color:var(--texto-3);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.linha .av{width:32px;height:32px;font-size:11px;flex:none}
+.vig small{display:block;font-size:11.5px;color:var(--texto-3)}
+.prog{margin-top:6px;height:5px;border-radius:99px;background:color-mix(in srgb,var(--tinta) 7%,transparent);overflow:hidden}
+.prog i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brasa),var(--laranja))}
+.valor{font-weight:600;font-size:13px}
+.valor small{display:block;font-weight:400;color:var(--texto-3);font-size:11px}
+.olho{color:var(--texto-3)}.olho.on{color:var(--laranja-claro)}
+.cab-lista{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 92px 158px 20px;gap:14px;padding:0 14px 6px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--texto-3)}
+
+/* detalhe */
+.detalhe{position:sticky;top:20px;padding:20px;border-radius:26px}
+.det-cab{display:flex;gap:12px;align-items:center}
+.det-cab .av{width:42px;height:42px;font-size:14px;flex:none}
+.det-cab h3{font-size:16px;font-weight:700;letter-spacing:-.02em}
+.det-cab p{color:var(--texto-3);font-size:12.5px}
+.pdf{margin-top:16px;display:flex;gap:14px;align-items:center;padding:14px;border-radius:18px;background:var(--fosco);border:1px solid var(--borda)}
+.folha{width:54px;height:70px;border-radius:8px;flex:none;position:relative;background:linear-gradient(180deg,#f3eee8,#d9d2ca);box-shadow:0 6px 16px rgba(0,0,0,.4);overflow:hidden}
+.folha::before{content:"";position:absolute;left:8px;right:8px;top:12px;height:30px;background:repeating-linear-gradient(180deg,#9a928a 0 2px,transparent 2px 6px);opacity:.5}
+.folha::after{content:"PDF";position:absolute;left:0;right:0;bottom:0;padding:3px 0;text-align:center;font-size:9px;font-weight:700;color:#fff;background:var(--brasa)}
+.pdf b{display:block;font-size:13px}
+.pdf small{color:var(--texto-3);font-size:11.5px}
+.pdf .esp{flex:1}
+.icone-b{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--vidro-2);border:1px solid var(--borda);color:var(--texto-2)}
+.icone-b:hover{color:var(--texto)}
+.dados{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.dado{padding:11px 13px;border-radius:14px;background:var(--fosco)}
+.dado small{display:block;font-size:11px;color:var(--texto-3)}
+.dado b{font-size:13.5px;font-weight:600}
+.sec{margin-top:18px}
+.sec h4{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--texto-3)}
+.escopo{display:flex;flex-direction:column;gap:10px}
+.esc{display:grid;grid-template-columns:70px 1fr 54px;gap:10px;align-items:center;font-size:12.5px}
+.esc span{color:var(--texto-2)}
+.esc .tr{height:8px;border-radius:99px;background:color-mix(in srgb,var(--tinta) 7%,transparent);overflow:hidden}
+.esc .tr i{display:block;height:100%;border-radius:99px;background:var(--laranja)}
+.esc .tr i.ok{background:var(--ambar)}
+.esc b{text-align:right;font-weight:600}
+.esc b small{color:var(--texto-3);font-weight:400}
+.interruptor{display:flex;align-items:center;gap:12px;margin-top:18px;padding:13px 14px;border-radius:16px;background:var(--fosco);border:1px solid var(--borda);cursor:pointer;width:100%;text-align:left}
+.interruptor div{flex:1}
+.interruptor b{display:block;font-size:13px;font-weight:600}
+.interruptor small{color:var(--texto-3);font-size:11.5px}
+.chave{width:42px;height:24px;border-radius:99px;flex:none;position:relative;background:color-mix(in srgb,var(--tinta) 12%,transparent);transition:background .25s}
+.chave::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4);transition:transform .35s var(--mola)}
+[aria-checked=true] .chave{background:var(--laranja)}
+[aria-checked=true] .chave::after{transform:translateX(18px)}
+.historico{position:relative;display:flex;flex-direction:column;gap:12px;padding-left:18px}
+.historico::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:color-mix(in srgb,var(--tinta) 12%,transparent)}
+.ev{position:relative;font-size:12.5px}
+.ev::before{content:"";position:absolute;left:-18px;top:5px;width:9px;height:9px;border-radius:50%;background:#2a2420;border:2px solid var(--texto-3)}
+.ev.forte::before{border-color:var(--laranja);background:var(--laranja);box-shadow:0 0 8px var(--laranja)}
+.ev small{display:block;color:var(--texto-3);font-size:11.5px}
+.det-acoes{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+
+/* modal */
+.veu{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:16px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);overflow:auto}
+.veu.aberto{display:grid;animation:aparece .25s ease}
+@keyframes aparece{from{opacity:0}}
+.modal{width:min(560px,100%);padding:26px;border-radius:28px;background:color-mix(in srgb,var(--superficie) 82%,transparent);animation:sobe .35s var(--mola)}
+@keyframes sobe{from{transform:translateY(16px) scale(.98);opacity:0}}
+.modal h3{font-size:19px;font-weight:700;letter-spacing:-.02em}
+.modal>p{color:var(--texto-3);font-size:12.5px;margin-top:4px}
+.soltar{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:26px;border-radius:20px;text-align:center;cursor:pointer;
+  border:1.5px dashed color-mix(in srgb,var(--laranja) 40%,transparent);background:color-mix(in srgb,var(--laranja) 5%,transparent);transition:all .2s}
+.soltar:hover,.soltar.sobre{background:color-mix(in srgb,var(--laranja) 10%,transparent);border-color:var(--laranja)}
+.soltar svg{color:var(--laranja-claro)}
+.soltar b{font-size:13.5px}
+.soltar small{color:var(--texto-3);font-size:12px}
+.campo{margin-top:14px}
+.campo label{display:block;font-size:12px;font-weight:600;color:var(--texto-2);margin-bottom:7px}
+.campo input,.campo select{width:100%;padding:11px 14px;border-radius:14px;background:var(--fosco);border:1px solid var(--borda);color:var(--texto);font:inherit;outline:none}
+.campo input:focus,.campo select:focus{border-color:color-mix(in srgb,var(--laranja) 50%,transparent)}
+.campo select option{background:var(--superficie)}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.acoes{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+
+/* ---------- portal do cliente ---------- */
+.portal{display:none;position:relative;z-index:1;min-height:100vh}
+.ver-cliente .app{display:none}
+.ver-cliente .portal{display:block}
+.barra-portal{position:sticky;top:0;z-index:5;padding:14px 24px 0}
+.barra-portal .vidro{border-radius:24px;padding:14px 18px 12px;background:color-mix(in srgb,var(--superficie) 60%,transparent)}
+.bp-topo{display:flex;align-items:center;gap:12px}
+.bp-topo .logo-ag{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#1d0c03;
+  background:linear-gradient(135deg,var(--laranja-claro),var(--laranja) 45%,var(--brasa));box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.bp-topo b{font-size:14px}
+.bp-topo small{display:block;color:var(--texto-3);font-size:11.5px}
+.bp-topo .esp{flex:1}
+.bp-topo .av{width:34px;height:34px;font-size:12px;margin:0}
+.abas{margin-top:12px;overflow-x:auto}
+.abas .pilulas{background:var(--fosco)}
+.abas .pilulas button{padding:7px 14px;font-size:13px;white-space:nowrap}
+.conteudo-portal{max-width:980px;margin:0 auto;padding:28px 24px 120px}
+.ola{font-size:clamp(24px,3vw,32px);font-weight:700;letter-spacing:-.03em}
+.ola em{font-style:normal;color:var(--laranja)}
+.sub{color:var(--texto-2);margin-top:6px}
+.pendente{margin-top:22px;display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:22px;border-color:color-mix(in srgb,var(--laranja) 40%,transparent);
+  background:linear-gradient(120deg,color-mix(in srgb,var(--laranja) 16%,transparent),color-mix(in srgb,var(--laranja) 4%,transparent))}
+.pendente .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--laranja) 20%,transparent);color:var(--laranja-claro)}
+.pendente div{flex:1}
+.pendente b{display:block;font-size:14.5px}
+.pendente small{color:var(--texto-2);font-size:12.5px}
+.contratos-cli{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.cc{padding:22px;border-radius:24px}
+.cc .topo-cc{display:flex;align-items:flex-start;gap:12px}
+.cc .topo-cc div{flex:1}
+.cc h3{font-size:16px;font-weight:700;letter-spacing:-.02em}
+.cc p{color:var(--texto-3);font-size:12.5px;margin-top:3px}
+.mes{margin-top:16px;padding:14px;border-radius:16px;background:var(--fosco)}
+.mes .linha-mes{display:flex;justify-content:space-between;font-size:12.5px;color:var(--texto-2);margin-bottom:8px}
+.mes .linha-mes b{color:var(--texto)}
+.cc .acoes-cc{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.cc.inteiro{grid-column:1/-1}
+.encerrados{margin-top:26px}
+.encerrados h4{margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--texto-3)}
+.vazio-cli{color:var(--texto-3);font-size:13px;padding:16px;border-radius:16px;border:1px dashed color-mix(in srgb,var(--tinta) 10%,transparent)}
+
+/* assinatura */
+.quadro-ass{margin-top:8px;position:relative;border-radius:16px;background:#f4efe9;height:150px;overflow:hidden;touch-action:none}
+.quadro-ass canvas{width:100%;height:100%;display:block;cursor:crosshair}
+.quadro-ass .linha-ass{position:absolute;left:20px;right:20px;bottom:34px;border-bottom:1px solid #b9b0a6;pointer-events:none}
+.quadro-ass .dica-ass{position:absolute;left:20px;bottom:12px;font-size:11px;color:#8d847a;pointer-events:none}
+.quadro-ass button{position:absolute;top:8px;right:8px;font-size:11.5px;color:#6b625a;padding:4px 8px;border-radius:8px;background:rgba(0,0,0,.06)}
+.concordo{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:12.5px;color:var(--texto-2)}
+.concordo input{margin-top:2px;accent-color:var(--laranja)}
+.selo-ass{margin-top:12px;font-size:11.5px;color:var(--texto-3);display:flex;gap:6px;align-items:center}
+
+/* controle do protótipo */
+.ver-como{position:fixed;z-index:30;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px 6px 6px 14px;border-radius:99px;
+  background:color-mix(in srgb,var(--superficie) 70%,transparent)}
+.ver-como span{font-size:11.5px;color:var(--texto-3);white-space:nowrap}
+.ver-como .pilulas{padding:3px;background:var(--fosco);box-shadow:none;border:0;backdrop-filter:none}
+.ver-como .pilulas button{padding:7px 14px;font-size:12.5px}
+.toast{position:fixed;z-index:40;left:50%;top:22px;transform:translate(-50%,-20px);opacity:0;padding:12px 18px;border-radius:16px;font-size:13px;transition:all .35s var(--mola);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1240px){.duo{grid-template-columns:1fr}.detalhe{position:static}}
+@media (max-width:1000px){.resumo{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){
+  .linha,.cab-lista{grid-template-columns:minmax(0,1fr) 100px}
+  .linha .vig,.linha .valor,.linha .olho,.cab-lista span:nth-child(2),.cab-lista span:nth-child(3),.cab-lista span:nth-child(5){display:none}
+  .contratos-cli{grid-template-columns:1fr}
+  .barra-portal{padding:10px 12px 0}.conteudo-portal{padding:22px 16px 120px}
+  .duas,.tres{grid-template-columns:1fr}
+}
+.duo>*,.resumo>*{min-width:0}
+.filtros{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+@media (max-width:760px){
+  .linha,.cab-lista{grid-template-columns:minmax(0,1fr) auto}
+  .res b{font-size:22px}
+  .cartao{padding:14px}
+  .topo .btn.fantasma{display:none}
+}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+
+<!-- ================= visão da agência ================= -->
+<div class="app">
+<!--LATERAL:contratos-->
+  <main class="principal">
+    <header class="topo">
+      <h1>Contratos</h1>
+      <div class="esp"></div>
+      <button class="btn fantasma"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Gerar de um modelo</button>
+      <button class="btn primario" data-abrir-upload><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg>Subir contrato</button>
+    </header>
+
+    <div class="titulo entra"><div><h2>Contratos da agência</h2><p>Tudo o que foi combinado com cada cliente, num lugar só. Você escolhe o que aparece no portal dele.</p></div></div>
+
+    <section class="resumo" data-resumo></section>
+
+    <section class="duo">
+      <div class="cartao vidro entra" style="animation-delay:.1s">
+        <div class="filtros">
+          <div class="pilulas vidro" role="group" aria-label="Filtrar contratos" data-pilulas data-grupo="filtro">
+            <span class="lente"></span>
+            <button aria-pressed="true" data-f="todos">Todos</button>
+            <button aria-pressed="false" data-f="ativo">Ativos</button>
+            <button aria-pressed="false" data-f="vencer">A vencer</button>
+            <button aria-pressed="false" data-f="aguardando">Aguardando assinatura</button>
+            <button aria-pressed="false" data-f="encerrado">Encerrados</button>
+          </div>
+        </div>
+        <div class="cab-lista"><span>Contrato</span><span>Vigência</span><span>Valor/mês</span><span>Status</span><span title="Visível no portal do cliente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span></div>
+        <div class="linhas" data-linhas></div>
+      </div>
+
+      <aside class="detalhe vidro especular entra" style="animation-delay:.15s" data-detalhe></aside>
+    </section>
+  </main>
+</div>
+
+<!-- ================= visão do cliente (portal) ================= -->
+<div class="portal">
+  <div class="barra-portal">
+    <div class="vidro especular">
+      <div class="bp-topo">
+        <span class="logo-ag" data-pt-logo>EF</span>
+        <div><b>Clínica Aurora</b><small data-pt-ag>Portal do cliente · Estúdio Faísca</small></div>
+        <div class="esp"></div>
+        <span class="av" style="background:linear-gradient(135deg,#FF9A57,#C2410C)">AR</span>
+      </div>
+      <nav class="abas">
+        <div class="pilulas" role="group" aria-label="Seções do portal" data-pilulas data-grupo="abas">
+          <span class="lente"></span>
+          <button aria-pressed="false">Planejamento</button><button aria-pressed="false">Pedidos</button><button aria-pressed="false">Mensagens</button>
+          <button aria-pressed="false">Relatório</button><button aria-pressed="false">Agenda</button><button aria-pressed="false">Arquivos</button>
+          <button aria-pressed="true">Contratos</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <div class="conteudo-portal" data-portal></div>
+</div>
+
+<!-- controle do protótipo -->
+<div class="ver-como vidro">
+  <span>Protótipo · ver como</span>
+  <div class="pilulas" role="group" aria-label="Ver como" data-pilulas data-grupo="ver">
+    <span class="lente"></span>
+    <button aria-pressed="true" data-ver="agencia">Agência</button>
+    <button aria-pressed="false" data-ver="cliente">Cliente</button>
+  </div>
+</div>
+<div class="toast vidro" data-toast></div>
+<!--MARCA-->
+
+<!-- modal: subir contrato -->
+<div class="veu" data-veu="upload">
+  <form class="modal vidro especular" data-form-upload>
+    <h3>Subir contrato</h3>
+    <p>O escopo vira a cota mensal do cliente e entra na meta do dashboard.</p>
+    <label class="soltar" data-soltar>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg>
+      <b data-nome-arq>Arraste o PDF aqui ou clique para escolher</b>
+      <small>PDF até 20 MB</small>
+      <input type="file" accept="application/pdf" hidden data-arquivo>
+    </label>
+    <div class="duas">
+      <div class="campo"><label for="u-cli">Cliente</label><select id="u-cli" data-u-cli></select></div>
+      <div class="campo"><label for="u-tipo">Tipo</label><select id="u-tipo"><option>Social media</option><option>Pack completo</option><option>Aditivo</option><option>Avulso</option></select></div>
+    </div>
+    <div class="duas">
+      <div class="campo"><label for="u-ini">Início</label><input id="u-ini" type="date" value="2026-11-01"></div>
+      <div class="campo"><label for="u-fim">Fim</label><input id="u-fim" type="date" value="2027-10-31"></div>
+    </div>
+    <div class="duas">
+      <div class="campo"><label for="u-valor">Valor mensal (R$)</label><input id="u-valor" inputmode="numeric" value="2.000"></div>
+      <div class="campo"><label for="u-dia">Dia do vencimento</label><input id="u-dia" inputmode="numeric" value="10"></div>
+    </div>
+    <div class="campo"><label>Escopo por mês</label>
+      <div class="tres"><input aria-label="Posts" value="8 posts"><input aria-label="Reels" value="4 reels"><input aria-label="Stories" value="12 stories"></div>
+    </div>
+    <button type="button" class="interruptor" role="switch" aria-checked="true" data-u-portal><div><b>Mostrar no portal do cliente</b><small>Ele vê, baixa e assina pelo portal</small></div><span class="chave"></span></button>
+    <div class="acoes"><button type="button" class="btn fantasma" data-fechar>Cancelar</button><button class="btn primario">Salvar e enviar para assinatura</button></div>
+  </form>
+</div>
+
+<!-- modal: assinar -->
+<div class="veu" data-veu="assinar">
+  <form class="modal vidro especular" data-form-assinar>
+    <h3>Assinar contrato</h3>
+    <p data-ass-nome></p>
+    <div class="duas">
+      <div class="campo"><label for="a-nome">Nome completo</label><input id="a-nome" required value="Ana Ribeiro"></div>
+      <div class="campo"><label for="a-cpf">CPF</label><input id="a-cpf" required placeholder="000.000.000-00" inputmode="numeric"></div>
+    </div>
+    <div class="campo"><label>Assinatura</label>
+      <div class="quadro-ass"><canvas data-canvas></canvas><span class="linha-ass"></span><span class="dica-ass">Desenhe com o dedo ou o mouse</span><button type="button" data-limpar>Limpar</button></div>
+    </div>
+    <label class="concordo"><input type="checkbox" required> Li o contrato inteiro e concordo com os termos.</label>
+    <p class="selo-ass"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Registramos data, hora, IP e um código do PDF que comprova que o documento não mudou.</p>
+    <div class="acoes"><button type="button" class="btn fantasma" data-fechar>Cancelar</button><button class="btn primario">Assinar</button></div>
+  </form>
+</div>
+
+<script>
+(function(){
+  var HOJE=new Date(2026,9,22);
+  var CLIENTES={CA:['Clínica Aurora','#FF9A57,#C2410C'],FB:['Forno Bravo','#f59e0b,#b45309'],SM:['Studio Move','#78716c,#44403c'],CL:['Casa Lume','#ea580c,#7c2d12'],OD:['Odonto Prado','#d97706,#78350f'],PB:['Pet Bistrô','#57534e,#292524']};
+  var C=[
+    {cli:'CA',tipo:'Social media · 12 meses',ini:'2026-03-01',fim:'2027-02-28',valor:2400,dia:10,renova:true,esc:[['Posts',8,6],['Reels',4,3],['Stories',12,10]],st:'assinado',portal:true,arq:'contrato-clinica-aurora.pdf',kb:184,
+     hist:[['18/02','Enviado para assinatura'],['19/02','Visto pelo cliente'],['19/02','Assinado por Ana Ribeiro',1]]},
+    {cli:'CA',tipo:'Aditivo · Ensaio fotográfico trimestral',ini:'2026-11-01',fim:'2027-02-28',valor:300,dia:10,renova:false,esc:[['Ensaio',1,0]],st:'aguardando',portal:true,arq:'aditivo-ensaio-aurora.pdf',kb:96,
+     hist:[['20/10','Enviado para assinatura',1],['21/10','Visto pelo cliente']]},
+    {cli:'FB',tipo:'Pack completo · 6 meses',ini:'2026-05-20',fim:'2026-11-20',valor:3200,dia:5,renova:true,esc:[['Posts',12,9],['Reels',6,5],['Stories',20,18]],st:'assinado',portal:true,arq:'pack-forno-bravo.pdf',kb:212,
+     hist:[['14/05','Enviado para assinatura'],['15/05','Assinado por Marcos Lima',1]]},
+    {cli:'SM',tipo:'Social media · 6 meses',ini:'2026-05-01',fim:'2026-10-31',valor:1500,dia:15,renova:false,esc:[['Posts',6,6],['Reels',2,2]],st:'assinado',portal:true,arq:'contrato-studio-move.pdf',kb:170,
+     hist:[['25/04','Assinado por Júlia Castro',1],['15/10','Aviso de vencimento enviado']]},
+    {cli:'CL',tipo:'Social media · 12 meses',ini:'2026-01-10',fim:'2027-01-09',valor:1900,dia:10,renova:true,esc:[['Posts',8,7],['Stories',8,8]],st:'assinado',portal:false,arq:'contrato-casa-lume.pdf',kb:166,
+     hist:[['08/01','Assinado por Rafael Nunes',1]]},
+    {cli:'OD',tipo:'Social media · 12 meses',ini:'2026-11-01',fim:'2027-10-31',valor:2100,dia:10,renova:true,esc:[['Posts',8,0],['Reels',4,0]],st:'aguardando',portal:true,arq:'contrato-odonto-prado.pdf',kb:180,
+     hist:[['20/10','Enviado para assinatura',1],['21/10','Visto pelo cliente']]},
+    {cli:'PB',tipo:'Social media · 6 meses',ini:'2026-01-01',fim:'2026-06-30',valor:1200,dia:10,renova:false,esc:[['Posts',6,0]],st:'encerrado',portal:false,arq:'contrato-pet-bistro.pdf',kb:150,
+     hist:[['30/06','Encerrado sem renovação',1]]}
+  ];
+  var sel=0,filtro='todos';
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function data(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+  function br(s){var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0].slice(2)}
+  function reais(v){return 'R$ '+v.toLocaleString('pt-BR')}
+  function dias(a,b){return Math.round((b-a)/864e5)}
+  function status(c){
+    if(c.st==='aguardando')return ['aguardando','Aguardando assinatura'];
+    if(c.st==='encerrado')return ['encerrado','Encerrado'];
+    var r=dias(HOJE,data(c.fim));
+    if(r<0)return ['encerrado','Encerrado'];
+    if(r<=30)return ['vencer','Vence em '+r+' d'];
+    return ['ativo','Ativo'];
+  }
+  function av(k,tam){var c=CLIENTES[k];return '<span class="av" style="background:linear-gradient(135deg,'+c[1]+')">'+k+'</span>'}
+  function progresso(c){var t=dias(data(c.ini),data(c.fim)),f=dias(data(c.ini),HOJE);return Math.max(0,Math.min(100,f/t*100))}
+  var OLHO='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var OLHO_OFF='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a10 10 0 0 0 5.4-1.6"/></svg>';
+
+  function resumo(){
+    var at=C.filter(function(c){var s=status(c)[0];return s==='ativo'||s==='vencer'});
+    var rec=at.reduce(function(s,c){return s+c.valor},0);
+    var ven=C.filter(function(c){return status(c)[0]==='vencer'});
+    var ag=C.filter(function(c){return status(c)[0]==='aguardando'});
+    $('[data-resumo]').innerHTML=
+      '<div class="res vidro entra"><span class="rotulo">Ativos</span><b>'+at.length+'</b><small>contratos em vigor</small></div>'+
+      '<div class="res vidro lar entra" style="animation-delay:.03s"><span class="rotulo">Receita mensal</span><b>'+reais(rec)+'</b><small>soma dos contratos ativos</small></div>'+
+      '<div class="res vidro ambar entra" style="animation-delay:.06s"><span class="rotulo">Vencem em 30 dias</span><b>'+ven.length+'</b><small>'+(ven.map(function(c){return CLIENTES[c.cli][0]}).join(' · ')||'nenhum')+'</small></div>'+
+      '<div class="res vidro entra" style="animation-delay:.09s"><span class="rotulo">Aguardando assinatura</span><b>'+ag.length+'</b><small>'+(ag.length?'enviados, ainda sem assinatura':'tudo assinado')+'</small></div>';
+  }
+  function linhas(){
+    $('[data-linhas]').innerHTML=C.map(function(c,i){
+      var s=status(c);if(filtro!=='todos'&&s[0]!==filtro)return '';
+      return '<button class="linha'+(i===sel?' sel':'')+'" data-i="'+i+'"><span class="cli">'+av(c.cli)+'<div><b>'+CLIENTES[c.cli][0]+'</b><small>'+c.tipo+'</small></div></span>'+
+        '<span class="vig"><small>'+br(c.ini)+' → '+br(c.fim)+'</small><div class="prog"><i style="width:'+progresso(c)+'%"></i></div></span>'+
+        '<span class="valor">'+reais(c.valor)+'<small>dia '+c.dia+'</small></span><span><span class="st '+s[0]+'">'+s[1]+'</span></span>'+
+        '<span class="olho'+(c.portal?' on':'')+'" title="'+(c.portal?'Visível':'Oculto')+' no portal">'+(c.portal?OLHO:OLHO_OFF)+'</span></button>';
+    }).join('')||'<p style="color:var(--texto-3);padding:16px">Nenhum contrato aqui.</p>';
+    $$('[data-linhas] .linha').forEach(function(b){b.addEventListener('click',function(){sel=+b.dataset.i;desenha()})});
+  }
+  function escopoHtml(c){
+    return '<div class="escopo">'+c.esc.map(function(e){var p=e[1]?Math.min(100,e[2]/e[1]*100):0;
+      return '<div class="esc"><span>'+e[0]+'</span><div class="tr"><i class="'+(e[2]>=e[1]?'ok':'')+'" style="width:'+p+'%"></i></div><b>'+e[2]+'<small>/'+e[1]+'</small></b></div>'}).join('')+'</div>';
+  }
+  function detalhe(){
+    var c=C[sel],s=status(c);
+    $('[data-detalhe]').innerHTML=
+      '<div class="det-cab">'+av(c.cli)+'<div style="flex:1"><h3>'+CLIENTES[c.cli][0]+'</h3><p>'+c.tipo+'</p></div><span class="st '+s[0]+'">'+s[1]+'</span></div>'+
+      '<div class="pdf"><span class="folha"></span><div><b>'+c.arq+'</b><small>'+c.kb+' KB · PDF</small></div><span class="esp"></span>'+
+        '<button class="icone-b" title="Abrir"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>'+
+        '<button class="icone-b" title="Baixar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></button></div>'+
+      '<div class="dados"><div class="dado"><small>Vigência</small><b>'+br(c.ini)+' → '+br(c.fim)+'</b></div><div class="dado"><small>Valor mensal</small><b>'+reais(c.valor)+'</b></div>'+
+        '<div class="dado"><small>Vencimento</small><b>todo dia '+c.dia+'</b></div><div class="dado"><small>Renovação</small><b>'+(c.renova?'automática':'manual')+'</b></div></div>'+
+      '<div class="sec"><h4>Escopo de outubro · contratado × entregue</h4>'+escopoHtml(c)+'</div>'+
+      '<button class="interruptor" role="switch" aria-checked="'+c.portal+'" data-portal-sw><div><b>Visível no portal do cliente</b><small>'+(c.portal?'O cliente vê, baixa'+(c.st==='aguardando'?' e assina':'')+' pelo portal':'Só a agência vê este contrato')+'</small></div><span class="chave"></span></button>'+
+      '<div class="sec"><h4>Histórico</h4><div class="historico">'+c.hist.slice().reverse().map(function(h){return '<div class="ev'+(h[2]?' forte':'')+'">'+h[1]+'<small>'+h[0]+'/2026</small></div>'}).join('')+'</div></div>'+
+      '<div class="det-acoes">'+(s[0]==='aguardando'?'<button class="btn primario" data-lembrar>Lembrar o cliente</button>':'')+
+        (s[0]==='vencer'?'<button class="btn primario" data-renovar>Renovar contrato</button>':'')+
+        '<button class="btn fantasma">Adicionar aditivo</button></div>';
+    $('[data-portal-sw]').addEventListener('click',function(){c.portal=!c.portal;aviso(c.portal?'Agora aparece no portal de '+CLIENTES[c.cli][0]:'Escondido do portal de '+CLIENTES[c.cli][0]);desenha()});
+    var l=$('[data-lembrar]');if(l)l.addEventListener('click',function(){c.hist.push(['22/10','Lembrete enviado ao cliente']);aviso('Lembrete enviado por e-mail');desenha()});
+    var r=$('[data-renovar]');if(r)r.addEventListener('click',function(){aviso('Renovação criada como rascunho')});
+  }
+
+  // portal: só os contratos da Clínica Aurora que estão visíveis
+  function portal(){
+    var meus=C.map(function(c,i){c._i=i;return c}).filter(function(c){return c.cli==='CA'&&c.portal});
+    var pend=meus.filter(function(c){return c.st==='aguardando'});
+    var vig=meus.filter(function(c){return c.st!=='aguardando'&&status(c)[0]!=='encerrado'});
+    var enc=meus.filter(function(c){return status(c)[0]==='encerrado'});
+    var h='<h2 class="ola">Seus <em>contratos</em></h2><p class="sub">O que foi combinado com o Estúdio Faísca e quanto já foi entregue este mês.</p>';
+    pend.forEach(function(c){
+      h+='<div class="pendente vidro"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>'+
+        '<div><b>'+c.tipo+' espera a sua assinatura</b><small>Enviado em 20/10 · '+reais(c.valor)+'/mês a partir de '+br(c.ini)+'</small></div>'+
+        '<button class="btn fantasma">Ler</button><button class="btn primario" data-assinar="'+c._i+'">Assinar</button></div>';
+    });
+    h+='<div class="contratos-cli">';
+    vig.forEach(function(c,k){
+      var tot=c.esc.reduce(function(s,e){return s+e[1]},0),ent=c.esc.reduce(function(s,e){return s+e[2]},0);
+      var t=dias(data(c.ini),data(c.fim)),f=dias(data(c.ini),HOJE);
+      h+='<div class="cc vidro especular'+(vig.length===1?' inteiro':'')+'"><div class="topo-cc"><div><h3>'+c.tipo+'</h3><p>'+br(c.ini)+' → '+br(c.fim)+' · '+reais(c.valor)+'/mês · vence todo dia '+c.dia+'</p></div><span class="st '+status(c)[0]+'">'+status(c)[1]+'</span></div>'+
+        '<div class="mes"><div class="linha-mes"><span>Vigência</span><b>'+Math.round(progresso(c))+'% do período</b></div><div class="prog"><i style="width:'+progresso(c)+'%"></i></div></div>'+
+        '<div class="mes"><div class="linha-mes"><span>Outubro · entregue</span><b>'+ent+' de '+tot+'</b></div>'+escopoHtml(c)+'</div>'+
+        '<div class="acoes-cc"><button class="btn fantasma"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Ler contrato</button>'+
+        '<button class="btn fantasma"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Baixar PDF</button></div></div>';
+    });
+    h+='</div>';
+    h+='<div class="encerrados"><h4>Encerrados</h4>'+(enc.length?'':'<p class="vazio-cli">Nenhum contrato encerrado.</p>')+'</div>';
+    $('[data-portal]').innerHTML=h;
+    $$('[data-assinar]').forEach(function(b){b.addEventListener('click',function(){abreAssinar(+b.dataset.assinar)})});
+  }
+
+  function desenha(){resumo();linhas();detalhe();portal()}
+
+  // toast
+  var tt;function aviso(m){var t=$('[data-toast]');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},2400)}
+
+  // pílulas com lente
+  function pilulas(g){
+    var lente=g.querySelector('.lente');
+    function move(b,anima){if(!b.offsetWidth)return;lente.style.width=b.offsetWidth+'px';lente.style.transform='translateX('+b.offsetLeft+'px)';
+      if(anima){lente.classList.remove('esticando');void lente.offsetWidth;lente.classList.add('esticando')}}
+    g._move=function(){lente.style.transition='none';move(g.querySelector('[aria-pressed=true]'),false);requestAnimationFrame(function(){lente.style.transition=''})};
+    g._move();
+    g.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+      $$('button',g).forEach(function(x){x.setAttribute('aria-pressed',x===b)});move(b,true);
+      if(g.dataset.grupo==='filtro'){filtro=b.dataset.f;linhas()}
+      if(g.dataset.grupo==='ver'){document.body.classList.toggle('ver-cliente',b.dataset.ver==='cliente');scrollTo(0,0);
+        $$('[data-pilulas]').forEach(function(x){if(x!==g)x._move()})}
+    });
+    addEventListener('resize',function(){g._move()});
+  }
+  $$('[data-pilulas]').forEach(pilulas);
+
+  // modais
+  function abre(n){$('[data-veu="'+n+'"]').classList.add('aberto')}
+  function fecha(){$$('.veu').forEach(function(v){v.classList.remove('aberto')})}
+  $$('[data-fechar]').forEach(function(b){b.addEventListener('click',fecha)});
+  $$('.veu').forEach(function(v){v.addEventListener('click',function(e){if(e.target===v)fecha()})});
+  addEventListener('keydown',function(e){if(e.key==='Escape')fecha()});
+
+  // subir contrato
+  $('[data-u-cli]').innerHTML=Object.keys(CLIENTES).map(function(k){return '<option value="'+k+'">'+CLIENTES[k][0]+'</option>'}).join('');
+  $('[data-abrir-upload]').addEventListener('click',function(){abre('upload')});
+  var sol=$('[data-soltar]'),arq=$('[data-arquivo]'),nomeArq=null;
+  function pega(f){if(!f)return;nomeArq=f.name;$('[data-nome-arq]').textContent=f.name}
+  arq.addEventListener('change',function(){pega(arq.files[0])});
+  ['dragover','dragenter'].forEach(function(t){sol.addEventListener(t,function(e){e.preventDefault();sol.classList.add('sobre')})});
+  ['dragleave','drop'].forEach(function(t){sol.addEventListener(t,function(){sol.classList.remove('sobre')})});
+  sol.addEventListener('drop',function(e){e.preventDefault();pega(e.dataTransfer.files[0])});
+  var uPortal=$('[data-u-portal]');uPortal.addEventListener('click',function(){uPortal.setAttribute('aria-checked',uPortal.getAttribute('aria-checked')!=='true')});
+  $('[data-form-upload]').addEventListener('submit',function(e){
+    e.preventDefault();
+    var k=$('[data-u-cli]').value,v=parseInt(($('#u-valor').value||'0').replace(/\D/g,''),10)||0;
+    C.unshift({cli:k,tipo:$('#u-tipo').value+' · novo',ini:$('#u-ini').value,fim:$('#u-fim').value,valor:v,dia:+$('#u-dia').value||10,renova:true,
+      esc:[['Posts',8,0],['Reels',4,0],['Stories',12,0]],st:'aguardando',portal:uPortal.getAttribute('aria-checked')==='true',arq:nomeArq||'contrato-'+k.toLowerCase()+'.pdf',kb:120,
+      hist:[['22/10','Enviado para assinatura',1]]});
+    sel=0;fecha();desenha();aviso('Contrato enviado para '+CLIENTES[k][0]+' assinar');
+  });
+
+  // assinar (portal)
+  var assinando=null,cv=$('[data-canvas]'),ctx,riscou=false;
+  function prepara(){var r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;ctx=cv.getContext('2d');ctx.scale(d,d);
+    ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#1c1612';riscou=false}
+  function abreAssinar(i){assinando=i;$('[data-ass-nome]').textContent=C[i].tipo+' · '+reais(C[i].valor)+'/mês';abre('assinar');$('[data-form-assinar]').reset();$('#a-nome').value='Ana Ribeiro';prepara()}
+  var desenhando=false;
+  function pt(e){var r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]}
+  cv.addEventListener('pointerdown',function(e){desenhando=true;try{cv.setPointerCapture(e.pointerId)}catch(x){}var p=pt(e);ctx.beginPath();ctx.moveTo(p[0],p[1])});
+  cv.addEventListener('pointermove',function(e){if(!desenhando)return;var p=pt(e);ctx.lineTo(p[0],p[1]);ctx.stroke();riscou=true});
+  cv.addEventListener('pointerup',function(){desenhando=false});
+  $('[data-limpar]').addEventListener('click',prepara);
+  $('[data-form-assinar]').addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!riscou){aviso('Desenhe a sua assinatura no quadro');return}
+    var c=C[assinando];c.st='assinado';c.hist.push(['22/10','Assinado por '+$('#a-nome').value,1]);
+    fecha();desenha();aviso('Contrato assinado. A agência já foi avisada.');
+  });
+
+  desenha();
+  if(location.hash==='#cliente')$('[data-ver=cliente]').click();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<script>
+/* Marca da agência no portal do cliente: sigla ou logo, nome e cor (definidos em Configurações). */
+(function(){
+  var P=window.PULSE;if(!P)return;var c=P.config();
+  function mistura(h,alvo,t){h=h.replace('#','');var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);
+    function m(x){return Math.round(x+(alvo-x)*t)}return 'rgb('+m(r)+','+m(g)+','+m(b)+')'}
+  function texto(h){h=h.replace('#','');var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);return (r*299+g*587+b*114)/1000>150?'#1d0c03':'#fff'}
+  [].forEach.call(document.querySelectorAll('[data-pt-logo]'),function(el){el.textContent=c.logo?'':c.sigla;
+    el.style.background=c.logo?'center/cover url('+c.logo+')':c.cor;el.style.color=texto(c.cor)});
+  [].forEach.call(document.querySelectorAll('[data-pt-ag]'),function(el){el.textContent='Portal do cliente · '+c.agencia});
+  if(c.cor.toLowerCase()==='#ff6b1a')return;
+  // página só do portal: a cor vale na página toda (inclusive o fundo); em contratos, só na visão do cliente
+  var alvos=document.querySelector('.portal-pag')?[document.documentElement]:[].slice.call(document.querySelectorAll('.portal'));
+  alvos.forEach(function(el){
+    el.style.setProperty('--laranja',c.cor);el.style.setProperty('--laranja-claro',mistura(c.cor,255,.35));el.style.setProperty('--brasa',mistura(c.cor,0,.3));
+    el.style.setProperty('--acs',mistura(c.cor,0,.6));el.style.setProperty('--texto-botao',texto(c.cor))});
+})();
+</script>

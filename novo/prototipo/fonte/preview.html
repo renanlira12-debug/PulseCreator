@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-BR" data-modo="claro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview · Clínica Aurora · outubro 2026</title>
+<meta property="og:title" content="Preview — Clínica Aurora · out/2026">
+<meta property="og:description" content="Confira e aprove as publicações de outubro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+/*BASE*/
+:root{--salvia:#2F4A3F;--creme:#F1E9DC}
+body{background:#f6f3ee}
+.aurora,.grao{display:none}
+.pv{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:0 18px 60px}
+.topo-pv{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:14px 0;background:color-mix(in srgb,#f6f3ee 88%,transparent);backdrop-filter:blur(16px)}
+.topo-pv .logo-ag{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.topo-pv b{font-size:14px}
+.topo-pv small{display:block;font-size:12px;color:var(--texto-3)}
+.topo-pv .esp{flex:1}
+.pendentes{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;font-size:13px;font-weight:600;color:#1d0c03;background:var(--laranja)}
+.pendentes.ok{color:#1d7a46;background:#dcf3e4}
+.perfil{display:flex;align-items:center;gap:26px;padding:26px 6px 20px;border-bottom:1px solid var(--borda)}
+.perfil .foto{width:96px;height:96px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--creme);background:var(--salvia);box-shadow:0 0 0 3px #fff,0 0 0 5px var(--laranja)}
+.perfil h1{font-size:20px;font-weight:700}
+.perfil .nums{display:flex;gap:22px;margin-top:8px;font-size:14px;color:var(--texto-2)}
+.perfil .nums strong{color:var(--texto)}
+.perfil p{margin-top:8px;font-size:13.5px;line-height:1.5;color:var(--texto-2)}
+.aviso-pv{display:flex;align-items:center;gap:10px;margin:16px 0;padding:12px 16px;border-radius:16px;font-size:13.5px;background:#fff;border:1px solid var(--borda)}
+.aviso-pv svg{flex:none;color:var(--laranja)}
+.feed{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.cel{position:relative;aspect-ratio:4/5;overflow:hidden;cursor:pointer;padding:0;border-radius:4px}
+.cel:hover .arte{transform:scale(1.03)}
+.selo{position:absolute;z-index:3;left:8px;bottom:8px;display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700}
+.selo.pub{color:#1d0c03;background:#C6F432}
+.selo.espera{color:#fff;background:var(--laranja)}
+.selo.aprov{color:#1d7a46;background:#dcf3e4}
+.selo.ajuste{color:#8a4b00;background:#ffe6c2}
+.tipo{position:absolute;z-index:3;right:8px;top:8px;color:#fff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+.arte{position:relative;width:100%;height:100%;overflow:hidden;isolation:isolate;transition:transform .4s}
+.a1{background:var(--salvia);color:var(--creme)}.a2{background:var(--creme);color:var(--salvia)}.a3{background:radial-gradient(120% 90% at 20% 10%,#7FA08A,#2F4A3F 70%);color:var(--creme)}
+.arte .txt{position:absolute;inset:0;padding:8%;display:flex;flex-direction:column;z-index:1}
+.arte .kick{font-size:clamp(7px,1.4vw,10px);font-weight:700;letter-spacing:.14em;opacity:.75;text-transform:uppercase}
+.arte .h{margin-top:auto;font-size:clamp(12px,3vw,26px);line-height:1.02;font-weight:900;letter-spacing:-.035em;text-transform:uppercase}
+.arte .h em{font-style:normal;color:#C9A76A}.a2 .h em{color:#B07D3C}
+.arte .circ{position:absolute;z-index:0;border-radius:50%;opacity:.16;background:currentColor}
+.rodape-pv{margin-top:24px;text-align:center;font-size:12px;color:var(--texto-3)}
+
+/* post aberto */
+.veu{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:20px;background:rgba(20,16,12,.72);backdrop-filter:blur(4px)}
+.veu.aberto{display:grid;animation:aparece .25s}
+@keyframes aparece{from{opacity:0}}
+.post{width:min(960px,100%);max-height:calc(100vh - 40px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,1fr);border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:sobe .35s var(--mola)}
+@keyframes sobe{from{transform:translateY(14px) scale(.98);opacity:0}}
+.slides{position:relative;background:#111;display:grid;place-items:center;min-height:0}
+.slides .arte{aspect-ratio:4/5;height:auto;max-height:calc(100vh - 40px)}
+.slides .arte .h{font-size:clamp(22px,3.4vw,40px)}
+.slides .arte .txt{padding:9%}
+.slides .cont{position:absolute;right:12px;top:12px;z-index:3;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:600;color:#fff;background:rgba(0,0,0,.5)}
+.slides .seta{position:absolute;top:50%;z-index:3;width:34px;height:34px;margin-top:-17px;border-radius:50%;display:grid;place-items:center;color:#1c1916;background:rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.slides .seta:disabled{opacity:0;pointer-events:none}
+.slides .seta.ant{left:12px}.slides .seta.prox{right:12px}
+.slides .pontos{position:absolute;bottom:12px;left:0;right:0;z-index:3;display:flex;justify-content:center;gap:5px}
+.slides .pontos i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5)}
+.slides .pontos i.on{background:#fff}
+.lado{display:flex;flex-direction:column;min-height:0;color:#1c1916}
+.lado-cab{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #eee7df}
+.lado-cab .foto{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:800;color:var(--creme);background:var(--salvia)}
+.lado-cab b{display:block;font-size:13.5px}
+.lado-cab small{font-size:11.5px;color:#8c857d}
+.lado-cab .esp{flex:1}
+.lado-cab button{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#5f5851}
+.lado-cab button:hover{background:#f3eee8}
+.corpo-l{flex:1;overflow:auto;padding:14px 16px}
+.legenda{font-size:13.5px;line-height:1.6;white-space:pre-wrap}
+.legenda b{font-weight:700}
+.legenda.curta{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.mais{font-size:13px;color:#8c857d;margin-top:2px}
+.baixar{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:12.5px;color:#5f5851}
+.baixar:hover{color:#1c1916}
+.sug{margin-top:16px;padding-top:14px;border-top:1px solid #eee7df}
+.sug h4{margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8c857d}
+.sug .item{padding:8px 0;font-size:13px}
+.sug .item b{font-weight:700}
+.sug .item small{display:block;font-size:11.5px;color:#8c857d;margin-top:2px}
+.sug .ok{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border-radius:6px;font-size:11px;font-weight:700;color:#1d7a46;background:#dcf3e4}
+.pe-l{padding:14px 16px;border-top:1px solid #eee7df}
+.bt-l{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bt-l button{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:12px;font-size:13.5px;font-weight:700}
+.aprovar{color:#1d0c03;background:var(--laranja)}
+.aprovar:disabled{opacity:.6}
+.sugerir{color:#1c1916;border:1.5px solid var(--laranja)!important;background:#fff}
+.form-sug{display:none}
+.form-sug.on{display:block}
+.form-sug textarea{width:100%;min-height:80px;padding:10px 12px;border-radius:12px;border:1px solid #e0d8ce;font:inherit;font-size:13px;resize:vertical;outline:none;color:#1c1916;background:#fff}
+.form-sug textarea:focus{border-color:var(--laranja)}
+.form-sug .bt{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+.form-sug .bt button{padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600}
+.feito{text-align:center;padding:8px 0}
+.feito .ic{width:40px;height:40px;margin:0 auto;border-radius:12px;display:grid;place-items:center;color:#fff;background:#22a35a}
+.feito b{display:block;margin-top:10px;font-size:15px}
+.feito small{font-size:12.5px;color:#8c857d}
+.feito.aj .ic{background:#e08a00}
+@media (max-width:760px){.post{grid-template-columns:1fr;max-height:none}.veu{padding:0;align-items:start;overflow:auto}.post{border-radius:0;min-height:100vh}.slides .arte{max-height:none}.perfil{gap:16px}.perfil .foto{width:72px;height:72px}}
+</style>
+</head>
+<body>
+<div class="portal-pag">
+<!--SESSAO-->
+<main class="pv">
+  <header class="topo-pv">
+    <span class="logo-ag" data-pt-logo>EF</span>
+    <div><b>Preview de feed · outubro 2026</b><small data-pt-ag>Estúdio Faísca</small></div>
+    <div class="esp"></div>
+    <span class="pendentes" data-pendentes></span>
+  </header>
+  <section class="perfil">
+    <span class="foto">AURORA</span>
+    <div><h1>clinicaaurora</h1><div class="nums"><span><strong>148</strong> publicações</span><span><strong>8.412</strong> seguidores</span></div>
+      <p><b>Clínica Aurora</b> · Dermatologia &amp; Estética<br>Cuidar da pele é rotina, não milagre. 📍 Recife</p></div>
+  </section>
+  <div class="aviso-pv"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span>Toque em cada publicação para ver a legenda e aprovar ou sugerir uma alteração. Você não precisa de login.</span></div>
+  <div class="feed" data-feed></div>
+  <p class="rodape-pv" data-rodape></p>
+</main>
+</div>
+<div class="veu" data-veu><div class="post" data-post role="dialog" aria-modal="true" aria-label="Publicação"></div></div>
+<!--MARCA-->
+<!--CONTEUDOS-->
+
+<script>
+(function(){
+  var CT=window.CONTEUDOS,CFG=window.PULSE?PULSE.config():{agencia:'Estúdio Faísca'};
+  var DS=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+  function itens(){return CT.lista().filter(function(c){return (c.tipo==='post'||c.tipo==='reels')&&c.portal}).slice().sort(function(a,b){return b.dia-a.dia||b.id-a.id})}
+  function espera(c){return c.etapa==='revisao_cliente'&&!c.aprovacao}
+  function arte(c,i){var est=i?['a2','a3','a1'][(i-1)%3]:c.estilo,ch=i?(['Limpeza','Hidratação','Protetor <em>todo dia</em>','Agende sua <em>avaliação</em>'][i-1]||'Slide'):c.chamada;
+    return '<div class="arte '+est+'"><span class="circ" style="width:60%;aspect-ratio:1;right:-20%;top:-14%"></span><span class="circ" style="width:30%;aspect-ratio:1;left:-10%;bottom:30%"></span><div class="txt"><span class="kick">'+(i?'Slide '+(i+1):c.formato==='Carrossel'?'Arraste para o lado':'Clínica Aurora')+'</span><span class="h">'+ch+'</span></div></div>'}
+  function selo(c){if(c.etapa==='publicado')return '<span class="selo pub">● Publicado</span>';if(c.aprovacao==='aprovado'||c.etapa==='pronto'||c.etapa==='agendado')return '<span class="selo aprov">✓ Aprovado</span>';if(c.aprovacao==='ajuste')return '<span class="selo ajuste">Ajuste pedido</span>';if(espera(c))return '<span class="selo espera">Aguardando você</span>';return ''}
+  function feed(){
+    var L=itens(),n=L.filter(espera).length;
+    $('[data-feed]').innerHTML=L.map(function(c){return '<button class="cel" data-c="'+c.id+'" aria-label="'+esc(c.titulo)+'">'+arte(c,0)+
+      '<span class="tipo">'+(c.tipo==='reels'?'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>':c.formato==='Carrossel'?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="7" y="7" width="14" height="14" rx="3"/><path d="M17 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2"/></svg>':'')+'</span>'+selo(c)+'</button>'}).join('');
+    $$('[data-c]').forEach(function(b){b.addEventListener('click',function(){abre(+b.dataset.c)})});
+    var p=$('[data-pendentes]');p.className='pendentes'+(n?'':' ok');p.textContent=n?n+(n>1?' esperam a sua aprovação':' espera a sua aprovação'):'✓ Tudo revisado';
+    $('[data-rodape]').textContent='Preparado por '+CFG.agencia+' · só aparecem as publicações prontas para você ver';
+  }
+  var slide=0;
+  function abre(id){var c=CT.pega(id),n=Math.max(1,c.slides);slide=0;
+    function desenha(){
+      var sug=c.log.filter(function(x){return (x.tipo==='comentario'&&x.quem==='cliente')||x.tipo==='aprovacao'});
+      $('[data-post]').innerHTML='<div class="slides">'+arte(c,slide)+(n>1?'<span class="cont">'+(slide+1)+'/'+n+'</span><button class="seta ant" data-ant'+(slide?'':' disabled')+' aria-label="Anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M15 18l-6-6 6-6"/></svg></button><button class="seta prox" data-prox'+(slide<n-1?'':' disabled')+' aria-label="Próximo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6"/></svg></button><div class="pontos">'+Array(n+1).join('x').split('').map(function(_,i){return '<i class="'+(i===slide?'on':'')+'"></i>'}).join('')+'</div>':'')+'</div>'+
+        '<div class="lado"><div class="lado-cab"><span class="foto">AUR</span><div><b>clinicaaurora</b><small>'+(c.etapa==='publicado'?'Publicado':'Publicação prevista')+': '+DS[new Date(2026,9,c.dia).getDay()]+', '+('0'+c.dia).slice(-2)+'/10'+(c.hora&&c.hora!=='—'?' às '+c.hora:'')+'</small></div><span class="esp"></span><button data-fecha aria-label="Fechar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'+
+        '<div class="corpo-l"><p class="legenda curta" data-leg><b>clinicaaurora</b> '+esc(c.legenda)+'</p><button class="mais" data-mais>mais</button><br><button class="baixar" data-baixar><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Baixar em alta qualidade</button>'+
+          '<div class="sug"><h4>Sugestões · '+sug.length+'</h4>'+(sug.length?sug.map(function(x){return x.tipo==='aprovacao'?'<div class="item"><b>Você</b> <span class="ok">✓ APROVADO</span><small>'+x.quando+'</small></div>':'<div class="item"><b>Você</b> '+esc(x.texto)+'<small>'+x.quando+'</small></div>'}).join(''):'<p style="font-size:13px;color:#8c857d">Nenhuma sugestão ainda.</p>')+'</div></div>'+
+        '<div class="pe-l">'+(c.etapa==='publicado'?'<div class="feito"><span class="ic">✓</span><b>Já está no ar</b><small>Publicado no Instagram</small></div>':
+          c.aprovacao==='aprovado'?'<div class="feito"><span class="ic">✓</span><b>Publicação aprovada!</b><small>Agradecemos a sua confirmação.</small></div>':
+          c.aprovacao==='ajuste'?'<div class="feito aj"><span class="ic">✎</span><b>Sugestão enviada</b><small>A agência vai ajustar e te mostra de novo.</small></div>':
+          '<div class="bt-l" data-bts><button class="aprovar" data-aprovar>✓ Aprovar post</button><button class="sugerir" data-sugerir>✎ Sugerir alteração</button></div><form class="form-sug" data-form><textarea placeholder="O que você quer mudar? Ex.: trocar a foto do slide 3" aria-label="Sugestão"></textarea><div class="bt"><button type="button" data-cancela>Cancelar</button><button class="aprovar">Enviar sugestão</button></div></form>')+'</div></div>';
+      $('[data-fecha]').addEventListener('click',fecha);
+      var a=$('[data-ant]');if(a)a.addEventListener('click',function(){slide--;desenha()});var p=$('[data-prox]');if(p)p.addEventListener('click',function(){slide++;desenha()});
+      $('[data-mais]').addEventListener('click',function(){$('[data-leg]').classList.remove('curta');this.remove()});
+      $('[data-baixar]').addEventListener('click',function(){this.textContent='Preparando o arquivo…'});
+      var ap=$('[data-aprovar]');if(ap)ap.addEventListener('click',function(){ap.disabled=true;ap.textContent='Aprovando…';setTimeout(function(){
+        var log=c.log.concat([{tipo:'aprovacao',quem:'cliente',quando:'agora'}]),patch={aprovacao:'aprovado',log:log};
+        if(c.etapa==='revisao_cliente'){patch.etapa='pronto';patch.log=log.concat([{tipo:'status',etapa:'pronto',quando:'agora',quem:'cliente'}])}
+        CT.salva(c.id,patch);desenha();feed()},700)});
+      var sg=$('[data-sugerir]');if(sg)sg.addEventListener('click',function(){$('[data-bts]').style.display='none';$('[data-form]').classList.add('on');$('[data-form] textarea').focus()});
+      var cc=$('[data-cancela]');if(cc)cc.addEventListener('click',function(){$('[data-form]').classList.remove('on');$('[data-bts]').style.display=''});
+      var f=$('[data-form]');if(f)f.addEventListener('submit',function(e){e.preventDefault();var t=$('textarea',f).value.trim();if(!t){$('textarea',f).focus();return}
+        CT.salva(c.id,{aprovacao:'ajuste',log:c.log.concat([{tipo:'comentario',quem:'cliente',texto:t,quando:'agora'}])});desenha();feed()});
+    }
+    desenha();$('[data-veu]').classList.add('aberto');
+  }
+  function fecha(){$('[data-veu]').classList.remove('aberto')}
+  $('[data-veu]').addEventListener('click',function(e){if(e.target===this)fecha()});
+  addEventListener('keydown',function(e){if(e.key==='Escape')fecha();if(!$('[data-veu]').classList.contains('aberto'))return;if(e.key==='ArrowRight'){var p=$('[data-prox]');if(p&&!p.disabled)p.click()}if(e.key==='ArrowLeft'){var a=$('[data-ant]');if(a&&!a.disabled)a.click()}});
+  feed();
+})();
+</script>
+</body>
+</html>

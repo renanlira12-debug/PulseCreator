@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clínica Aurora · Relatório</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+<style>
+/*BASE*/
+.cab-r{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.cab-r .esp{flex:1}
+.cab-r .pilulas button{padding:8px 15px;font-size:12.5px;font-weight:600}
+.mes-sel{display:inline-flex;align-items:center;gap:4px;padding:4px;border-radius:99px}
+.mes-sel b{padding:0 10px;font-size:13px;font-weight:600;min-width:118px;text-align:center}
+.mes-sel button{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--texto-2)}
+.mes-sel button:hover:not(:disabled){background:var(--vidro-2);color:var(--texto)}
+.mes-sel button:disabled{opacity:.3;cursor:default}
+
+/* resumo escrito */
+.resumo-r{margin-top:20px;display:flex;gap:18px;padding:22px 24px;border-radius:26px}
+.resumo-r .ic{width:42px;height:42px;border-radius:14px;flex:none;display:grid;place-items:center;color:var(--laranja-claro);background:color-mix(in srgb,var(--laranja) 14%,transparent)}
+.resumo-r h3{font-size:16px;font-weight:700;letter-spacing:-.02em}
+.resumo-r p{margin-top:8px;font-size:14px;line-height:1.65;color:var(--texto-2);max-width:780px}
+.resumo-r p b{color:var(--texto);font-weight:600}
+.assinado{margin-top:10px;font-size:11.5px;color:var(--texto-3)}
+
+/* números */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px}
+.kpi{padding:18px 20px;border-radius:22px}
+.kpi b{display:block;margin:8px 0 8px;font-size:30px;font-weight:700;letter-spacing:-.04em}
+.kpi small{color:var(--texto-3);font-size:12px;margin-left:4px}
+
+/* blocos */
+.duas-r{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;margin-top:16px}
+.bloco-r{padding:22px;border-radius:24px;min-width:0}
+.bloco-r .cab{margin-bottom:14px}
+.bloco-r .cab .alt{font-size:12px;color:var(--texto-3);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.bloco-r .cab .alt:hover{color:var(--texto)}
+.analise{margin-top:16px;padding:12px 14px;border-radius:14px;background:var(--fosco);border-left:2px solid var(--laranja);font-size:13px;line-height:1.6;color:var(--texto-2)}
+.analise b{color:var(--texto);font-weight:600}
+
+/* gráfico de área */
+.area{position:relative}
+.area svg{display:block;width:100%;height:220px;overflow:visible}
+.area .grade-l{stroke:color-mix(in srgb,var(--tinta) 7%,transparent)}
+.area .eixo-t{fill:var(--texto-3);font-size:10.5px;font-family:Inter,sans-serif}
+.area .linha{fill:none;stroke:var(--laranja);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.area .cursor{stroke:color-mix(in srgb,var(--tinta) 35%,transparent);stroke-width:1;stroke-dasharray:3 3;opacity:0}
+.area .ponto{fill:var(--laranja);stroke:var(--superficie);stroke-width:2;opacity:0}
+.area.ativa .cursor,.area.ativa .ponto{opacity:1}
+.dica{position:absolute;z-index:3;pointer-events:none;padding:8px 11px;border-radius:12px;font-size:12px;white-space:nowrap;opacity:0;transform:translate(-50%,-110%);
+  background:color-mix(in srgb,var(--superficie) 92%,transparent);border:1px solid var(--borda);box-shadow:0 8px 20px rgba(0,0,0,.5);transition:opacity .15s}
+.dica b{display:block;font-size:14px;font-weight:700}
+.dica small{color:var(--texto-3)}
+.dica.on{opacity:1}
+.tabela-r{display:none;margin-top:4px;max-height:220px;overflow:auto}
+.tabela-r table{width:100%;border-collapse:collapse;font-size:12.5px}
+.tabela-r td,.tabela-r th{padding:6px 8px;border-bottom:1px solid color-mix(in srgb,var(--tinta) 6%,transparent);text-align:right}
+.tabela-r td:first-child,.tabela-r th:first-child{text-align:left}
+.tabela-r th{font-size:11px;color:var(--texto-3);font-weight:600;position:sticky;top:0;background:var(--superficie)}
+.ver-tabela .area{display:none}.ver-tabela .tabela-r{display:block}
+
+/* melhores posts */
+.tops{display:flex;flex-direction:column;gap:10px}
+.top{display:flex;align-items:center;gap:12px;padding:10px;border-radius:16px;background:var(--fosco)}
+.top .pos{width:22px;text-align:center;font-size:13px;font-weight:700;color:var(--texto-3)}
+.top:first-child .pos{color:var(--laranja-claro)}
+.top .mini{width:46px;height:58px;border-radius:9px;flex:none;display:grid;place-items:center;text-align:center;padding:3px;font-size:6.5px;font-weight:900;line-height:1.05;text-transform:uppercase;letter-spacing:-.01em}
+.m1{background:#2F4A3F;color:#F1E9DC}.m2{background:#F1E9DC;color:#2F4A3F}.m3{background:radial-gradient(120% 90% at 20% 10%,#7FA08A,#2F4A3F 70%);color:#F1E9DC}
+.top div{flex:1;min-width:0}
+.top b{display:block;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top small{color:var(--texto-3);font-size:11.5px}
+.top .val{text-align:right;flex:none}
+.top .val b{font-size:14px}
+
+/* público */
+.barras-h{display:flex;flex-direction:column;gap:9px}
+.bh{display:grid;grid-template-columns:52px minmax(0,1fr) 40px;gap:10px;align-items:center;font-size:12.5px;position:relative}
+.bh span{color:var(--texto-2)}
+.bh .tr{height:14px;border-radius:4px;background:color-mix(in srgb,var(--tinta) 5%,transparent);overflow:hidden}
+.bh .tr i{display:block;height:100%;border-radius:0 4px 4px 0;background:var(--laranja);opacity:.85;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.bh:hover .tr i{opacity:1}
+.bh b{text-align:right;font-weight:600}
+.genero{display:flex;height:14px;border-radius:4px;overflow:hidden;gap:2px;margin-top:18px}
+.genero i{display:block;height:100%}
+.genero-l{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--texto-2)}
+.genero-l span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;background:var(--c);vertical-align:-1px}
+.cidades{margin-top:18px;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.cidades div{display:flex;justify-content:space-between;padding:7px 10px;border-radius:10px;background:var(--fosco)}
+.cidades b{font-weight:600}
+
+/* mapa de calor */
+.calor{display:grid;grid-template-columns:34px repeat(6,minmax(0,1fr));gap:3px;position:relative}
+.calor .rot{font-size:10.5px;color:var(--texto-3);display:flex;align-items:center}
+.calor .rot.h{justify-content:center;padding-bottom:2px}
+.celula{height:30px;border-radius:5px;cursor:default;transition:outline-color .15s;outline:1.5px solid transparent;outline-offset:1px}
+.celula:hover{outline-color:#fff}
+.celula.melhor{box-shadow:inset 0 0 0 2px #fff}
+.escala{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11px;color:var(--texto-3)}
+.escala i{flex:1;max-width:160px;height:8px;border-radius:99px;background:linear-gradient(90deg,#2a1d15,#7a3511,#C2410C,#FF6B1A,#FFB074)}
+
+.rodape-r{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;font-size:12px;color:var(--texto-3)}
+.rodape-r .esp{flex:1}
+
+@media (max-width:980px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.duas-r{grid-template-columns:1fr}}
+@media (max-width:520px){.kpi b{font-size:24px}.kpi{padding:14px}.resumo-r{flex-direction:column;padding:18px}.kpi small{display:block;margin:6px 0 0}}
+@media print{
+  .aurora,.grao,.barra-portal,.mes-sel,.cab-r .pilulas,[data-pdf],.alt{display:none!important}
+  body{background:#0b0908}
+  .vidro{backdrop-filter:none;-webkit-backdrop-filter:none;background:#15110e}
+  .entra{animation:none;opacity:1;filter:none;transform:none}
+}
+</style>
+</head>
+<body>
+<!--FUNDO-->
+<div class="portal-pag">
+<!--PORTAL:relatorio-->
+  <main class="conteudo-portal">
+    <div class="cab-r entra">
+      <div><span class="rotulo">Relatório mensal</span><h2 class="ola-p" style="margin-top:6px">Como foi o seu <em data-mes-nome>setembro</em></h2></div>
+      <div class="esp"></div>
+      <div class="pilulas vidro" role="group" aria-label="Rede" data-pilulas>
+        <span class="lente"></span>
+        <button aria-pressed="true" data-rede="ig">Instagram</button>
+        <button aria-pressed="false" data-rede="fb">Facebook</button>
+      </div>
+      <div class="mes-sel vidro"><button data-mes="-1" aria-label="Mês anterior"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button><b data-mes-rot>Setembro 2026</b><button data-mes="1" aria-label="Próximo mês"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button></div>
+      <button class="btn primario" data-pdf><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Baixar PDF</button>
+    </div>
+
+    <section class="resumo-r vidro especular entra" style="animation-delay:.05s">
+      <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/></svg></span>
+      <div><h3>O mês em poucas palavras</h3><p data-resumo></p><p class="assinado">Escrito com IA e revisado por Bianca, do Estúdio Faísca.</p></div>
+    </section>
+
+    <section class="kpis" data-kpis></section>
+
+    <div class="duas-r">
+      <section class="bloco-r vidro entra" style="animation-delay:.15s" data-bloco-alcance>
+        <div class="cab"><div><h3>Alcance por dia</h3><p>Pessoas diferentes que viram o seu perfil ou conteúdo</p></div><div class="esp"></div><span class="alt" data-alt>Ver como tabela</span></div>
+        <div class="area" data-area><svg data-svg role="img" aria-label="Gráfico de alcance por dia"></svg><div class="dica" data-dica></div></div>
+        <div class="tabela-r" data-tabela></div>
+        <p class="analise" data-an-alcance></p>
+      </section>
+      <section class="bloco-r vidro entra" style="animation-delay:.2s">
+        <div class="cab"><div><h3>Melhores conteúdos</h3><p>Pelo alcance de cada publicação</p></div></div>
+        <div class="tops" data-tops></div>
+        <p class="analise" data-an-tops></p>
+      </section>
+    </div>
+
+    <div class="duas-r">
+      <section class="bloco-r vidro entra" style="animation-delay:.25s">
+        <div class="cab"><div><h3>Quem é o seu público</h3><p>Seguidores por faixa de idade</p></div></div>
+        <div class="barras-h" data-idade></div>
+        <div class="genero" data-genero></div>
+        <div class="genero-l" data-genero-l></div>
+        <div class="cidades" data-cidades></div>
+      </section>
+      <section class="bloco-r vidro entra" style="animation-delay:.3s">
+        <div class="cab"><div><h3>Melhor dia e horário</h3><p>Quando os seus seguidores estão mais ativos</p></div></div>
+        <div class="calor" data-calor><div class="dica" data-dica-c></div></div>
+        <div class="escala">menos <i></i> mais</div>
+        <p class="analise" data-an-calor></p>
+      </section>
+    </div>
+
+    <div class="rodape-r"><span>Dados oficiais do Instagram e do Facebook, coletados todo dia pelo Pulse Creator.</span><span class="esp"></span><span>Atualizado em 01/10/2026 às 06h</span></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var MESES=[
+    {rot:'Agosto 2026',nome:'agosto',dias:31,seed:3,base:{ig:[7610,38200,4.1,1420],fb:[2310,9100,1.6,310]},ant:{ig:[7480,35400,3.9,1300],fb:[2290,8800,1.5,290]}},
+    {rot:'Setembro 2026',nome:'setembro',dias:30,seed:7,base:{ig:[8198,42100,4.8,1890],fb:[2342,10400,1.9,355]},ant:{ig:[7610,38200,4.1,1420],fb:[2310,9100,1.6,310]}}
+  ];
+  var mi=1,rede='ig';
+  var TOPS=[
+    {ig:[['Mês da pele','Post · 05/08','m3','Mês da pele','4,1 mil','210 curtidas'],['Equipe Aurora','Post · 19/08','m2','Equipe','3,3 mil','176 curtidas'],['Rotina da manhã','Carrossel · 26/08','m1','Rotina','2,9 mil','98 salvamentos']],
+     fb:[['Mês da pele','Post · 05/08','m3','Mês da pele','1,2 mil','44 reações'],['Equipe Aurora','Post · 19/08','m2','Equipe','860','29 reações'],['Rotina da manhã','Carrossel · 26/08','m1','Rotina','610','17 reações']]},
+    {ig:[['Bastidores da recepção','Reels · 25/09','m3','Bastidores','11,4 mil','820 curtidas'],['Skincare noturno','Carrossel · 20/09','m1','Skincare noturno','5,8 mil','126 salvamentos'],['Conheça a Dra. Paula','Post · 16/09','m2','Dra. Paula','3,2 mil','184 curtidas']],
+     fb:[['Bastidores da recepção','Vídeo · 25/09','m3','Bastidores','2,1 mil','96 reações'],['Conheça a Dra. Paula','Post · 16/09','m2','Dra. Paula','1,4 mil','52 reações'],['Skincare noturno','Carrossel · 20/09','m1','Skincare noturno','980','31 reações']]}
+  ];
+  var IDADE=[['18–24',12],['25–34',38],['35–44',29],['45–54',14],['55+',7]];
+  var CIDADES=[['Recife',41],['Olinda',14],['Jaboatão',11],['Paulista',6]];
+  function $(s,c){return (c||document).querySelector(s)}
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s))}
+  function fmt(n){return n.toLocaleString('pt-BR')}
+  function mil(n){return n>=1000?(n/1000).toLocaleString('pt-BR',{maximumFractionDigits:1})+' mil':fmt(n)}
+  function varia(a,b,pp){var d=pp?(a-b):(a-b)/b*100,s=d>=0;return '<span class="var '+(s?'sobe':'desce')+'">'+(s?'▲ ':'▼ ')+Math.abs(d).toLocaleString('pt-BR',{maximumFractionDigits:1})+(pp?' p.p.':'%')+'</span>'}
+  function serie(m){ // alcance diário determinístico, com pico no dia do reels (13)
+    var r=[],x=m.seed,tot=m.base[rede][1],k=rede==='ig'?1:.25;
+    for(var d=1;d<=m.dias;d++){x=(x*9301+49297)%233280;var v=900+x/233280*700+(d%7===2||d%7===5?500:0)+(m.dias===30&&d===25?2600:0)+(m.dias===30&&d===26?1100:0)+(m.dias===30&&d===20?900:0)+(m.dias===31&&d===5?1300:0);r.push(Math.round(v*k*tot/(rede==='ig'?42100:42100*.25)*(m.dias===31?.92:1)))}
+    return r;
+  }
+  function desenha(){
+    var m=MESES[mi],b=m.base[rede],a=m.ant[rede];
+    $('[data-mes-rot]').textContent=m.rot;$('[data-mes-nome]').textContent=m.nome;
+    $$('[data-mes]').forEach(function(x){var n=mi+(+x.dataset.mes);x.disabled=n<0||n>=MESES.length});
+    $('[data-resumo]').innerHTML=rede==='ig'?
+      (mi===1?'Setembro foi o melhor mês desde o início do trabalho. Você ganhou <b>'+fmt(b[0]-a[0])+' seguidores</b> e o alcance cresceu <b>10%</b>, puxado pelo reels <b>“Bastidores da recepção”</b>, que sozinho alcançou 11,4 mil pessoas. Conteúdo de bastidores funciona muito bem com o seu público, por isso outubro tem mais dois reels nesse formato. O ponto de atenção são os stories, que tiveram menos respostas que em agosto.':
+      'Agosto teve crescimento constante, sem picos. Os carrosséis educativos foram os que mais geraram salvamentos, sinal de que o público guarda o conteúdo para consultar depois. Foi a partir dessa leitura que entraram mais carrosséis no planejamento de setembro.'):
+      'No Facebook o público é menor e mais velho, mas responde bem a vídeo. O alcance subiu '+((b[1]-a[1])/a[1]*100).toFixed(0)+'% com o reels compartilhado na página. Seguimos publicando os vídeos também aqui, sem custo extra de produção.';
+    var nomes=[['Seguidores',fmt(b[0]),varia(b[0],a[0])+'<small>+'+fmt(b[0]-a[0])+'</small>'],['Alcance',mil(b[1]),varia(b[1],a[1])+'<small>vs mês anterior</small>'],
+      ['Engajamento',b[2].toLocaleString('pt-BR')+'%',varia(b[2],a[2],true)+'<small>vs mês anterior</small>'],['Visitas ao perfil',fmt(b[3]),varia(b[3],a[3])+'<small>vs mês anterior</small>']];
+    $('[data-kpis]').innerHTML=nomes.map(function(n,i){return '<div class="kpi vidro entra" style="animation-delay:'+(.08+i*.03)+'s"><span class="rotulo" style="color:var(--texto-3)">'+n[0]+'</span><b>'+n[1]+'</b>'+n[2]+'</div>'}).join('');
+    area(serie(m),m);
+    $('[data-tops]').innerHTML=TOPS[mi][rede].map(function(t,i){return '<div class="top"><span class="pos">'+(i+1)+'</span><span class="mini '+t[2]+'">'+t[3]+'</span><div><b>'+t[0]+'</b><small>'+t[1]+'</small></div><span class="val"><b>'+t[4]+'</b><small style="display:block">'+t[5]+'</small></span></div>'}).join('');
+    $('[data-an-tops]').innerHTML=(mi===1?'<b>Análise:</b> o vídeo de bastidores alcançou 3× mais que a média dos posts. O carrossel educativo foi o mais salvo.':'<b>Análise:</b> o post de campanha puxou o mês. O carrossel teve menos alcance, mas foi o mais salvo.');
+    $('[data-an-alcance]').innerHTML=(mi===1?'<b>Análise:</b> o pico do dia 25 é o reels “Bastidores da recepção”. Terças e sextas, dias de publicação, ficam sempre acima da média.':'<b>Análise:</b> o mês não teve picos. O dia 5, do post “Mês da pele”, foi o de maior alcance.');
+    publico();calor();
+  }
+  function area(v,m){
+    var svg=$('[data-svg]'),W=svg.clientWidth||600,H=220,pl=38,pr=8,pt=10,pb=24;
+    var mx=Math.ceil(Math.max.apply(0,v)/1000)*1000,iw=W-pl-pr,ih=H-pt-pb;
+    function X(i){return pl+i*iw/(v.length-1)}function Y(y){return pt+ih-(y/mx)*ih}
+    var g='';for(var k=0;k<=4;k++){var y=pt+ih*k/4;g+='<line class="grade-l" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'"/><text class="eixo-t" x="'+(pl-8)+'" y="'+(y+3.5)+'" text-anchor="end">'+mil(mx*(4-k)/4).replace(' mil','k')+'</text>'}
+    [1,8,15,22,v.length].forEach(function(d){g+='<text class="eixo-t" x="'+X(d-1)+'" y="'+(H-6)+'" text-anchor="middle">'+d+'</text>'});
+    var p=v.map(function(y,i){return (i?'L':'M')+X(i).toFixed(1)+','+Y(y).toFixed(1)}).join('');
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    svg.innerHTML='<defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF6B1A" stop-opacity=".35"/><stop offset="1" stop-color="#FF6B1A" stop-opacity="0"/></linearGradient></defs>'+g+
+      '<path d="'+p+'L'+X(v.length-1)+','+(pt+ih)+'L'+pl+','+(pt+ih)+'Z" fill="url(#ga)"/><path class="linha" d="'+p+'"/>'+
+      '<line class="cursor" data-cur y1="'+pt+'" y2="'+(pt+ih)+'"/><circle class="ponto" r="5" data-pt/><rect x="'+pl+'" y="0" width="'+iw+'" height="'+H+'" fill="transparent" data-hit/>';
+    var box=$('[data-area]'),dica=$('[data-dica]'),hit=$('[data-hit]',svg);
+    function mostra(e){
+      var r=svg.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,i=Math.max(0,Math.min(v.length-1,Math.round((x-pl)/iw*(v.length-1))));
+      $('[data-cur]',svg).setAttribute('x1',X(i));$('[data-cur]',svg).setAttribute('x2',X(i));
+      $('[data-pt]',svg).setAttribute('cx',X(i));$('[data-pt]',svg).setAttribute('cy',Y(v[i]));
+      box.classList.add('ativa');dica.classList.add('on');
+      dica.style.left=(X(i)*r.width/W)+'px';dica.style.top=(Y(v[i])*r.height/H-8)+'px';
+      dica.innerHTML='<b>'+fmt(v[i])+' pessoas</b><small>'+('0'+(i+1)).slice(-2)+'/'+(mi===1?'09':'08')+(mi===1&&i===24?' · reels “Bastidores da recepção”':'')+'</small>';
+    }
+    hit.addEventListener('pointermove',mostra);hit.addEventListener('pointerdown',mostra);
+    hit.addEventListener('pointerleave',function(){box.classList.remove('ativa');dica.classList.remove('on')});
+    $('[data-tabela]').innerHTML='<table><thead><tr><th>Dia</th><th>Alcance</th></tr></thead><tbody>'+v.map(function(y,i){return '<tr><td>'+('0'+(i+1)).slice(-2)+'/'+(mi===1?'09':'08')+'</td><td>'+fmt(y)+'</td></tr>'}).join('')+'</tbody></table>';
+  }
+  function publico(){
+    var mx=Math.max.apply(0,IDADE.map(function(x){return x[1]}));
+    $('[data-idade]').innerHTML=IDADE.map(function(x){return '<div class="bh" title="'+x[0]+' anos: '+x[1]+'% dos seguidores"><span>'+x[0]+'</span><div class="tr"><i style="width:'+(x[1]/mx*100)+'%"></i></div><b>'+x[1]+'%</b></div>'}).join('');
+    var f=rede==='ig'?78:64;
+    $('[data-genero]').innerHTML='<i style="width:'+f+'%;background:#FF6B1A" title="Mulheres: '+f+'%"></i><i style="width:'+(100-f)+'%;background:#A8A29B" title="Homens: '+(100-f)+'%"></i>';
+    $('[data-genero-l]').innerHTML='<span style="--c:#FF6B1A">Mulheres <b>'+f+'%</b></span><span style="--c:#A8A29B">Homens <b>'+(100-f)+'%</b></span>';
+    $('[data-cidades]').innerHTML=CIDADES.map(function(c){return '<div><span>'+c[0]+'</span><b>'+c[1]+'%</b></div>'}).join('');
+  }
+  function calor(){
+    var DIAS=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],HORAS=['8h','11h','14h','17h','19h','21h'];
+    var RAMP=['#2a1d15','#4d2512','#7a3511','#A33A0E','#C2410C','#E2551A','#FF6B1A','#FF8A47','#FFB074'];
+    var h='<div class="dica" data-dica-c></div><span></span>'+HORAS.map(function(x){return '<span class="rot h">'+x+'</span>'}).join(''),melhor=[0,0,-1];
+    var val=DIAS.map(function(d,i){return HORAS.map(function(x,j){var v=(j===4?5:j===3?3.5:j===5?3:j===1?2.2:1.5)+(i===1||i===4?2.2:0)+(i>=5?-1.2:0)+((i*3+j*7)%5)*.25;if(v>melhor[2])melhor=[i,j,v];return v})});
+    var mx=melhor[2],mn=Math.min.apply(0,[].concat.apply([],val));
+    DIAS.forEach(function(d,i){h+='<span class="rot">'+d+'</span>';HORAS.forEach(function(x,j){var t=(val[i][j]-mn)/(mx-mn),c=RAMP[Math.round(t*(RAMP.length-1))];
+      h+='<span class="celula'+(i===melhor[0]&&j===melhor[1]?' melhor':'')+'" style="background:'+c+'" data-i="'+d+' às '+x+'" data-v="'+Math.round(t*100)+'"></span>'})});
+    var el=$('[data-calor]');el.innerHTML=h;
+    var dica=$('[data-dica-c]');
+    $$('.celula',el).forEach(function(c){
+      function mostra(){var r=c.getBoundingClientRect(),p=el.getBoundingClientRect();dica.innerHTML='<b>'+c.dataset.i+'</b><small>atividade '+c.dataset.v+'% do pico</small>';dica.style.left=(r.left-p.left+r.width/2)+'px';dica.style.top=(r.top-p.top-4)+'px';dica.classList.add('on')}
+      c.addEventListener('pointerenter',mostra);c.addEventListener('pointerdown',mostra);c.addEventListener('pointerleave',function(){dica.classList.remove('on')});
+    });
+    $('[data-an-calor]').innerHTML='<b>Melhor momento:</b> '+DIAS[melhor[0]].toLowerCase()+' às '+HORAS[melhor[1]]+'. Por isso os reels saem às 19h, de preferência às terças e sextas.';
+  }
+  // controles
+  $$('[data-mes]').forEach(function(b){b.addEventListener('click',function(){mi+=+b.dataset.mes;troca()})});
+  function troca(){var m=$('main');m.style.transition='filter .2s,opacity .2s';m.style.filter='blur(6px)';m.style.opacity='.5';setTimeout(function(){desenha();m.style.filter='';m.style.opacity=''},200)}
+  $('[data-alt]').addEventListener('click',function(){var b=$('[data-bloco-alcance]');b.classList.toggle('ver-tabela');this.textContent=b.classList.contains('ver-tabela')?'Ver como gráfico':'Ver como tabela'});
+  $('[data-pdf]').addEventListener('click',function(){print()});
+  var g=$('[data-pilulas]'),lente=g.querySelector('.lente');
+  function move(b,an){lente.style.width=b.offsetWidth+'px';lente.style.transform='translateX('+b.offsetLeft+'px)';if(an){lente.classList.remove('esticando');void lente.offsetWidth;lente.classList.add('esticando')}}
+  lente.style.transition='none';move(g.querySelector('[aria-pressed=true]'));requestAnimationFrame(function(){lente.style.transition=''});
+  g.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;$$('button',g).forEach(function(x){x.setAttribute('aria-pressed',x===b)});move(b,true);rede=b.dataset.rede;troca()});
+  var rt;addEventListener('resize',function(){move(g.querySelector('[aria-pressed=true]'));clearTimeout(rt);rt=setTimeout(function(){area(serie(MESES[mi]),MESES[mi])},150)});
+  desenha();
+})();
+</script>
+</body>
+</html>
