@@ -1,0 +1,5 @@
+# Mesmas quebras de linha no Mac e no Windows
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.mp4 binary

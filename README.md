@@ -4,6 +4,8 @@ Sistema para agências de social media: lado da agência (pautas, clientes, agen
 
 Hoje é um protótipo navegável em HTML, sem back-end. Os dados de exemplo e o que muda durante o teste ficam salvos no navegador (localStorage).
 
+**Vai mexer no projeto?** Comece pelo [COMO-COMECAR.md](COMO-COMECAR.md): instalação, como rodar e como enviar mudanças.
+
 ## Estrutura
 
 - `v2/` — **versão atual** (visual claro e enxuto, inspirado no Showa, em preto e laranja)
