@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Início · Pulse Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600&display=swap">
+<link rel="icon" href="assets/icone.svg">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.grade{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:30px;align-items:start}
+.sec-t{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-t h2{font-size:22px;font-weight:600;letter-spacing:-.02em}
+.lista{display:flex;flex-direction:column}
+.lp{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--linha);cursor:pointer;text-align:left;width:100%}
+.lp:last-child{border-bottom:0}
+.lp:hover{background:var(--cartao-2)}
+.lp:first-child{border-radius:26px 26px 0 0}.lp:last-child{border-radius:0 0 26px 26px}.lp:only-child{border-radius:26px}
+.lp .t{flex:1;min-width:0}
+.lp b{display:block;font-size:15.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lp small{display:block;font-size:13px;color:var(--tinta-3);margin-top:2px}
+.ev{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--linha)}
+.ev:last-child{border-bottom:0}
+.ev .h{width:48px;flex:none;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+.ev .h small{display:block;font-weight:400;color:var(--tinta-3);font-size:12.5px}
+.ev .b{flex:1;min-width:0;padding-left:12px;border-left:3px solid var(--c)}
+.ev .b b{display:block;font-size:15px;font-weight:600}
+.ev .b small{display:block;font-size:13px;color:var(--tinta-3)}
+.col-d{display:flex;flex-direction:column;gap:22px}
+.resumo{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+.resumo .cartao{padding:20px 22px}
+.resumo b{display:block;font-family:var(--titulo);font-weight:500;font-size:30px;letter-spacing:-.04em}
+.resumo span{font-size:14px;color:var(--tinta-2)}
+.resumo .q b{color:var(--laranja)}
+.ped{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--linha)}
+.ped:last-child{border-bottom:0}
+.ped b{display:block;font-size:15px;font-weight:600}
+.ped p{font-size:13.5px;color:var(--tinta-2);margin-top:2px}
+.aniv{display:flex;align-items:center;gap:12px;padding:8px 0}
+.aniv b{font-weight:600}
+.aniv small{margin-left:auto;font-size:13.5px;color:var(--tinta-3)}
+@media (max-width:1250px){.grade{grid-template-columns:1fr}.resumo{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body data-area="agencia" data-pag="inicio" data-botao="nova-pauta">
+<div class="app"><aside class="lat" id="lat"></aside><main class="painel"><div class="miolo">
+  <header class="cab"><div class="t"><div class="olho" data-quando></div><h1 data-saud></h1><p class="sub" data-resumo></p></div><div class="acoes-topo" data-acoes></div></header>
+  <div class="resumo" data-nums hidden></div>
+  <div class="grade">
+    <div style="display:flex;flex-direction:column;gap:30px">
+      <section><div class="sec-t"><h2>Suas pautas</h2><a class="link-seta" href="pautas.html?f=minhas">Ver quadro<span data-ic="seta"></span></a></div><div class="cartao lista" data-minhas></div></section>
+      <section data-sec-ped hidden><div class="sec-t"><h2>Pedidos dos clientes</h2></div><div class="cartao pad" data-pedidos style="padding-top:8px;padding-bottom:8px"></div></section>
+    </div>
+    <div class="col-d">
+      <section class="cartao pad"><div class="cab-c"><h3>Hoje</h3><a class="link-seta" href="agenda.html">Agenda<span data-ic="seta"></span></a></div><div data-hoje></div></section>
+      <section class="cartao pad"><div class="cab-c"><h3>Próximos dias</h3></div><div data-prox></div></section>
+      <section class="cartao pad" data-sec-aniv hidden><div class="cab-c"><h3>Aniversários do mês</h3></div><div data-aniv></div></section>
+    </div>
+  </div>
+</div></main></div>
+<script src="assets/dados.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var S=DB.S,EU=UI.eu,$=UI.$,$$=UI.$$,esc=UI.esc;if(!EU)return;
+  $$('[data-ic]').forEach(function(s){s.outerHTML=UI.ico(s.dataset.ic,18)});
+  function relogio(){var d=new Date();$('[data-quando]').textContent=UI.SEMANA[d.getDay()]+', '+d.getDate()+' de '+UI.MESES[d.getMonth()]+' · '+UI.hora(d)}
+  relogio();setInterval(relogio,30000);
+  var h=new Date().getHours();$('[data-saud]').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+DB.primeiroNome(EU)+'.';
+  window.aoCompletarPerfil=function(){$('[data-saud]').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+DB.primeiroNome(DB.eu())+'.'};
+
+  function desenha(){
+    var minhas=UI.minhasAbertas().sort(function(a,b){return a.prazo<b.prazo?-1:1});
+    var atras=minhas.filter(function(p){return UI.diasAte(p.prazo)<0}).length,hoje=minhas.filter(function(p){return UI.diasAte(p.prazo)===0}).length;
+    $('[data-resumo]').textContent=!minhas.length?'Nenhuma pauta sua em aberto.':minhas.length+' pauta'+(minhas.length>1?'s':'')+' sua'+(minhas.length>1?'s':'')+' em aberto'+(hoje?', '+hoje+' para hoje':'')+(atras?', '+atras+' atrasada'+(atras>1?'s':''):'')+'.';
+    $('[data-minhas]').innerHTML=minhas.length?minhas.map(function(p){var c=DB.cliente(p.cliente),d=UI.diasAte(p.prazo);return '<button class="lp" data-p="'+p.id+'">'+UI.avCli(c)+'<span class="t"><b>'+esc(p.titulo)+'</b><small>'+esc(c.nome)+' · '+esc(p.formato)+'</small></span><span class="selo">'+esc(DB.coluna(p.coluna).n)+'</span><span class="cp-prazo'+(d<0?' atras':d<=1?' perto':'')+'">'+(d===0?'hoje':d<0?'atrasada':UI.dataCurta(p.prazo))+'</span></button>'}).join(''):'<div class="vazio-c">Tudo entregue por aqui.</div>';
+    $$('[data-p]').forEach(function(b){b.addEventListener('click',function(){UI.abrePauta(+b.dataset.p)})});
+    // números da operação (quem vê resultados)
+    if(DB.pode(EU,'ver_resultados')){var vis=UI.pautasVisiveis(),ab=vis.filter(function(p){return p.coluna!=='publicado'});
+      $('[data-nums]').hidden=false;$('[data-nums]').innerHTML=[[ab.length,'pautas em aberto'],[vis.filter(function(p){return p.coluna==='cliente'}).length,'esperando o cliente'],[ab.filter(function(p){return UI.diasAte(p.prazo)<0}).length,'atrasadas','q'],[vis.filter(function(p){return p.coluna==='publicado'}).length,'publicadas no mês']].map(function(n){return '<div class="cartao '+(n[2]||'')+'"><b>'+n[0]+'</b><span>'+n[1]+'</span></div>'}).join('')}
+  }
+  desenha();window.aoMudarPautas=desenha;
+
+  // agenda
+  var hojeI=DB.hoje();
+  function evHTML(e,dia){var c=DB.CATS[e.cat];return '<div class="ev"><div class="h">'+(e.hora||'—')+(dia?'<small>'+UI.dataCurta(e.data)+'</small>':'')+'</div><div class="b" style="--c:'+c.c+'"><b>'+esc(e.titulo)+'</b><small>'+esc(c.n)+(e.local?' · '+esc(e.local):'')+'</small></div></div>'}
+  // o que é seu: onde você está marcado, de clientes seus ou da equipe toda; "Meu Google" só seu
+  var ids=DB.meusClientes(EU).map(function(c){return c.id});
+  var meus=S.eventos.filter(function(e){if(e.cat==='google'||e.cat==='ocupado')return e.quem.indexOf(EU.id)>=0;return EU.papel==='admin'||e.quem.indexOf(EU.id)>=0||(e.cliente?ids.indexOf(e.cliente)>=0:e.quem.length>=3)});
+  var hj=meus.filter(function(e){return e.data===hojeI}).sort(function(a,b){return a.hora<b.hora?-1:1});
+  var sz=DB.SAZONAIS[hojeI.slice(5)];
+  $('[data-hoje]').innerHTML=(sz?evHTML({hora:'',titulo:sz,cat:'sazonal'}):'')+(hj.length?hj.map(function(e){return evHTML(e)}).join(''):sz?'':'<p style="color:var(--tinta-2)">Nada marcado para hoje.</p>');
+  var prox=meus.filter(function(e){var d=UI.diasAte(e.data);return d>0&&d<=7&&e.cat!=='ocupado'}).sort(function(a,b){return (a.data+a.hora)<(b.data+b.hora)?-1:1}).slice(0,5);
+  $('[data-prox]').innerHTML=prox.length?prox.map(function(e){return evHTML(e,true)}).join(''):'<p style="color:var(--tinta-2)">Semana tranquila.</p>';
+  // aniversários do mês
+  var mes=new Date().getMonth(),an=S.equipe.filter(function(p){return p.nasc&&UI.dt(p.nasc).getMonth()===mes}).sort(function(a,b){return UI.dt(a.nasc).getDate()-UI.dt(b.nasc).getDate()});
+  if(an.length){$('[data-sec-aniv]').hidden=false;$('[data-aniv]').innerHTML=an.map(function(p){var d=UI.dt(p.nasc).getDate(),hoje=d===new Date().getDate();return '<div class="aniv">'+UI.av(p,'p')+'<b>'+esc(DB.primeiroNome(p))+'</b>'+(hoje?'<span class="selo laranja">hoje!</span>':'')+'<small>'+d+' de '+UI.MESES[mes]+'</small></div>'}).join('')}
+  // pedidos dos clientes
+  if(DB.pode(EU,'falar_cliente')){var ids=DB.meusClientes(EU).map(function(c){return c.id}),ped=S.pedidos.filter(function(p){return p.status==='novo'&&ids.indexOf(p.cliente)>=0});
+    if(ped.length){$('[data-sec-ped]').hidden=false;
+      function desPed(){var L=S.pedidos.filter(function(p){return p.status==='novo'&&ids.indexOf(p.cliente)>=0});$('[data-pedidos]').innerHTML=L.length?L.map(function(p){var c=DB.cliente(p.cliente);return '<div class="ped">'+UI.avCli(c)+'<div style="flex:1;min-width:0"><b>'+esc(p.titulo)+'</b><p>'+esc(c.nome)+' · '+UI.quando(p.quando+'T09:00:00')+(p.urg==='alta'?' · <span style="color:var(--vermelho);font-weight:600">urgente</span>':'')+'</p><p>'+esc(p.desc)+'</p></div>'+(DB.pode(EU,'criar_pauta')?'<button class="btn p" data-vira="'+p.id+'">Virar pauta</button>':'')+'</div>'}).join(''):'<div class="vazio-c">Nenhum pedido novo.</div>';
+        $$('[data-vira]').forEach(function(b){b.addEventListener('click',function(){var pd=S.pedidos.filter(function(x){return x.id===+b.dataset.vira})[0];UI.novaPauta({cliente:pd.cliente,titulo:pd.titulo,depois:function(){pd.status='virou pauta';DB.salva('pedidos');desPed()}})})})}
+      desPed()}}
+})();
+</script>
+</body>
+</html>

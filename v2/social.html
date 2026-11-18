@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social · Pulse Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600&display=swap">
+<link rel="icon" href="assets/icone.svg">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.soc{display:grid;grid-template-columns:380px minmax(0,1fr);gap:24px;height:calc(100vh - 210px);min-height:520px}
+.canais{display:flex;flex-direction:column;padding:22px 18px 18px;overflow:hidden}
+.canais .rolo-c{flex:1;overflow-y:auto;margin:0 -6px;padding:0 6px}
+.grp{display:flex;align-items:center;justify-content:space-between;padding:10px 10px 8px;font-size:15px;color:var(--tinta-3)}
+.grp button{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:var(--tinta-2)}
+.grp button:hover{background:var(--cartao-2)}
+.can{display:flex;align-items:center;gap:12px;width:100%;height:52px;padding:0 14px;border-radius:16px;font-size:17px;color:var(--tinta);text-align:left}
+.can:hover{background:var(--cartao-2)}
+.can.ativo{background:var(--cartao-2);box-shadow:inset 0 0 0 1px var(--linha)}
+.can svg{color:var(--tinta-3)}
+.can .ct{margin-left:auto;font-size:13px;font-weight:600;color:var(--verde)}
+.can .nl{margin-left:auto;min-width:22px;height:22px;padding:0 6px;border-radius:99px;display:grid;place-items:center;font-size:11.5px;font-weight:700;color:#fff;background:var(--laranja)}
+.dentro{display:flex;flex-direction:column;gap:6px;padding:2px 0 10px 54px}
+.dentro div{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--tinta-2)}
+.reuniao{margin-top:12px}
+.chat{display:flex;flex-direction:column;overflow:hidden}
+.chat-cab{display:flex;align-items:center;gap:12px;padding:22px 28px;border-bottom:1px solid var(--linha)}
+.chat-cab b{font-size:19px;font-weight:600}
+.chat-cab small{font-size:14px;color:var(--tinta-3)}
+.msgs{flex:1;overflow-y:auto;padding:20px 28px;display:flex;flex-direction:column;gap:2px}
+.msg{display:flex;gap:14px;padding:8px 0}
+.msg.cont{padding-top:0}
+.msg.cont .av{visibility:hidden;height:0}
+.msg .c{flex:1;min-width:0}
+.msg .q{font-size:14px;color:var(--tinta-3);margin-bottom:2px}
+.msg .q b{color:var(--tinta);font-weight:600;margin-right:6px}
+.msg .x{font-size:15.5px;line-height:1.55;word-wrap:break-word}
+.msg.cli .x{display:inline-block;padding:10px 14px;border-radius:16px;background:var(--laranja-suave)}
+.dia-sep{display:flex;align-items:center;gap:12px;margin:14px 0 8px;font-size:12.5px;color:var(--tinta-3)}
+.dia-sep::before,.dia-sep::after{content:"";flex:1;height:1px;background:var(--linha)}
+.escreve{display:flex;gap:10px;padding:16px 22px;border-top:1px solid var(--linha)}
+.escreve .ent{height:52px;border-radius:16px}
+.vazio-ch{flex:1;display:grid;place-items:center;text-align:center;padding:30px}
+.vazio-ch h3{font-size:24px;font-weight:600;margin-bottom:8px}
+.vazio-ch p{color:var(--tinta-2)}
+.sala{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:30px}
+.sala .gente{display:flex;flex-wrap:wrap;gap:22px;justify-content:center}
+.sala .p{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:14px}
+.sala .p .av{width:96px;height:96px;font-size:28px}
+.sala .p.fala .av{box-shadow:0 0 0 4px var(--cartao),0 0 0 7px var(--verde)}
+.sala .ctrl{display:flex;gap:12px}
+.sala .ctrl button{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:var(--cartao-2);border:1px solid var(--linha)}
+.sala .ctrl .sai{background:var(--vermelho);color:#fff;border-color:transparent}
+.sala .ctrl .off{background:var(--tinta);color:var(--painel)}
+.volta-c{display:none}
+@media (max-width:900px){
+  .soc{grid-template-columns:1fr;height:auto}
+  .soc.com-canal .canais{display:none}
+  .soc:not(.com-canal) .chat{display:none}
+  .chat{height:calc(100vh - 190px);min-height:460px}
+  .volta-c{display:grid;width:40px;height:40px;border-radius:12px;place-items:center}
+  .msgs{padding:16px}.chat-cab{padding:14px 16px}.escreve{padding:12px}
+}
+</style>
+</head>
+<body data-area="agencia" data-pag="social">
+<div class="app"><aside class="lat" id="lat"></aside><main class="painel"><div class="miolo" style="max-width:none">
+  <header class="cab" style="margin-bottom:22px"><div class="t"><h1>Social</h1></div><div class="acoes-topo" data-acoes></div></header>
+  <div class="soc" data-soc>
+    <section class="cartao canais"><div class="rolo-c" data-canais></div><button class="btn reuniao" data-link></button></section>
+    <section class="cartao chat" data-chat></section>
+  </div>
+</div></main></div>
+<script src="assets/dados.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var S=DB.S,EU=UI.eu,$=UI.$,$$=UI.$$,esc=UI.esc,ico=UI.ico;if(!EU)return;
+  var C=S.canais,ADM=EU.papel==='admin',FC=DB.pode(EU,'falar_cliente');
+  var atual=null,naSala=C.voz.filter(function(v){return v.dentro.indexOf(EU.id)>=0})[0],mudo=false;
+  if(naSala&&naSala.k!=='direcao'){naSala.dentro.splice(naSala.dentro.indexOf(EU.id),1);naSala=null}
+  $('[data-link]').innerHTML=ico('link',18)+'Criar link de reunião';
+  function lidos(){try{return JSON.parse(localStorage.getItem('pc2:lidos:'+EU.id)||'{}')}catch(e){return {}}}
+  function marcaLido(k,n){var l=lidos();l[k]=n;try{localStorage.setItem('pc2:lidos:'+EU.id,JSON.stringify(l))}catch(e){}}
+  function msgsDe(k){return k.indexOf('cli:')===0?(C.cliente[k.slice(4)]=C.cliente[k.slice(4)]||[]):(C.msgs[k]=C.msgs[k]||[])}
+  function naoLidas(k){var l=lidos()[k];var L=msgsDe(k);return l==null?0:Math.max(0,L.length-l)}
+  function lista(){
+    var cli=FC?DB.meusClientes(EU):[];
+    $('[data-canais]').innerHTML='<div class="grp">Canais de texto'+(ADM?'<button data-novo="texto" aria-label="Novo canal de texto">'+ico('mais',18)+'</button>':'')+'</div>'+
+      C.texto.map(function(c){var n=naoLidas(c.k);return '<button class="can'+(atual===c.k?' ativo':'')+'" data-t="'+c.k+'">'+ico('hash',20)+esc(c.n)+(n?'<span class="nl">'+n+'</span>':'')+'</button>'}).join('')+
+      '<div class="grp" style="margin-top:14px">Canais de voz'+(ADM?'<button data-novo="voz" aria-label="Nova sala de voz">'+ico('mais',18)+'</button>':'')+'</div>'+
+      C.voz.map(function(v){return '<button class="can'+(atual==='voz:'+v.k?' ativo':'')+'" data-v="'+v.k+'">'+ico('voz',20)+esc(v.n)+(v.trancado?ico('cadeado',15):'')+(v.dentro.length?'<span class="ct">'+v.dentro.length+'</span>':'')+'</button>'+(v.dentro.length?'<div class="dentro">'+v.dentro.map(function(q){var p=DB.pessoa(q);return p?'<div>'+UI.av(p,'p')+esc(DB.primeiroNome(p))+(q===EU.id&&mudo?' · mudo':q!==EU.id&&q!=='TM'?' · mudo':'')+'</div>':''}).join('')+'</div>':'')}).join('')+
+      (cli.length?'<div class="grp" style="margin-top:14px">Clientes</div>'+cli.map(function(c){var k='cli:'+c.id,n=naoLidas(k);return '<button class="can'+(atual===k?' ativo':'')+'" data-t="'+k+'" style="font-size:15.5px">'+UI.avCli(c,'p')+esc(c.nome)+(n?'<span class="nl">'+n+'</span>':'')+'</button>'}).join(''):'');
+    $$('[data-t]').forEach(function(b){b.addEventListener('click',function(){abre(b.dataset.t)})});
+    $$('[data-v]').forEach(function(b){b.addEventListener('click',function(){sala(b.dataset.v)})});
+    $$('[data-novo]').forEach(function(b){b.addEventListener('click',function(){var t=b.dataset.novo,n=prompt(t==='texto'?'Nome do canal (ex.: gravações)':'Nome da sala de voz');if(!n||!n.trim())return;n=n.trim();var k=n.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||('c'+Date.now());
+      if(t==='texto'){if(C.texto.some(function(c){return c.k===k})){UI.aviso('Já existe um canal com esse nome');return}C.texto.push({k:k,n:k});C.msgs[k]=[]}else C.voz.push({k:k,n:n,dentro:[]});DB.salva('canais');lista();if(t==='texto')abre(k)})});
+  }
+  function vazio(){$('[data-chat]').innerHTML='<div class="vazio-ch"><div><h3>Escolha um canal</h3><p>Converse nos canais de texto ou entre em uma sala de voz.</p></div></div>';$('[data-soc]').classList.remove('com-canal')}
+  function cab(t,s){return '<div class="chat-cab"><button class="volta-c" data-vc aria-label="Voltar">'+ico('voltar',20)+'</button>'+t+'<div style="flex:1;min-width:0"><b>'+s+'</b></div></div>'}
+  function abre(k){atual=k;var ehCli=k.indexOf('cli:')===0,c=ehCli?DB.cliente(k.slice(4)):null;
+    $('[data-chat]').innerHTML=cab(ehCli?UI.avCli(c,'p'):ico('hash',22),ehCli?esc(c.nome)+'<small style="display:block;font-weight:400">Conversa com '+esc(c.contato)+' · ela vê pelo portal</small>':esc(C.texto.filter(function(x){return x.k===k})[0].n))+'<div class="msgs" data-msgs></div><div class="escreve"><input class="ent" data-in placeholder="'+(ehCli?'Responder '+esc(DB.nomeCurto(c.contato)):'Mensagem em #'+esc(k))+'" aria-label="Mensagem"><button class="btn pri" style="height:52px;width:56px;padding:0" data-env aria-label="Enviar">'+ico('enviar',19)+'</button></div>';
+    $('[data-soc]').classList.add('com-canal');$('[data-vc]').addEventListener('click',function(){atual=null;vazio();lista()});
+    msgs();var inp=$('[data-in]');inp.focus();
+    function envia(){var t=inp.value.trim();if(!t)return;msgsDe(k).push({quem:EU.id,txt:t,quando:new Date().toISOString()});DB.salva('canais');
+      (t.match(/@([A-Za-zÀ-ú]+)/g)||[]).forEach(function(mn){var p=S.equipe.filter(function(x){return DB.primeiroNome(x).toLowerCase()===mn.slice(1).toLowerCase()})[0];if(p&&p.id!==EU.id)UI.notifica({txt:'<b>'+esc(DB.primeiroNome(EU))+'</b> te marcou em <b>#'+esc(k)+'</b>',link:'social.html',para:p.id})});
+      if(ehCli)UI.notifica({txt:'<b>'+esc(DB.primeiroNome(EU))+'</b> respondeu sua mensagem',link:'portal.html#mensagens',cliente:c.id});
+      inp.value='';msgs()}
+    $('[data-env]').addEventListener('click',envia);inp.addEventListener('keydown',function(e){if(e.key==='Enter')envia()});lista()}
+  function msgs(){var L=msgsDe(atual),box=$('[data-msgs]'),c=atual.indexOf('cli:')===0?DB.cliente(atual.slice(4)):null,ult=null,dia=null;
+    box.innerHTML=L.length?L.map(function(m){var d=m.quando.slice(0,10),h='';if(d!==dia){dia=d;ult=null;var dd=UI.diasAte(d);h+='<div class="dia-sep">'+(dd===0?'Hoje':dd===-1?'Ontem':UI.dataLonga(d))+'</div>'}
+      var cont=ult===m.quem;ult=m.quem;var p=m.quem==='cliente'?'cliente':DB.pessoa(m.quem);
+      return h+'<div class="msg'+(cont?' cont':'')+(m.quem==='cliente'?' cli':'')+'">'+(m.quem==='cliente'?UI.avCli(c):UI.av(p))+'<div class="c">'+(cont?'':'<div class="q"><b>'+(m.quem==='cliente'?esc(c.contato):esc(p?DB.primeiroNome(p):'?'))+'</b>'+UI.hora(m.quando)+'</div>')+'<div class="x">'+esc(m.txt).replace(/@([A-Za-zÀ-ú]+)/g,'<b style="color:var(--laranja-tinta)">@$1</b>')+'</div></div></div>'}).join(''):'<div class="vazio-c">Nenhuma mensagem ainda. Comece a conversa.</div>';
+    box.scrollTop=box.scrollHeight;marcaLido(atual,L.length)}
+  function sala(k){var v=C.voz.filter(function(x){return x.k===k})[0];
+    if(v.trancado&&!ADM&&v.dentro.indexOf(EU.id)<0){UI.aviso('Sala trancada: só a direção entra');return}
+    if(naSala&&naSala!==v)naSala.dentro.splice(naSala.dentro.indexOf(EU.id),1);
+    if(v.dentro.indexOf(EU.id)<0)v.dentro.push(EU.id);naSala=v;atual='voz:'+k;DB.salva('canais');desenhaSala();lista()}
+  function desenhaSala(){var v=naSala;
+    $('[data-chat]').innerHTML=cab(ico('voz',22),esc(v.n)+'<small style="display:block;font-weight:400">'+v.dentro.length+' na sala · protótipo, sem áudio de verdade</small>')+'<div class="sala"><div class="gente">'+v.dentro.map(function(q){var p=DB.pessoa(q);return p?'<div class="p'+(q===EU.id&&!mudo?' fala':'')+'">'+UI.av(p)+esc(DB.primeiroNome(p))+(q===EU.id?' (você)':'')+'</div>':''}).join('')+'</div><div class="ctrl"><button data-mudo class="'+(mudo?'off':'')+'" aria-label="'+(mudo?'Ativar microfone':'Silenciar')+'">'+ico(mudo?'micOff':'mic',24)+'</button><button class="sai" data-sai aria-label="Sair da sala">'+ico('sair',22)+'</button></div></div>';
+    $('[data-soc]').classList.add('com-canal');$('[data-vc]').addEventListener('click',function(){atual=null;vazio();lista()});
+    $('[data-mudo]').addEventListener('click',function(){mudo=!mudo;desenhaSala();lista()});
+    $('[data-sai]').addEventListener('click',function(){naSala.dentro.splice(naSala.dentro.indexOf(EU.id),1);DB.salva('canais');naSala=null;atual=null;vazio();lista();UI.aviso('Você saiu da sala')})}
+  $('[data-link]').addEventListener('click',function(){var cod=Math.random().toString(36).slice(2,5)+'-'+Math.random().toString(36).slice(2,6)+'-'+Math.random().toString(36).slice(2,5),url='https://meet.pulsecreator.app/'+cod;
+    var m=UI.modal('<div class="olho">Reunião rápida</div><h2>Link de reunião</h2><p class="desc">Mande para quem é de fora da equipe, como um cliente. O link vale por 24 horas.</p><div style="display:flex;gap:8px;align-items:center;padding:8px 8px 8px 16px;border-radius:16px;background:var(--cartao-2);border:1px solid var(--linha)"><code style="flex:1;font-family:inherit;color:var(--tinta-2);overflow:hidden;text-overflow:ellipsis">'+url+'</code><button class="btn p" data-cp>'+ico('copiar',16)+'Copiar</button></div><div class="pe"><button class="btn escuro" data-ag>'+ico('agenda',17)+'Pôr na agenda</button></div>');
+    $('[data-cp]',m.el).addEventListener('click',function(){UI.copiar(url,'Link copiado')});
+    $('[data-ag]',m.el).addEventListener('click',function(){var h=new Date();h.setMinutes(0);h.setHours(h.getHours()+1);var hh=('0'+h.getHours()).slice(-2)+':00',ff=('0'+((h.getHours()+1)%24)).slice(-2)+':00';S.eventos.push({id:'e'+Date.now().toString(36),data:DB.hoje(),hora:hh,fim:ff,cat:'reuniao',titulo:'Reunião rápida',quem:[EU.id],cliente:null,local:url});DB.salva('eventos');m.fecha();UI.aviso('Marcado hoje às '+hh)})});
+  lista();vazio();
+  var q=new URLSearchParams(location.search).get('canal');if(q)abre(q);
+})();
+</script>
+</body>
+</html>

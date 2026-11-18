@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pautas · Pulse Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600&display=swap">
+<link rel="icon" href="assets/icone.svg">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.barra{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.barra .esp{flex:1}
+.barra select{width:auto;min-width:200px;height:50px;border-radius:99px}
+.nova-col{flex:0 0 260px;display:flex;align-items:center;justify-content:center;gap:10px;height:64px;border-radius:24px;border:1.5px dashed var(--linha-2);color:var(--tinta-2);font-size:16px}
+.nova-col:hover{background:var(--cartao);color:var(--tinta)}
+.col-cab input{flex:1;min-width:0;font-size:17px;font-weight:600;border:0;outline:0;background:var(--cartao);border-radius:10px;padding:4px 8px}
+.col-cab .mn{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:var(--tinta-3)}
+.col-cab .mn:hover{background:var(--cartao-2);color:var(--tinta)}
+.col .cadeado{display:inline-flex;color:var(--tinta-3)}
+</style>
+</head>
+<body data-area="agencia" data-pag="pautas" data-botao="nova-pauta">
+<div class="app"><aside class="lat" id="lat"></aside><main class="painel"><div class="miolo" style="max-width:none">
+  <header class="cab"><div class="t"><div class="olho">Quadro da equipe</div><h1>Pautas</h1><p class="sub" data-sub>Arraste o cartão para mudar o status. Tudo fica registrado com data e hora.</p></div><div class="acoes-topo" data-acoes></div></header>
+  <div class="barra"><div class="chips"><button class="chip" data-f="todas">Todas</button><button class="chip" data-f="minhas">Minhas</button></div><span class="esp"></span><select class="ent" data-cli aria-label="Filtrar por cliente"></select></div>
+  <div class="quadro" data-quadro></div>
+</div></main></div>
+<script src="assets/dados.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var S=DB.S,EU=UI.eu,$=UI.$,$$=UI.$$,esc=UI.esc;if(!EU)return;
+  var q=new URLSearchParams(location.search),filtro=q.get('f')||'todas',cli=q.get('c')||'';
+  var ADM=EU.papel==='admin';
+  $('[data-cli]').innerHTML='<option value="">Todos os clientes</option>'+DB.meusClientes(EU).map(function(c){return '<option value="'+c.id+'"'+(c.id===cli?' selected':'')+'>'+esc(c.nome)+'</option>'}).join('');
+  $('[data-cli]').addEventListener('change',function(){cli=this.value;desenha()});
+  $$('[data-f]').forEach(function(b){b.addEventListener('click',function(){filtro=b.dataset.f;desenha()})});
+  if(!DB.pode(EU,'mover_tudo'))$('[data-sub]').textContent='Arraste o cartão para mudar o status. Colunas com cadeado são movidas pela social media ou pelo admin.';
+
+  function desenha(){
+    $$('[data-f]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.f===filtro)});
+    var L=UI.pautasVisiveis().filter(function(p){return (filtro!=='minhas'||p.resp.indexOf(EU.id)>=0)&&(!cli||p.cliente===cli)});
+    var podeCriar=DB.pode(EU,'criar_pauta');
+    $('[data-quadro]').innerHTML=S.colunas.map(function(c,i){var cs=L.filter(function(p){return p.coluna===c.k}).sort(function(a,b){return a.prazo<b.prazo?-1:1});var livre=DB.podeMover(EU,c.k);
+      return '<section class="col" data-col="'+c.k+'"><div class="col-cab"><b data-nome="'+c.k+'">'+esc(c.n)+'</b>'+(livre?'':'<span class="cadeado" title="Sua função não move cards para cá">'+UI.ico('cadeado',15)+'</span>')+'<span>'+cs.length+'</span>'+(ADM?'<button class="mn" data-ren="'+c.k+'" title="Renomear coluna" aria-label="Renomear coluna">'+UI.ico('doc',15)+'</button>':'')+'</div>'+
+        cs.map(function(p){return UI.cartaoPauta(p,{arrasta:true})}).join('')+(podeCriar?'<button class="col-add" data-add="'+c.k+'">'+UI.ico('mais',18)+'Adicionar um cartão</button>':'')+'</section>'}).join('')+
+      (ADM?'<button class="nova-col" data-nova-col>'+UI.ico('mais',18)+'Nova coluna</button>':'');
+    $$('.cp').forEach(function(el){el.addEventListener('click',function(){UI.abrePauta(+el.dataset.pid)});el.addEventListener('keydown',function(e){if(e.key==='Enter')UI.abrePauta(+el.dataset.pid)})});
+    $$('[data-add]').forEach(function(b){b.addEventListener('click',function(){UI.novaPauta({coluna:b.dataset.add,cliente:cli||undefined})})});
+    $$('[data-ren]').forEach(function(b){b.addEventListener('click',function(){renomeia(b.dataset.ren)})});
+    var nc=$('[data-nova-col]');if(nc)nc.addEventListener('click',function(){var n=prompt('Nome da nova coluna');if(!n||!n.trim())return;var k='c'+Date.now().toString(36);S.colunas.splice(S.colunas.length-1,0,{k:k,n:n.trim(),todos:false});DB.salva('colunas');desenha();UI.aviso('Coluna criada antes de “'+S.colunas[S.colunas.length-1].n+'”')});
+    arrastar();
+  }
+  function renomeia(k){var b=$('[data-nome="'+k+'"]'),c=DB.coluna(k);var i=document.createElement('input');i.value=c.n;b.replaceWith(i);i.focus();i.select();
+    function ok(){var v=i.value.trim();if(v&&v!==c.n){c.n=v;DB.salva('colunas');UI.aviso('Coluna renomeada')}desenha()}
+    i.addEventListener('blur',ok);i.addEventListener('keydown',function(e){if(e.key==='Enter')i.blur();if(e.key==='Escape'){i.value=c.n;i.blur()}})}
+  // arrastar e soltar entre colunas (respeita a função de quem arrasta)
+  function arrastar(){var pid=null;
+    $$('.cp').forEach(function(el){
+      el.addEventListener('dragstart',function(e){pid=+el.dataset.pid;el.classList.add('arrastando');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',pid)}catch(x){}
+        $$('.col').forEach(function(c){if(!DB.podeMover(EU,c.dataset.col))c.classList.add('bloq')})});
+      el.addEventListener('dragend',function(){el.classList.remove('arrastando');$$('.col').forEach(function(c){c.classList.remove('bloq','alvo')})})});
+    $$('.col').forEach(function(col){
+      col.addEventListener('dragover',function(e){if(pid==null||!DB.podeMover(EU,col.dataset.col))return;e.preventDefault();col.classList.add('alvo')});
+      col.addEventListener('dragleave',function(e){if(!col.contains(e.relatedTarget))col.classList.remove('alvo')});
+      col.addEventListener('drop',function(e){e.preventDefault();var p=DB.pauta(pid),k=col.dataset.col;pid=null;if(!p||p.coluna===k)return;
+        if(!DB.podeMover(EU,k)){UI.aviso('Sua função não pode mover para “'+DB.coluna(k).n+'”');return}
+        p.coluna=k;if(k==='cliente'){p.visivelCliente=true;p.aprovacao=null}DB.log(p,{t:'moveu',para:k,quem:EU.id});UI.aviso('“'+p.titulo+'” → '+DB.coluna(k).n);UI.desenhaLateral();desenha()})});
+  }
+  window.aoMudarPautas=function(){UI.desenhaLateral();desenha()};
+  desenha();
+})();
+</script>
+</body>
+</html>

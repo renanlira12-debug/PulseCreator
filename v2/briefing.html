@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600&display=swap">
+<link rel="icon" href="assets/icone.svg">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+body{background:var(--painel)}
+.pub{max-width:680px;margin:0 auto;padding:40px 18px 80px}
+.marca-p{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--tinta-3);margin-bottom:30px}
+.marca-p b{font-family:var(--titulo);font-weight:600;color:var(--tinta);letter-spacing:-.03em}
+.passo{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--laranja-tinta);margin:30px 0 14px}
+.opcoes{display:flex;flex-wrap:wrap;gap:8px}
+.feito{text-align:center;padding:60px 20px}
+.feito .ic{width:76px;height:76px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;color:#fff;background:var(--verde)}
+</style>
+</head>
+<body data-area="publico">
+<div class="pub" data-pub></div>
+<script src="assets/dados.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var S=DB.S,$=UI.$,$$=UI.$$,esc=UI.esc,ico=UI.ico;
+  var C=DB.cliente(new URLSearchParams(location.search).get('c'));
+  if(!C){$('[data-pub]').innerHTML='<div class="vazio-l" style="margin-top:60px"><b>Link inválido</b>Peça um novo link para a agência.</div>';return}
+  document.title='Briefing · '+C.nome;
+  var TOM=['Próximo','Divertido','Sério','Técnico','Inspirador','Elegante'];
+  $('[data-pub]').innerHTML='<div class="marca-p"><span class="av p" style="--c:var(--laranja)">'+ico('raio',14,' fill="#fff"')+'</span><b>'+esc(S.config.agencia)+'</b></div>'+
+    '<h1>Vamos conhecer a '+esc(C.nome)+'</h1><p class="sub">Leva uns 5 minutos. Suas respostas viram o briefing que a equipe usa para criar.</p>'+
+    '<div class="passo">1 · Sobre o negócio</div><label class="campo"><span>O que vocês fazem, em uma frase?</span><input class="ent" data-q="Negócio"></label><label class="campo"><span>Quem é o cliente ideal?</span><textarea class="ent" rows="3" data-q="Público" placeholder="Idade, onde mora, o que busca…"></textarea></label><label class="campo"><span>O que diferencia vocês da concorrência?</span><textarea class="ent" rows="3" data-q="Diferencial"></textarea></label>'+
+    '<div class="passo">2 · Comunicação</div><div class="campo"><span>Como a marca fala? (escolha até 3)</span><div class="opcoes">'+TOM.map(function(t){return '<button class="chip p" data-tom="'+t+'" aria-pressed="false">'+t+'</button>'}).join('')+'</div></div><label class="campo"><span>Perfis que vocês admiram</span><input class="ent" data-q="Referências" placeholder="@perfil1, @perfil2"></label><label class="campo"><span>O que não pode aparecer de jeito nenhum?</span><textarea class="ent" rows="2" data-q="Evitar"></textarea></label>'+
+    '<div class="passo">3 · Objetivos</div><label class="campo"><span>O que vocês querem das redes nos próximos 3 meses?</span><textarea class="ent" rows="3" data-q="Objetivo" placeholder="Mais agendamentos, vender um produto, ser lembrado…"></textarea></label><label class="campo"><span>Datas importantes</span><input class="ent" data-q="Datas" placeholder="Aniversário da empresa, lançamentos…"></label>'+
+    '<button class="btn pri" style="width:100%;margin-top:10px" data-env>'+ico('enviar',19)+'Enviar respostas</button>';
+  var tons=[];$$('[data-tom]').forEach(function(b){b.addEventListener('click',function(){var i=tons.indexOf(b.dataset.tom);if(i>=0)tons.splice(i,1);else{if(tons.length>=3){UI.aviso('Escolha até 3');return}tons.push(b.dataset.tom)}b.setAttribute('aria-pressed',i<0)})});
+  $('[data-env]').addEventListener('click',function(){var r=[];$$('[data-q]').forEach(function(i){if(i.value.trim())r.push(i.dataset.q+': '+i.value.trim())});if(tons.length)r.splice(3,0,'Tom de voz: '+tons.join(', '));
+    if(r.length<3){UI.aviso('Responda pelo menos três perguntas');return}
+    C.briefing=r.join('\n');DB.salva('clientes');
+    S.equipe.filter(function(p){return DB.pode(p,'gerir_clientes')&&(p.clientes==='todos'||p.clientes.indexOf(C.id)>=0)}).forEach(function(p){UI.notifica({txt:'<b>'+esc(C.nome)+'</b> respondeu o briefing',link:'cliente.html?c='+C.id,para:p.id})});
+    $('[data-pub]').innerHTML='<div class="feito"><div class="ic">'+ico('check',36)+'</div><h1>Obrigado!</h1><p class="sub" style="margin:12px auto 0">A equipe da '+esc(S.config.agencia)+' recebeu suas respostas e vai usar no planejamento.</p></div>';scrollTo(0,0)});
+})();
+</script>
+</body>
+</html>

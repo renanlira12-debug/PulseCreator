@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestão · Pulse Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600&display=swap">
+<link rel="icon" href="assets/icone.svg">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.nums .cartao{padding:20px 22px}
+.nums small{display:block;font-size:13.5px;color:var(--tinta-2)}
+.nums b{display:block;font-family:var(--titulo);font-weight:500;font-size:26px;letter-spacing:-.04em;margin-top:4px}
+.duas{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.pes{display:flex;align-items:center;gap:12px}
+.pes b{display:block;font-weight:600}
+.pes small{display:block;font-size:13px;color:var(--tinta-3)}
+.tab select.ent.p{width:auto;min-width:150px}
+.perm td:not(:first-child),.perm th:not(:first-child){text-align:center;width:110px}
+.perm input{width:20px;height:20px;accent-color:var(--laranja);cursor:pointer}
+.perm input:disabled{cursor:not-allowed}
+.col-l{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--linha)}
+.col-l:last-child{border-bottom:0}
+.col-l input.ent{flex:1}
+.col-l .mv{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--tinta-2)}
+.col-l .mv:hover{background:var(--cartao-2)}
+.col-l .mv:disabled{opacity:.3}
+.col-l label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tinta-2);white-space:nowrap}
+.int{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--linha)}
+.int:last-child{border-bottom:0}
+.int div{flex:1}
+.int b{display:block;font-weight:600}
+.int small{font-size:13px;color:var(--tinta-3)}
+.pz{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:1100px){.duas{grid-template-columns:1fr}.nums{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body data-area="agencia" data-pag="gestao" data-exige="gestao">
+<div class="app"><aside class="lat" id="lat"></aside><main class="painel"><div class="miolo">
+  <header class="cab"><div class="t"><div class="olho" data-ag></div><h1>Gestão</h1><p class="sub">Equipe, permissões, dinheiro e as regras da agência. Só admins veem esta tela.</p></div><div class="acoes-topo" data-acoes></div></header>
+  <div class="abas" role="tablist" data-abas></div>
+  <div data-aba></div>
+</div></main></div>
+<script src="assets/dados.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var S=DB.S,EU=UI.eu,$=UI.$,$$=UI.$$,esc=UI.esc,ico=UI.ico;if(!EU)return;
+  $('[data-ag]').textContent=S.config.agencia;
+  var ABAS=[['equipe','Equipe'],['funcoes','Funções e permissões'],['financeiro','Financeiro'],['config','Configurações']];
+  var aba=location.hash.slice(1);if(!ABAS.some(function(a){return a[0]===aba}))aba='equipe';
+  function abas(){$('[data-abas]').innerHTML=ABAS.map(function(a){return '<button role="tab" aria-selected="'+(a[0]===aba)+'" data-a="'+a[0]+'">'+a[1]+'</button>'}).join('');$$('[data-a]').forEach(function(b){b.addEventListener('click',function(){aba=b.dataset.a;history.replaceState(null,'','#'+aba);abas();R[aba]()})})}
+  var R={};
+
+  /* ---------- equipe ---------- */
+  R.equipe=function(){
+    $('[data-aba]').innerHTML='<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap"><p style="flex:1;color:var(--tinta-2)">Adicione pelo e-mail e escolha a função: é ela que define o que a pessoa pode fazer. No primeiro acesso, a pessoa completa o perfil.</p><button class="btn pri p" data-conv>'+ico('mais',18)+'Adicionar pessoa</button></div>'+
+      '<div class="cartao rolo"><table class="tab"><thead><tr><th>Pessoa</th><th>Função</th><th>Acesso</th><th>Clientes</th><th>Aniversário</th><th>Pix</th><th></th></tr></thead><tbody>'+S.equipe.map(function(p){var d=p.nasc?UI.dt(p.nasc):null,eu=p.id===EU.id;
+        return '<tr><td><button class="pes" data-ver="'+p.id+'" style="text-align:left">'+UI.av(p)+'<span><b>'+esc(p.nome)+(eu?' (você)':'')+'</b><small>'+esc(p.email)+'</small></span></button></td>'+
+          '<td><select class="ent p" data-fun="'+p.id+'"'+(eu?' disabled':'')+'>'+Object.keys(DB.FUNCOES).map(function(k){return '<option value="'+k+'"'+(k===p.funcao?' selected':'')+'>'+DB.FUNCOES[k].n+'</option>'}).join('')+'</select></td>'+
+          '<td><select class="ent p" data-pap="'+p.id+'"'+(eu?' disabled':'')+'><option value="colaborador"'+(p.papel!=='admin'?' selected':'')+'>Colaborador</option><option value="admin"'+(p.papel==='admin'?' selected':'')+'>Admin</option></select></td>'+
+          '<td><button class="btn p" data-cli="'+p.id+'">'+(p.clientes==='todos'?'Todos':p.clientes.length+' cliente'+(p.clientes.length===1?'':'s'))+'</button></td>'+
+          '<td>'+(d?d.getDate()+' '+UI.MES3[d.getMonth()]:'<span class="selo laranja">primeiro acesso</span>')+'</td><td style="font-size:13.5px;color:var(--tinta-2)">'+esc(p.pix||'—')+'</td>'+
+          '<td>'+(eu?'':'<button class="btn fant p" data-rem="'+p.id+'" aria-label="Remover" title="Remover">'+ico('lixo',16)+'</button>')+'</td></tr>'}).join('')+'</tbody></table></div>';
+    $$('[data-ver]').forEach(function(b){b.addEventListener('click',function(){UI.verPessoa(b.dataset.ver)})});
+    $$('[data-fun]').forEach(function(s){s.addEventListener('change',function(){var p=DB.pessoa(s.dataset.fun);p.funcao=s.value;p.cargo=DB.FUNCOES[s.value].n;DB.salva('equipe');UI.aviso(DB.primeiroNome(p)+' agora é '+DB.FUNCOES[s.value].n);R.equipe()})});
+    $$('[data-pap]').forEach(function(s){s.addEventListener('change',function(){var p=DB.pessoa(s.dataset.pap);p.papel=s.value;if(s.value==='admin')p.clientes='todos';else if(p.clientes==='todos')p.clientes=S.clientes.map(function(c){return c.id});DB.salva('equipe');UI.aviso(s.value==='admin'?DB.primeiroNome(p)+' agora é admin e vê tudo':DB.primeiroNome(p)+' agora é colaborador');R.equipe()})});
+    $$('[data-cli]').forEach(function(b){b.addEventListener('click',function(){clientesDe(DB.pessoa(b.dataset.cli))})});
+    $$('[data-rem]').forEach(function(b){b.addEventListener('click',function(){var p=DB.pessoa(b.dataset.rem);if(!confirm('Remover '+p.nome+' da equipe? A pessoa perde o acesso. As pautas continuam no quadro.'))return;S.equipe.splice(S.equipe.indexOf(p),1);S.pautas.forEach(function(pt){var i=pt.resp.indexOf(p.id);if(i>=0&&pt.resp.length>1)pt.resp.splice(i,1)});DB.salva('equipe');DB.salva('pautas');UI.aviso(p.nome+' removido da equipe');R.equipe()})});
+    $('[data-conv]').addEventListener('click',convidar);
+  };
+  function seletorClientes(sel){return '<div style="display:flex;flex-wrap:wrap;gap:6px" data-cs>'+S.clientes.map(function(c){return '<button class="chip p" data-c="'+c.id+'" aria-pressed="'+(sel.indexOf(c.id)>=0)+'" style="padding-left:5px;gap:7px">'+UI.avCli(c,'p')+esc(c.nome)+'</button>'}).join('')+'</div>'}
+  function ligaSeletor(box,sel){$$('[data-c]',box).forEach(function(b){b.addEventListener('click',function(){var i=sel.indexOf(b.dataset.c);if(i>=0)sel.splice(i,1);else sel.push(b.dataset.c);b.setAttribute('aria-pressed',i<0)})})}
+  function clientesDe(p){if(p.papel==='admin'){UI.aviso('Admins veem todos os clientes');return}var sel=p.clientes.slice();
+    var m=UI.modal('<h2>Clientes de '+esc(DB.primeiroNome(p))+'</h2><p class="desc">A pessoa só vê as pautas, a agenda e as conversas desses clientes.</p>'+seletorClientes(sel)+'<div class="pe"><button class="btn pri p" data-ok>Salvar</button></div>',{semFoco:true});
+    ligaSeletor(m.el,sel);$('[data-ok]',m.el).addEventListener('click',function(){p.clientes=sel;DB.salva('equipe');m.fecha();UI.aviso('Clientes atualizados');R.equipe()})}
+  function convidar(){var sel=[];
+    var m=UI.modal('<div class="olho">Equipe</div><h2>Adicionar pessoa</h2><p class="desc">Ela entra com esse e-mail (Google) e completa o perfil no primeiro acesso.</p>'+
+      '<div class="linha2"><label class="campo"><span>Nome</span><input class="ent" data-n="nome"></label><label class="campo"><span>E-mail</span><input class="ent" type="email" data-n="email" placeholder="nome@agencia.com.br"></label></div>'+
+      '<div class="linha2"><label class="campo"><span>Função</span><select class="ent" data-n="funcao">'+Object.keys(DB.FUNCOES).map(function(k){return '<option value="'+k+'"'+(k==='designer'?' selected':'')+'>'+DB.FUNCOES[k].n+'</option>'}).join('')+'</select></label><label class="campo"><span>Cargo (aparece pra equipe)</span><input class="ent" data-n="cargo" placeholder="Ex.: Designer júnior"></label></div>'+
+      '<div class="campo"><span>Clientes</span>'+seletorClientes(sel)+'</div><div class="pe"><button class="btn fant" data-x>Cancelar</button><button class="btn pri p" data-ok>Adicionar</button></div>');
+    ligaSeletor(m.el,sel);$('[data-x]',m.el).addEventListener('click',m.fecha);
+    $('[data-ok]',m.el).addEventListener('click',function(){var v={};$$('[data-n]',m.el).forEach(function(i){v[i.dataset.n]=i.value.trim()});
+      if(!v.nome||!/^\S+@\S+\.\S+$/.test(v.email)){UI.aviso('Preencha o nome e um e-mail válido');return}
+      if(S.equipe.some(function(p){return p.email.toLowerCase()===v.email.toLowerCase()})){UI.aviso('Esse e-mail já está na equipe');return}
+      var id;do{id=UI.iniciais(v.nome)+Math.floor(Math.random()*9+1)}while(DB.pessoa(id));
+      var cores=['#9A5B13','#C2410C','#57534E','#7A5C1E','#8F2D1B','#5B4B8A','#246B74'];
+      S.equipe.push({id:id,nome:v.nome,email:v.email,papel:'colaborador',funcao:v.funcao,cargo:v.cargo||DB.FUNCOES[v.funcao].n,cor:cores[S.equipe.length%cores.length],nasc:'',pix:'',desc:'',clientes:sel.slice(),foto:null});
+      DB.salva('equipe');m.fecha();UI.aviso(v.nome+' adicionado. Avise para entrar com '+v.email+'.');R.equipe()})}
+
+  /* ---------- funções e permissões ---------- */
+  R.funcoes=function(){var F=Object.keys(DB.FUNCOES).filter(function(k){return k!=='direcao'});
+    function tem(f,a){var p=S.config.perm[f]||DB.FUNCOES[f].p;return p.indexOf(a)>=0}
+    $('[data-aba]').innerHTML='<p style="color:var(--tinta-2);margin-bottom:20px;max-width:760px">Cada função vem com um padrão. Marque e desmarque para ajustar o que ela pode fazer. Admins e a função Direção podem tudo. Mover para colunas com cadeado depende de “Mover para qualquer coluna”; as outras colunas qualquer pessoa move (ajuste em Configurações › Colunas do quadro).</p>'+
+      '<div class="cartao rolo"><table class="tab perm"><thead><tr><th>O que pode fazer</th>'+F.map(function(f){return '<th>'+DB.FUNCOES[f].n+'</th>'}).join('')+'</tr></thead><tbody>'+DB.ACOES.map(function(a){return '<tr><td>'+esc(a[1])+'</td>'+F.map(function(f){return '<td><input type="checkbox" data-f="'+f+'" data-ac="'+a[0]+'"'+(tem(f,a[0])?' checked':'')+(a[0]==='gestao'?' disabled title="Gestão é só para admins"':'')+' aria-label="'+esc(DB.FUNCOES[f].n+': '+a[1])+'"></td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'+
+      '<div style="margin-top:16px"><button class="btn" data-pad>Voltar ao padrão</button></div>';
+    $$('[data-ac]').forEach(function(c){c.addEventListener('change',function(){var f=c.dataset.f,p=(S.config.perm[f]||DB.FUNCOES[f].p).slice(),i=p.indexOf(c.dataset.ac);if(c.checked&&i<0)p.push(c.dataset.ac);if(!c.checked&&i>=0)p.splice(i,1);S.config.perm[f]=p;DB.salva('config');UI.aviso('Permissão de '+DB.FUNCOES[f].n+' atualizada')})});
+    $('[data-pad]').addEventListener('click',function(){S.config.perm={};DB.salva('config');R.funcoes();UI.aviso('Permissões no padrão')});
+  };
+
+  /* ---------- financeiro ---------- */
+  R.financeiro=function(){var hoje=new Date(),mes=hoje.getFullYear()+'-'+hoje.getMonth(),rec=S.config.recebidos=S.config.recebidos||{};rec[mes]=rec[mes]||S.clientes.filter(function(c){return c.venc<hoje.getDate()-2}).map(function(c){return c.id});
+    var receita=S.clientes.reduce(function(s,c){return s+c.valor},0),recebido=S.clientes.filter(function(c){return rec[mes].indexOf(c.id)>=0}).reduce(function(s,c){return s+c.valor},0);
+    var folha=S.pagamentos.reduce(function(s,p){return s+p.valor},0),ferr=S.ferramentas.reduce(function(s,t){return s+(+t.valor||0)},0);
+    $('[data-aba]').innerHTML='<div class="nums"><div class="cartao"><small>Receita mensal</small><b>'+UI.reais(receita)+'</b></div><div class="cartao"><small>Recebido em '+UI.MESES[hoje.getMonth()]+'</small><b style="color:var(--verde)">'+UI.reais(recebido)+'</b></div><div class="cartao"><small>Equipe no mês</small><b>'+UI.reais(folha)+'</b></div><div class="cartao"><small>Sobra estimada</small><b style="color:var(--laranja-tinta)">'+UI.reais(receita-folha-ferr)+'</b></div></div>'+
+      '<div class="duas"><section class="cartao pad"><div class="cab-c"><h3>Mensalidades</h3></div><div class="rolo"><table class="tab"><tbody>'+S.clientes.slice().sort(function(a,b){return a.venc-b.venc}).map(function(c){var ok=rec[mes].indexOf(c.id)>=0,atr=!ok&&c.venc<hoje.getDate();return '<tr><td><span class="pes">'+UI.avCli(c,'p')+'<span><b>'+esc(c.nome)+'</b><small>vence dia '+c.venc+'</small></span></span></td><td class="num">'+UI.reais(c.valor)+'</td><td class="num"><button class="selo '+(ok?'verde':atr?'vermelho':'')+'" data-rec="'+c.id+'" title="Clique para alternar">'+(ok?'pago':atr?'atrasado':'a receber')+'</button></td></tr>'}).join('')+'</tbody></table></div></section>'+
+      '<section style="display:flex;flex-direction:column;gap:24px"><div class="cartao pad"><div class="cab-c"><h3>Pagamentos da equipe</h3></div><div class="rolo"><table class="tab"><tbody>'+S.pagamentos.map(function(p,i){var pe=DB.pessoa(p.quem);return pe?'<tr><td><span class="pes">'+UI.av(pe,'p')+'<span><b>'+esc(DB.primeiroNome(pe))+'</b><small>'+esc(p.ref)+(pe.pix?' · Pix '+esc(pe.pix):' · sem Pix')+'</small></span></span></td><td class="num">'+UI.reais(p.valor)+'</td><td class="num">'+(p.status==='pago'?'<span class="selo verde">pago</span>':'<button class="btn p" data-pg="'+i+'">Marcar pago</button>')+'</td></tr>':''}).join('')+'</tbody></table></div></div>'+
+      '<div class="cartao pad"><div class="cab-c"><h3>Ferramentas</h3><span style="font-weight:600">'+UI.reais(ferr)+'/mês</span></div>'+S.ferramentas.map(function(t){return '<div class="int"><div><b>'+esc(t.nome)+'</b></div><span>'+UI.reais(t.valor)+'</span></div>'}).join('')+'</div></section></div>';
+    $$('[data-rec]').forEach(function(b){b.addEventListener('click',function(){var L=rec[mes],i=L.indexOf(b.dataset.rec);if(i>=0)L.splice(i,1);else L.push(b.dataset.rec);DB.salva('config');R.financeiro()})});
+    $$('[data-pg]').forEach(function(b){b.addEventListener('click',function(){var p=S.pagamentos[+b.dataset.pg],pe=DB.pessoa(p.quem);if(!pe.pix&&!confirm(DB.primeiroNome(pe)+' ainda não cadastrou Pix. Marcar como pago mesmo assim?'))return;p.status='pago';p.data=DB.hoje();DB.salva('pagamentos');UI.notifica({txt:'Seu pagamento de <b>'+esc(p.ref)+'</b> ('+UI.reais(p.valor)+') foi marcado como pago',link:'inicio.html',para:pe.id});UI.aviso('Pago. '+DB.primeiroNome(pe)+' foi avisado.');R.financeiro()})});
+  };
+
+  /* ---------- configurações ---------- */
+  R.config=function(){var C=S.config;
+    $('[data-aba]').innerHTML='<div class="duas"><div style="display:flex;flex-direction:column;gap:24px">'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Agência</h3></div><label class="campo" style="margin:0"><span>Nome que aparece nos relatórios e no portal</span><input class="ent" data-ag-n value="'+esc(C.agencia)+'"></label></section>'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Prazo por nível</h3></div><p style="font-size:14.5px;color:var(--tinta-2);margin-bottom:14px">Dias sugeridos quando alguém cria uma pauta.</p><div class="pz">'+[['leve','Leve'],['media','Média'],['alta','Alta']].map(function(n){return '<label class="campo" style="margin:0"><span>'+UI.nivelHTML(n[0])+'</span><input class="ent" type="number" min="1" max="60" data-pz="'+n[0]+'" value="'+C.prazos[n[0]]+'"></label>'}).join('')+'</div></section>'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Integrações</h3></div>'+[['instagram','Instagram','Publicar e puxar métricas'],['meta_ads','Meta Ads','Resultados de anúncios'],['google','Google Agenda','“Meu Google” na agenda de cada pessoa'],['drive','Google Drive','Pastas dos clientes'],['whatsapp','WhatsApp','Avisar o cliente quando tiver post para aprovar']].map(function(i){return '<div class="int"><div><b>'+i[1]+'</b><small>'+i[2]+'</small></div><button class="troca" role="switch" aria-checked="'+!!C.integracoes[i[0]]+'" data-int="'+i[0]+'" aria-label="'+i[1]+'"></button></div>'}).join('')+'</section>'+
+    '</div><div style="display:flex;flex-direction:column;gap:24px">'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Colunas do quadro</h3><button class="btn p" data-nc>'+ico('mais',16)+'Coluna</button></div><p style="font-size:14.5px;color:var(--tinta-2);margin-bottom:8px">Renomeie, mude a ordem e diga se designers e videomakers podem mover cards para ela.</p><div data-cols></div></section>'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Dados do protótipo</h3></div><p style="font-size:14.5px;color:var(--tinta-2);margin-bottom:14px">Apaga o que foi mexido neste navegador e volta para os dados de exemplo.</p><button class="btn perigo" data-zera>Voltar aos dados de exemplo</button></section>'+
+    '</div></div>';
+    cols();
+    $('[data-ag-n]').addEventListener('change',function(){var v=this.value.trim();if(!v)return;C.agencia=v;DB.salva('config');$('[data-ag]').textContent=v;UI.aviso('Nome salvo')});
+    $$('[data-pz]').forEach(function(i){i.addEventListener('change',function(){var v=Math.max(1,Math.min(60,+i.value||1));i.value=v;C.prazos[i.dataset.pz]=v;DB.salva('config');UI.aviso('Prazo salvo')})});
+    $$('[data-int]').forEach(function(b){b.addEventListener('click',function(){var k=b.dataset.int;C.integracoes[k]=!C.integracoes[k];b.setAttribute('aria-checked',C.integracoes[k]);DB.salva('config');UI.aviso(C.integracoes[k]?'Conectado (no protótipo é só a chave)':'Desconectado')})});
+    $('[data-nc]').addEventListener('click',function(){S.colunas.splice(S.colunas.length-1,0,{k:'c'+Date.now().toString(36),n:'Nova coluna',todos:false});DB.salva('colunas');cols()});
+    $('[data-zera]').addEventListener('click',function(){if(!confirm('Voltar tudo aos dados de exemplo? O que foi criado neste navegador some.'))return;DB.zerar();location.reload()});
+  };
+  function cols(){var L=S.colunas;
+    $('[data-cols]').innerHTML=L.map(function(c,i){var n=S.pautas.filter(function(p){return p.coluna===c.k}).length;return '<div class="col-l"><button class="mv" data-up="'+i+'"'+(i===0?' disabled':'')+' aria-label="Subir">'+ico('voltar',16,' style="transform:rotate(90deg)"')+'</button><button class="mv" data-dw="'+i+'"'+(i===L.length-1?' disabled':'')+' aria-label="Descer">'+ico('seta',16,' style="transform:rotate(90deg)"')+'</button><input class="ent p" data-cn="'+i+'" value="'+esc(c.n)+'" aria-label="Nome da coluna"><label><input type="checkbox" data-td="'+i+'"'+(c.todos?' checked':'')+' style="accent-color:var(--laranja)">todos movem</label><button class="mv" data-cx="'+i+'" aria-label="Remover" title="'+(['cliente','publicado'].indexOf(c.k)>=0?'O portal do cliente usa essa coluna':n?'Tem '+n+' pauta(s): mova antes de remover':'Remover')+'"'+(n||L.length<=2||['cliente','publicado'].indexOf(c.k)>=0?' disabled':'')+'>'+ico('lixo',16)+'</button></div>'}).join('');
+    function troca(a,b){var t=L[a];L[a]=L[b];L[b]=t;DB.salva('colunas');cols()}
+    $$('[data-up]').forEach(function(b){b.addEventListener('click',function(){troca(+b.dataset.up,+b.dataset.up-1)})});
+    $$('[data-dw]').forEach(function(b){b.addEventListener('click',function(){troca(+b.dataset.dw,+b.dataset.dw+1)})});
+    $$('[data-cn]').forEach(function(i){i.addEventListener('change',function(){var v=i.value.trim();if(!v){i.value=L[+i.dataset.cn].n;return}L[+i.dataset.cn].n=v;DB.salva('colunas');UI.aviso('Coluna renomeada')})});
+    $$('[data-td]').forEach(function(c){c.addEventListener('change',function(){L[+c.dataset.td].todos=c.checked;DB.salva('colunas');UI.aviso(c.checked?'Todos podem mover para cá':'Só quem pode mover para qualquer coluna')})});
+    $$('[data-cx]').forEach(function(b){b.addEventListener('click',function(){L.splice(+b.dataset.cx,1);DB.salva('colunas');cols();UI.aviso('Coluna removida')})});
+  }
+  abas();R[aba]();
+})();
+</script>
+</body>
+</html>

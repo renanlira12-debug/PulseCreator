@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clientes · Pulse Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600&display=swap">
+<link rel="icon" href="assets/icone.svg">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.barra{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.barra .esp{flex:1}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.cc{position:relative;display:flex;align-items:center;gap:18px;padding:24px;border-radius:26px;background:var(--cartao);border:1px solid var(--linha);box-shadow:var(--sombra);transition:transform .15s,box-shadow .2s}
+.cc:hover{transform:translateY(-2px);box-shadow:var(--sombra-2)}
+.cc .av{width:74px;height:74px;font-size:22px}
+.cc .t{flex:1;min-width:0}
+.cc b{display:block;font-size:18px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.cc small{display:block;font-size:15px;color:var(--tinta-3);margin-top:3px}
+.cc .pin{position:relative;z-index:2;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:var(--tinta-3)}
+.cc .pin:hover{background:var(--cartao-2);color:var(--tinta)}
+.cc .pin[aria-pressed=true]{color:var(--laranja)}
+.cc a.cobre{position:absolute;inset:0;border-radius:26px}
+.cc .ab{display:block;margin-top:8px;font-size:12.5px;color:var(--tinta-2)}
+.tab .cli{display:flex;align-items:center;gap:12px;font-weight:600}
+.tab tbody tr{cursor:pointer}
+.tab tbody tr:hover td{background:var(--cartao-2)}
+.link-box{display:flex;gap:8px;align-items:center;padding:8px 8px 8px 16px;border-radius:16px;background:var(--cartao-2);border:1px solid var(--linha);font-size:14px;margin-bottom:10px}
+.link-box code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:inherit;color:var(--tinta-2)}
+</style>
+</head>
+<body data-area="agencia" data-pag="clientes">
+<div class="app"><aside class="lat" id="lat"></aside><main class="painel"><div class="miolo">
+  <header class="cab"><div class="t"><div class="olho" data-qtd></div><h1>Clientes</h1><p class="sub">Ao cadastrar um cliente, gere o link do formulário de briefing. As respostas viram o briefing dele automaticamente.</p></div><div class="acoes-topo" data-acoes></div></header>
+  <div class="barra"><div class="chips"><button class="chip p" data-s="todos">Todos</button><button class="chip p" data-s="fixados">Fixados</button></div><span class="esp"></span><div class="seg"><button data-v="grade">Grade</button><button data-v="lista">Lista</button></div></div>
+  <div data-lista></div>
+</div></main></div>
+<script src="assets/dados.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var S=DB.S,EU=UI.eu,$=UI.$,$$=UI.$$,esc=UI.esc;if(!EU)return;
+  var vis=(function(){try{return localStorage.getItem('pc2:vis-clientes')||'grade'}catch(e){return 'grade'}})(),sec='todos',FIN=DB.pode(EU,'gestao');
+  if(DB.pode(EU,'gerir_clientes')){var b=document.createElement('button');b.className='btn pri';b.innerHTML=UI.ico('mais',20)+'Novo cliente';b.addEventListener('click',novo);$('[data-acoes]').appendChild(b)}
+  $$('[data-v]').forEach(function(b){b.addEventListener('click',function(){vis=b.dataset.v;try{localStorage.setItem('pc2:vis-clientes',vis)}catch(e){}desenha()})});
+  $$('[data-s]').forEach(function(b){b.addEventListener('click',function(){sec=b.dataset.s;desenha()})});
+  function abertas(id){return S.pautas.filter(function(p){return p.cliente===id&&p.coluna!=='publicado'}).length}
+  function desenha(){
+    var mc=DB.meusClientes(EU),fx=UI.fixos(),L=sec==='fixados'?mc.filter(function(c){return fx.indexOf(c.id)>=0}):mc;
+    $('[data-qtd]').textContent=mc.length+' cliente'+(mc.length>1?'s':'')+' ativo'+(mc.length>1?'s':'')+(EU.papel==='admin'?'':' com você');
+    $$('[data-v]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===vis)});$$('[data-s]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.s===sec)});
+    if(!L.length){$('[data-lista]').innerHTML='<div class="vazio-l"><b>Nenhum cliente fixado</b>Use o alfinete no cartão do cliente para ele aparecer aqui e na lateral.</div>';return}
+    if(vis==='grade'){
+      $('[data-lista]').innerHTML='<div class="grade">'+L.map(function(c){var n=abertas(c.id),on=fx.indexOf(c.id)>=0;return '<div class="cc"><a class="cobre" href="cliente.html?c='+c.id+'" aria-label="Abrir '+esc(c.nome)+'"></a>'+UI.avCli(c)+'<div class="t"><b>'+esc(c.nome)+'</b><small>'+esc(c.seg)+'</small>'+(n?'<span class="ab">'+n+' pauta'+(n>1?'s':'')+' em aberto</span>':'')+'</div><button class="pin" data-pin="'+c.id+'" aria-pressed="'+on+'" title="'+(on?'Desafixar':'Fixar na lateral')+'" aria-label="'+(on?'Desafixar':'Fixar na lateral')+'">'+UI.ico(on?'pinOn':'pin',19)+'</button></div>'}).join('')+'</div>';
+    }else{
+      $('[data-lista]').innerHTML='<div class="cartao rolo"><table class="tab"><thead><tr><th>Cliente</th><th>Segmento</th><th>Equipe</th><th class="num">Em aberto</th>'+(FIN?'<th>Plano</th><th class="num">Mensalidade</th>':'')+'<th></th></tr></thead><tbody>'+L.map(function(c){var eq=S.equipe.filter(function(p){return p.clientes!=='todos'&&p.clientes.indexOf(c.id)>=0}),on=fx.indexOf(c.id)>=0;
+        return '<tr data-ir="'+c.id+'"><td><span class="cli">'+UI.avCli(c,'p')+esc(c.nome)+'</span></td><td>'+esc(c.seg)+'</td><td><span class="avs">'+eq.map(function(p){return UI.av(p,'p')}).join('')+'</span></td><td class="num">'+abertas(c.id)+'</td>'+(FIN?'<td>'+esc(c.plano)+'</td><td class="num">'+UI.reais(c.valor)+'</td>':'')+'<td style="width:50px"><button class="pin btn fant p" data-pin="'+c.id+'" aria-pressed="'+on+'" aria-label="Fixar">'+UI.ico(on?'pinOn':'pin',17)+'</button></td></tr>'}).join('')+'</tbody></table></div>';
+      $$('[data-ir]').forEach(function(tr){tr.addEventListener('click',function(e){if(!e.target.closest('[data-pin]'))location.href='cliente.html?c='+tr.dataset.ir})});
+    }
+    $$('[data-pin]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var on=UI.alternaFixo(b.dataset.pin);UI.aviso(on?'Fixado na lateral':'Desafixado');desenha()})});
+  }
+  function novo(){
+    var m=UI.modal('<div class="olho">Novo cliente</div><h2>Cadastrar cliente</h2><p class="desc">O básico agora. O resto do briefing o cliente responde pelo formulário.</p>'+
+      '<label class="campo"><span>Nome do cliente ou da marca</span><input class="ent" data-n="nome" placeholder="Ex.: Clínica Sorriso"></label>'+
+      '<div class="linha2"><label class="campo"><span>Segmento</span><input class="ent" data-n="seg" placeholder="Ex.: Odontologia"></label><label class="campo"><span>Instagram</span><input class="ent" data-n="insta" placeholder="@perfil"></label></div>'+
+      '<div class="linha2"><label class="campo"><span>Pessoa de contato</span><input class="ent" data-n="contato"></label><label class="campo"><span>E-mail (acesso ao portal)</span><input class="ent" type="email" data-n="email"></label></div>'+
+      (FIN?'<div class="linha2"><label class="campo"><span>Plano</span><select class="ent" data-n="plano"><option>Essencial</option><option>Pro</option></select></label><label class="campo"><span>Mensalidade (R$)</span><input class="ent" type="number" min="0" step="50" data-n="valor" value="1500"></label></div>':'')+
+      '<div class="pe"><button class="btn fant" data-x>Cancelar</button><button class="btn pri p" data-ok>Cadastrar e gerar link</button></div>');
+    $('[data-x]',m.el).addEventListener('click',m.fecha);
+    $('[data-ok]',m.el).addEventListener('click',function(){var v={};$$('[data-n]',m.el).forEach(function(i){v[i.dataset.n]=i.value.trim()});if(!v.nome){UI.aviso('Preencha o nome');return}
+      var id;do{id=UI.iniciais(v.nome).slice(0,2)+Math.floor(Math.random()*90+10)}while(DB.cliente(id));
+      var cores=['#2F4A3F','#9A2E12','#B07A2A','#4B4F8C','#1F3B57','#246B74','#5B3A29','#7A3E65'];
+      var c={id:id,nome:v.nome,seg:v.seg||'—',cor:cores[S.clientes.length%cores.length],ini:UI.iniciais(v.nome),plano:v.plano||'Essencial',valor:+v.valor||0,venc:10,insta:v.insta,desde:DB.hoje(),contato:v.contato||v.nome,email:v.email,fone:'',briefing:'',fixo:false};
+      S.clientes.push(c);DB.salva('clientes');if(EU.papel!=='admin'&&EU.clientes!=='todos'){EU.clientes.push(id);DB.salva('equipe')}
+      m.fecha();desenha();UI.desenhaLateral();linkBriefing(c)});
+  }
+  function linkBriefing(c){var url=location.href.replace(/[^\/]*$/,'')+'briefing.html?c='+c.id;
+    var m=UI.modal('<div class="olho">'+esc(c.nome)+'</div><h2>Link do briefing</h2><p class="desc">Mande para o cliente. Quando ele responder, as respostas entram na ficha dele.</p><div class="link-box"><code>'+esc(url)+'</code><button class="btn p" data-cp>'+UI.ico('copiar',16)+'Copiar</button></div><div class="pe"><a class="btn" href="'+url+'" target="_blank">'+UI.ico('olho',17)+'Ver formulário</a><a class="btn escuro" href="cliente.html?c='+c.id+'">Abrir cliente</a></div>');
+    $('[data-cp]',m.el).addEventListener('click',function(){UI.copiar(url,'Link copiado')})}
+  window.linkBriefing=linkBriefing;
+  desenha();
+})();
+</script>
+</body>
+</html>

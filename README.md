@@ -1,27 +1,29 @@
 # Pulse Creator
 
-Sistema para agências de social media: lado da agência (quadro de conteúdos, demandas, equipe com permissões, resultados, financeiro, IA) e portal do cliente (planejamento, aprovação, pedidos, mensagens, relatório, agenda, arquivos e contratos).
+Sistema para agências de social media: lado da agência (pautas, clientes, agenda, conversas da equipe, ferramentas e gestão) e portal do cliente (aprovações, pedidos, mensagens, agenda, arquivos e relatórios).
 
 Hoje é um protótipo navegável em HTML, sem back-end. Os dados de exemplo e o que muda durante o teste ficam salvos no navegador (localStorage).
 
 ## Estrutura
 
-- `novo/` — versão atual
-  - `01-analise.md` a `06-video-modo-criador.md` — análise, telas, escopo, design system
-  - `prototipo/fonte/` — **edite aqui** as telas
-  - `prototipo/comum/` — partes compartilhadas (CSS base, lateral, sessão/permissões, conteúdos)
-  - `prototipo/*.html` — telas montadas (geradas, não edite direto)
-  - `prototipo/montar.py` — junta `fonte/` + `comum/` e gera as telas
-- `docs/` e `prototipo/` — primeira versão, guardada só como referência
+- `v2/` — **versão atual** (visual claro e enxuto, inspirado no Showa, em preto e laranja)
+  - `index.html` — login (conta Google de exemplo ou e-mail)
+  - `inicio.html` · `pautas.html` · `clientes.html` · `cliente.html` · `agenda.html` · `social.html` · `ferramentas.html` · `gestao.html` — telas da agência
+  - `portal.html` — portal do cliente (uma página com seções)
+  - `aprovar.html` e `briefing.html` — links públicos que o cliente abre sem login
+  - `assets/app.css` — visual; `assets/app.js` — lateral, topo, perfil e editor de pauta; `assets/dados.js` — dados de exemplo e permissões
+- `novo/` — versão anterior (escura, com mais telas), guardada como referência
+- `docs/` e `prototipo/` — primeira versão, só referência
+
+Não tem etapa de montagem: edite os arquivos de `v2/` e recarregue a página.
 
 ## Rodar localmente
 
 ```bash
-cd novo/prototipo
-python3 montar.py
-python3 -m http.server 4180
+cd v2
+python3 servir.py
 ```
 
-Abra http://localhost:4180 (cai no login). A lista de todas as telas está em `telas.html`.
+Abra http://localhost:4190. No login, “Entrar com Google” mostra as contas de exemplo (admin, social media, designer, videomaker, cliente e um colaborador novo para ver o primeiro acesso).
 
-Depois de editar algo em `fonte/` ou `comum/`, rode `python3 montar.py` de novo e recarregue a página.
+Para zerar os dados de teste: Gestão › Configurações › “Voltar aos dados de exemplo”.

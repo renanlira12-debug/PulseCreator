@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal · Pulse Creator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600&display=swap">
+<link rel="icon" href="assets/icone.svg">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.faixa{display:flex;align-items:center;gap:12px;padding:12px 18px;margin-bottom:22px;border-radius:18px;font-size:14.5px;color:var(--laranja-tinta);background:var(--laranja-suave)}
+.faixa b{flex:1}
+.duas{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}
+.cta{display:flex;align-items:center;gap:20px;padding:28px 30px;border-radius:26px;color:#F6EFE8;background:radial-gradient(80% 120% at 0% 0%,rgba(242,107,29,.55),transparent 60%),linear-gradient(160deg,#2B211A,#141110);margin-bottom:24px}
+.cta b{display:block;font-family:var(--titulo);font-weight:600;font-size:24px;letter-spacing:-.04em}
+.cta p{color:rgba(246,239,232,.72);margin-top:4px}
+.cta .btn{margin-left:auto;flex:none}
+.feed{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;border-radius:22px;overflow:hidden;max-width:680px}
+.tile{position:relative;aspect-ratio:4/5;display:flex;align-items:flex-end;padding:14px;color:#F6EFE8;cursor:pointer;background:linear-gradient(155deg,var(--c),#141110);text-align:left}
+.tile b{font-family:var(--titulo);font-weight:600;font-size:13px;letter-spacing:-.03em;line-height:1.15;text-transform:uppercase}
+.tile .st{position:absolute;top:10px;right:10px;height:24px;padding:0 9px;border-radius:99px;display:inline-flex;align-items:center;font-size:11px;font-weight:700;background:rgba(0,0,0,.45);backdrop-filter:blur(6px)}
+.tile .st.ok{background:#2E8A57}.tile .st.aj{background:#B94A0C}.tile .st.ag{background:var(--laranja)}
+.item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--linha)}
+.item:last-child{border-bottom:0}
+.item .t{flex:1;min-width:0}
+.item b{display:block;font-weight:600;font-size:15px}
+.item small{display:block;font-size:13px;color:var(--tinta-3);margin-top:2px}
+.item .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--cartao-2);color:var(--tinta-2);flex:none}
+.chat{display:flex;flex-direction:column;height:calc(100vh - 230px);min-height:460px;overflow:hidden}
+.msgs{flex:1;overflow-y:auto;padding:22px 26px;display:flex;flex-direction:column;gap:10px}
+.bal{max-width:72%;padding:12px 16px;border-radius:20px;font-size:15px;line-height:1.5;background:var(--cartao-2)}
+.bal small{display:block;font-size:12px;color:var(--tinta-3);margin-top:4px}
+.bal.eu{align-self:flex-end;background:var(--laranja-suave);border-bottom-right-radius:6px}
+.bal.eles{border-bottom-left-radius:6px}
+.bal .q{font-size:12.5px;font-weight:700;color:var(--tinta-2);margin-bottom:2px}
+.escreve{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--linha)}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.nums .cartao{padding:20px 22px}
+.nums small{display:block;font-size:13.5px;color:var(--tinta-2)}
+.nums b{display:block;font-family:var(--titulo);font-weight:500;font-size:28px;letter-spacing:-.04em;margin-top:4px}
+@media (max-width:1200px){.duas{grid-template-columns:1fr}.nums{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.cta{flex-direction:column;align-items:flex-start}.cta .btn{margin-left:0}.bal{max-width:88%}}
+</style>
+</head>
+<body data-area="portal">
+<div class="app"><aside class="lat" id="lat"></aside><main class="painel"><div class="miolo">
+  <div class="faixa" data-faixa hidden></div>
+  <header class="cab"><div class="t"><div class="olho" data-olho></div><h1 data-tit></h1><p class="sub" data-sub></p></div><div class="acoes-topo" data-acoes></div></header>
+  <div data-conteudo></div>
+</div></main></div>
+<script src="assets/dados.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var S=DB.S,EU=UI.eu,$=UI.$,$$=UI.$$,esc=UI.esc,ico=UI.ico;if(!EU||!EU.ehCliente)return;
+  var C=EU.c,AG=S.config.agencia;
+  // a agência vendo como o cliente
+  var volta=null;try{volta=localStorage.getItem('pc2:voltar')}catch(e){}
+  if(volta){$('[data-faixa]').hidden=false;$('[data-faixa]').innerHTML=ico('olho',18)+'<b>Você está vendo o portal como '+esc(C.nome)+'.</b><button class="btn p" data-volta>Voltar para a agência</button>';
+    $('[data-volta]').addEventListener('click',function(){DB.entrar(volta);try{localStorage.removeItem('pc2:voltar')}catch(e){}location.href='cliente.html?c='+C.id})}
+  function posts(){return S.pautas.filter(function(p){return p.cliente===C.id&&p.visivelCliente})}
+  function pendentes(){return posts().filter(function(p){return p.coluna==='cliente'&&!p.aprovacao})}
+  function tile(p){var st=p.aprovacao==='aprovado'?'<span class="st ok">Aprovado</span>':p.aprovacao==='ajuste'?'<span class="st aj">Ajuste pedido</span>':p.coluna==='cliente'?'<span class="st ag">Para aprovar</span>':p.coluna==='publicado'?'<span class="st">Publicado</span>':'<span class="st">'+UI.dataCurta(p.prazo)+'</span>';
+    return '<button class="tile v'+(p.id%4)+'" style="--c:'+C.cor+'" data-post="'+p.id+'">'+st+'<b>'+esc(p.titulo)+'</b></button>'}
+  function ligaPosts(){$$('[data-post]').forEach(function(b){b.addEventListener('click',function(){UI.verPost(DB.pauta(+b.dataset.post),function(){UI.desenhaLateral();vai()})})})}
+  function cab(o,t,s){$('[data-olho]').textContent=o;$('[data-tit]').textContent=t;$('[data-sub]').textContent=s||''}
+  var R={};
+
+  R.inicio=function(){var h=new Date().getHours(),pd=pendentes(),prox=posts().filter(function(p){return ['programado','cliente'].indexOf(p.coluna)>=0}).sort(function(a,b){return a.prazo<b.prazo?-1:1}).slice(0,4);
+    var ev=S.eventos.filter(function(e){return e.cliente===C.id&&UI.diasAte(e.data)>=0&&e.cat!=='ocupado'}).sort(function(a,b){return (a.data+a.hora)<(b.data+b.hora)?-1:1}),arq=S.arquivos.filter(function(a){return a.cliente===C.id}).sort(function(a,b){return a.quando<b.quando?1:-1}).slice(0,3);
+    cab(C.nome+' · com '+AG,(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', '+DB.nomeCurto(C.contato)+'.',pd.length?'Tem '+pd.length+' post'+(pd.length>1?'s':'')+' esperando a sua aprovação.':'Nada esperando por você agora.');
+    $('[data-conteudo]').innerHTML=(pd.length?'<div class="cta"><div><b>'+pd.length+' post'+(pd.length>1?'s':'')+' para aprovar</b><p>Veja como vai ficar no feed e aprove ou peça ajuste em cada um.</p></div><a class="btn pri" href="#aprovar">'+ico('check',19)+'Aprovar agora</a></div>':'')+
+      '<div class="duas"><section class="cartao pad"><div class="cab-c"><h3>Próximos posts</h3><a class="link-seta" href="#aprovar">Ver feed'+ico('seta',18)+'</a></div>'+(prox.length?prox.map(function(p){return '<button class="item" style="width:100%;text-align:left" data-post="'+p.id+'"><span class="ic">'+ico(p.formato==='Reels'?'olho':'imagem',20)+'</span><span class="t"><b>'+esc(p.titulo)+'</b><small>'+esc(p.formato)+' · '+UI.SEMANA[UI.dt(p.prazo).getDay()]+', '+UI.dataCurta(p.prazo)+'</small></span><span class="selo '+(p.coluna==='cliente'&&!p.aprovacao?'laranja':'')+'">'+(p.coluna==='cliente'&&!p.aprovacao?'para aprovar':p.aprovacao==='ajuste'?'em ajuste':'programado')+'</span></button>'}).join(''):'<div class="vazio-c">Nada programado ainda.</div>')+'</section>'+
+      '<div style="display:flex;flex-direction:column;gap:24px"><section class="cartao pad"><div class="cab-c"><h3>Agenda</h3><a class="link-seta" href="#agenda">Marcar'+ico('seta',18)+'</a></div>'+(ev.length?ev.slice(0,3).map(function(e){return '<div class="item"><span class="ic" style="color:'+DB.CATS[e.cat].c+'">'+ico(e.cat==='gravacao'?'camera':'agenda',20)+'</span><span class="t"><b>'+esc(e.titulo)+'</b><small>'+UI.dataCurta(e.data)+(e.hora?' · '+e.hora:'')+(e.pedido?' · aguardando confirmação':'')+'</small></span></div>'}).join(''):'<p style="color:var(--tinta-2)">Nenhum compromisso marcado.</p>')+'</section>'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Arquivos recentes</h3><a class="link-seta" href="#arquivos">Todos'+ico('seta',18)+'</a></div>'+arq.map(function(a){return '<div class="item"><span class="ic">'+ico('doc',20)+'</span><span class="t"><b>'+esc(a.nome)+'</b><small>'+esc(a.pasta)+'</small></span></div>'}).join('')+'</section></div></div>';
+    ligaPosts()};
+
+  R.aprovar=function(){var L=posts().filter(function(p){return ['Post','Carrossel','Reels'].indexOf(p.formato)>=0}).sort(function(a,b){return a.prazo<b.prazo?1:-1}),pd=pendentes(),ou=posts().filter(function(p){return ['Post','Carrossel','Reels'].indexOf(p.formato)<0});
+    cab('Planejamento','Aprovações','Seu feed como vai ficar. Toque em um post para ver, aprovar ou pedir ajuste.');
+    $('[data-conteudo]').innerHTML='<div class="duas"><section><div class="feed">'+L.map(tile).join('')+'</div>'+(L.length?'':'<div class="vazio-l"><b>Nada por aqui ainda</b>Quando a equipe mandar posts, eles aparecem aqui.</div>')+'</section>'+
+      '<div style="display:flex;flex-direction:column;gap:24px"><section class="cartao pad"><div class="cab-c"><h3>Esperando você</h3><span class="selo '+(pd.length?'laranja':'verde')+'">'+pd.length+'</span></div>'+(pd.length?pd.map(function(p){return '<button class="item" style="width:100%;text-align:left" data-post="'+p.id+'"><span class="t"><b>'+esc(p.titulo)+'</b><small>'+esc(p.formato)+' · '+UI.dataCurta(p.prazo)+'</small></span>'+ico('seta',18)+'</button>'}).join(''):'<p style="color:var(--tinta-2)">Tudo aprovado. Obrigado!</p>')+'</section>'+
+      (ou.length?'<section class="cartao pad"><div class="cab-c"><h3>Stories e outros</h3></div>'+ou.map(function(p){return '<button class="item" style="width:100%;text-align:left" data-post="'+p.id+'"><span class="t"><b>'+esc(p.titulo)+'</b><small>'+esc(p.formato)+' · '+UI.dataCurta(p.prazo)+'</small></span><span class="selo">'+(p.aprovacao==='aprovado'?'aprovado':p.coluna==='cliente'?'para aprovar':esc(DB.coluna(p.coluna).n))+'</span></button>'}).join('')+'</section>':'')+'</div></div>';
+    ligaPosts()};
+
+  R.pedidos=function(){var L=S.pedidos.filter(function(p){return p.cliente===C.id}).sort(function(a,b){return a.quando<b.quando?1:-1});
+    cab('Pedidos','Seus pedidos','Precisa de um post, uma arte ou um ajuste fora do planejado? Peça aqui.');
+    $('[data-conteudo]').innerHTML='<div class="duas"><section class="cartao">'+(L.length?'<div style="padding:8px 28px">'+L.map(function(p){return '<div class="item"><span class="ic">'+ico('pedido',20)+'</span><span class="t"><b>'+esc(p.titulo)+'</b><small>'+UI.dataCurta(p.quando)+' · '+esc(p.desc)+'</small></span><span class="selo '+(p.status==='novo'?'laranja':'verde')+'">'+(p.status==='novo'?'recebido':'em produção')+'</span></div>'}).join('')+'</div>':'<div class="vazio-c">Nenhum pedido ainda.</div>')+'</section>'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Novo pedido</h3></div><label class="campo"><span>O que você precisa?</span><input class="ent" data-n="titulo" placeholder="Ex.: Post sobre o feriado"></label><label class="campo"><span>Detalhes</span><textarea class="ent" rows="4" data-n="desc" placeholder="Datas, textos, fotos que quer usar…"></textarea></label><label class="campo"><span>Urgência</span><select class="ent" data-n="urg"><option value="baixa">Sem pressa</option><option value="normal" selected>Normal</option><option value="alta">Urgente</option></select></label><label class="campo"><span>Anexo (opcional)</span><input class="ent" type="file" data-anexo style="padding-top:14px"></label><button class="btn pri" style="width:100%" data-envia>'+ico('enviar',18)+'Enviar pedido</button></section></div>';
+    $('[data-envia]').addEventListener('click',function(){var v={};$$('[data-n]').forEach(function(i){v[i.dataset.n]=i.value.trim()});if(!v.titulo){UI.aviso('Conte o que você precisa');return}
+      var f=$('[data-anexo]').files[0];S.pedidos.push({id:DB.novoId(S.pedidos),cliente:C.id,titulo:v.titulo,desc:v.desc+(f?' (anexo: '+f.name+')':''),urg:v.urg,status:'novo',quando:DB.hoje()});DB.salva('pedidos');
+      S.equipe.filter(function(p){return DB.pode(p,'falar_cliente')&&(p.clientes==='todos'||p.clientes.indexOf(C.id)>=0)}).forEach(function(p){UI.notifica({txt:'<b>'+esc(DB.nomeCurto(C.contato))+'</b> ('+esc(C.nome)+') fez um pedido: <b>'+esc(v.titulo)+'</b>',link:'inicio.html',para:p.id})});
+      UI.aviso('Pedido enviado. A equipe já foi avisada.');R.pedidos()})};
+
+  R.mensagens=function(){cab('Mensagens','Fale com a equipe','Respondemos em horário comercial.');var L=S.canais.cliente[C.id]=S.canais.cliente[C.id]||[];
+    $('[data-conteudo]').innerHTML='<section class="cartao chat"><div class="msgs" data-msgs></div><div class="escreve"><input class="ent" data-in placeholder="Escreva sua mensagem" aria-label="Mensagem"><button class="btn pri" style="height:56px;width:58px;padding:0" data-env aria-label="Enviar">'+ico('enviar',19)+'</button></div></section>';
+    function des(){var b=$('[data-msgs]');b.innerHTML=L.length?L.map(function(m){var eu=m.quem==='cliente',p=eu?null:DB.pessoa(m.quem);return '<div class="bal '+(eu?'eu':'eles')+'">'+(eu?'':'<div class="q">'+esc(p?DB.primeiroNome(p):AG)+' · '+esc(AG)+'</div>')+esc(m.txt)+'<small>'+UI.quando(m.quando)+'</small></div>'}).join(''):'<div class="vazio-c">Mande a primeira mensagem.</div>';b.scrollTop=b.scrollHeight}
+    des();var i=$('[data-in]');function env(){var t=i.value.trim();if(!t)return;L.push({quem:'cliente',txt:t,quando:new Date().toISOString()});DB.salva('canais');
+      S.equipe.filter(function(p){return DB.pode(p,'falar_cliente')&&(p.clientes==='todos'||p.clientes.indexOf(C.id)>=0)}).forEach(function(p){UI.notifica({txt:'Nova mensagem de <b>'+esc(DB.nomeCurto(C.contato))+'</b> ('+esc(C.nome)+')',link:'social.html?canal=cli:'+C.id,para:p.id})});i.value='';des()}
+    $('[data-env]').addEventListener('click',env);i.addEventListener('keydown',function(e){if(e.key==='Enter')env()})};
+
+  R.agenda=function(){cab('Agenda','Gravações e reuniões','Peça um horário. A equipe confirma e o compromisso aparece aqui.');
+    var L=S.eventos.filter(function(e){return e.cliente===C.id&&UI.diasAte(e.data)>=-30}).sort(function(a,b){return (a.data+a.hora)<(b.data+b.hora)?-1:1});
+    $('[data-conteudo]').innerHTML='<div class="duas"><section class="cartao pad"><div class="cab-c"><h3>Marcados</h3></div>'+(L.length?L.map(function(e){var pas=UI.diasAte(e.data)<0;return '<div class="item" style="'+(pas?'opacity:.55':'')+'"><span class="ic" style="color:'+DB.CATS[e.cat].c+'">'+ico(e.cat==='gravacao'?'camera':'agenda',20)+'</span><span class="t"><b>'+esc(e.titulo)+'</b><small>'+UI.SEMANA[UI.dt(e.data).getDay()]+', '+UI.dataCurta(e.data)+(e.hora?' · '+e.hora+(e.fim?'–'+e.fim:''):'')+(e.local?' · '+esc(e.local):'')+'</small></span>'+(e.pedido?'<span class="selo laranja">aguardando</span>':pas?'<span class="selo">feito</span>':'<span class="selo verde">confirmado</span>')+'</div>'}).join(''):'<div class="vazio-c">Nada marcado ainda.</div>')+'</section>'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Pedir horário</h3></div><div class="campo"><span>Para quê?</span><div class="chips" data-tipos><button class="chip p" data-tp="gravacao" aria-pressed="true">Gravação</button><button class="chip p" data-tp="fotos">Fotos profissionais</button><button class="chip p" data-tp="reuniao">Reunião</button></div></div><div class="linha2"><label class="campo"><span>Data</span><input class="ent" type="date" data-dt min="'+DB.somaDias(1)+'" value="'+DB.somaDias(3)+'"></label><label class="campo"><span>Horário</span><select class="ent" data-hr><option>09:00</option><option>10:00</option><option selected>14:00</option><option>15:00</option><option>16:00</option></select></label></div><label class="campo"><span>Observação</span><textarea class="ent" rows="2" data-obs placeholder="Local, o que vamos gravar…"></textarea></label><button class="btn pri" style="width:100%" data-pede>'+ico('agenda',18)+'Pedir horário</button></section></div>';
+    var tp='gravacao';$$('[data-tp]').forEach(function(b){b.addEventListener('click',function(){tp=b.dataset.tp;$$('[data-tp]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})})});
+    $('[data-pede]').addEventListener('click',function(){var d=$('[data-dt]').value,h=$('[data-hr]').value;if(!d||UI.diasAte(d)<1){UI.aviso('Escolha uma data a partir de amanhã');return}
+      var nome={gravacao:'Gravação',fotos:'Sessão de fotos',reuniao:'Reunião'}[tp],fim=('0'+(+h.slice(0,2)+(tp==='reuniao'?1:3))).slice(-2)+':00';
+      S.eventos.push({id:'e'+Date.now().toString(36),data:d,hora:h,fim:fim,cat:tp==='reuniao'?'reuniao':'gravacao',titulo:nome+' · '+C.nome,quem:[],cliente:C.id,local:$('[data-obs]').value.trim(),pedido:true});DB.salva('eventos');
+      S.equipe.filter(function(p){return DB.pode(p,'falar_cliente')&&(p.clientes==='todos'||p.clientes.indexOf(C.id)>=0)}).forEach(function(p){UI.notifica({txt:'<b>'+esc(C.nome)+'</b> pediu '+nome.toLowerCase()+' em '+UI.dataCurta(d)+' às '+h,link:'agenda.html',para:p.id})});
+      UI.aviso('Pedido enviado. A equipe confirma com você.');R.agenda()})};
+
+  var pasta='Todas';
+  R.arquivos=function(){cab('Arquivos','Arquivos e contratos','Tudo o que a agência compartilhou com você.');var L=S.arquivos.filter(function(a){return a.cliente===C.id}),P=['Todas','Contratos','Marca','Fotos','Relatórios'],V=pasta==='Todas'?L:L.filter(function(a){return a.pasta===pasta});
+    $('[data-conteudo]').innerHTML='<div class="chips" style="margin-bottom:18px">'+P.map(function(p){return '<button class="chip p" data-pa="'+p+'" aria-pressed="'+(p===pasta)+'">'+p+'</button>'}).join('')+'</div><section class="cartao" style="padding:6px 26px">'+(V.length?V.map(function(a){return '<div class="item"><span class="ic">'+ico(a.pasta==='Fotos'?'imagem':a.pasta==='Relatórios'?'grafico':'doc',20)+'</span><span class="t"><b>'+esc(a.nome)+'</b><small>'+esc(a.pasta)+' · '+esc(a.tam)+'</small></span>'+(a.pasta==='Contratos'?(a.assinado?'<span class="selo verde">assinado</span>':'<button class="btn p escuro" data-ass="'+a.id+'">Assinar</button>'):'')+'<button class="btn fant p" data-bx aria-label="Baixar">'+ico('baixar',17)+'</button></div>'}).join(''):'<div class="vazio-c">Nada nesta pasta.</div>')+'</section>';
+    $$('[data-pa]').forEach(function(b){b.addEventListener('click',function(){pasta=b.dataset.pa;R.arquivos()})});
+    $$('[data-bx]').forEach(function(b){b.addEventListener('click',function(){UI.aviso('No protótipo os arquivos são de exemplo.')})});
+    $$('[data-ass]').forEach(function(b){b.addEventListener('click',function(){var a=S.arquivos.filter(function(x){return x.id===+b.dataset.ass})[0];if(!confirm('Assinar “'+a.nome+'”? No sistema real, isso abre a assinatura digital.'))return;a.assinado=true;DB.salva('arquivos');S.equipe.filter(function(p){return p.papel==='admin'}).forEach(function(p){UI.notifica({txt:'<b>'+esc(C.nome)+'</b> assinou <b>'+esc(a.nome)+'</b>',link:'cliente.html?c='+C.id+'#arquivos',para:p.id})});UI.aviso('Contrato assinado');R.arquivos()})})};
+
+  R.relatorios=function(){var hoje=new Date();cab('Relatórios','Seus resultados','Como as suas redes foram no mês, e os relatórios que mandamos.');
+    var pub=S.pautas.filter(function(p){return p.cliente===C.id&&p.coluna==='publicado'}).length,rel=S.arquivos.filter(function(a){return a.cliente===C.id&&a.pasta==='Relatórios'});
+    var h=0;for(var i=0;i<C.id.length;i++)h=h*31+C.id.charCodeAt(i);var seg=2500+h%14000,alc=Math.round(seg*2.7),eng=(2+h%40/10);
+    $('[data-conteudo]').innerHTML='<div class="nums"><div class="cartao"><small>Seguidores</small><b>'+seg.toLocaleString('pt-BR')+'</b></div><div class="cartao"><small>Alcance no mês</small><b>'+(alc/1000).toFixed(1).replace('.',',')+' mil</b></div><div class="cartao"><small>Engajamento</small><b>'+eng.toFixed(1).replace('.',',')+'%</b></div><div class="cartao"><small>Posts publicados</small><b>'+pub+'</b></div></div>'+
+      '<section class="cartao pad"><div class="cab-c"><h3>Relatórios em PDF</h3></div>'+(rel.length?rel.map(function(a){return '<div class="item"><span class="ic">'+ico('grafico',20)+'</span><span class="t"><b>'+esc(a.nome)+'</b><small>'+UI.dataCurta(a.quando)+' · '+esc(a.tam)+'</small></span><button class="btn p" data-bx>'+ico('baixar',16)+'Baixar</button></div>'}).join(''):'<p style="color:var(--tinta-2)">O relatório do mês chega aqui no começo do mês seguinte.</p>')+'</section>';
+    $$('[data-bx]').forEach(function(b){b.addEventListener('click',function(){UI.aviso('No protótipo os arquivos são de exemplo.')})})};
+
+  function vai(){var s=location.hash.slice(1)||'inicio';if(!R[s])s='inicio';R[s]();$$('#lat .nav a').forEach(function(a){a.classList.toggle('ativo',a.dataset.sec===s)});$('.painel').scrollTop=0}
+  window.addEventListener('hashchange',vai);vai();
+})();
+</script>
+</body>
+</html>
